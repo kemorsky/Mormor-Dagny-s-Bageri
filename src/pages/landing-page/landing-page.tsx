@@ -1,7 +1,7 @@
 export default function LandingPage() {
     return (
-        <main>
-            <h1>Landing Page</h1>
+        <main className='bg-red-600'>
+            <h1 className="">Landing Page</h1>
         </main>
     )
 }
