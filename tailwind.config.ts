@@ -13,7 +13,7 @@ export default {
               textSecondary: "#fff/75",
               textAccent: "#E8B923",
               input: "#2C2B30",
-              loginButton: '#504F55',
+              loginButton: '#403f44',
             },
           },
           fontFamily: {

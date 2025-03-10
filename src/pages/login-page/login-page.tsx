@@ -23,31 +23,31 @@ export default function LoginPage() {
     };
 
     return (
-        <main className="bg-gradient-primary h-[956px] relative">
+        <main className="bg-gradient-primary h-[59.75rem] relative">
             <div className="absolute inset-0 top-[8.125rem] flex flex-col items-start justify-start gap-6">
                 <div className="px-[1.375rem]">
                     <article className="flex flex-col gap-3">
                         <h1 className="font-open-sans font-bold text-[2rem] leading-[2.75rem] text-Branding-textAccent">Välkommen!</h1>
-                        <p className="w-[19.1875rem] font-open-sans font-semibold text-[1.375rem] leading-[1.875rem]">Logga in för att beställa eller följa dina leveranser</p>
+                        <p className="w-[19.1875rem]  font-open-sans font-semibold text-Branding-textPrimary text-[1.375rem] leading-[1.875rem]">Logga in för att beställa eller följa dina leveranser</p>
                     </article>
                 </div>
                 <div className="w-full flex flex-col items-center justify-center">
-                    <div className="w-[392px] flex flex-col items-center justify-center gap-6">
+                    <div className="w-[24.5rem] flex flex-col items-center justify-center gap-6">
                         <form className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" onSubmit={handleSubmit} action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[14px] leading-[14px] font-inter font-semibold">Användarenamn</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
                                 <InputLogin type="text" 
                                             value={username}
                                             onChange={(e) => {setUsername(e.target.value)}} 
                                 />
                             </label>
-                            <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[14px] leading-[14px] font-semibold">
-                                <span className="text-[14px] leading-[14px] font-inter font-semibold">Lösenord</span>
-                                <PiEye className="absolute w-6 h-6 inset-0 top-[9.5px] left-[340px]"/>
+                            <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[0.875rem] leading-[0.875rem] font-semibold">
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold">Lösenord</span>
                                 <InputLogin type="password"
                                             value={password}
                                             onChange={(e) => {setPassword(e.target.value)}}
-                                />
+                                            
+                                /><PiEye className="absolute fill-white/75 w-6 h-6 inset-0 top-[16.75rem] left-[23.125rem]"/>
                             </label>
                         </form>
                         <section className="w-full flex flex-col items-center justify-center gap-4">
