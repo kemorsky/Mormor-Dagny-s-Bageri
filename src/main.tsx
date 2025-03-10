@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom';
 import './index.css'
 import router from './router/router.tsx'
+import "@fontsource/lato/index.css"; 
+import "@fontsource/open-sans/index.css";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

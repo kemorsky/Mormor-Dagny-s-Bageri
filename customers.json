@@ -1,0 +1,53 @@
+{
+    "customers":
+    [
+        {
+            "address":
+            {
+                "street": "Olbersgatan 2",
+                "postalCode": "41655",
+                "city": "Göteborg"
+            },
+            "name": "Tempo Skatås",
+            "contactPerson": "",
+            "customerNumber": 317075550,
+            "active": true
+        },
+        {
+            "address":
+            {
+                "street": "Kungsmässan",
+                "postalCode": "434 38",
+                "city": "KUNGSBACKA"
+            },
+            "name": "ICA Kvantum Kungsbacka",
+            "contactPerson": "Mattias",
+            "customerNumber": 30051150,
+            "active": true
+        },
+        {
+            "address":
+            {
+                "street": "Månstensvägen 2",
+                "postalCode": "43451",
+                "city": "Kungsbacka"
+            },
+            "name": "Coop Kolla Parkstad",
+            "contactPerson": "Tobias",
+            "customerNumber": 46766352150,
+            "active": true
+        },
+        {
+            "address":
+            {
+                "street": "Mjörnbotorget 6",
+                "postalCode": "443 42",
+                "city": "Gråbo"
+            },
+            "name": "Coop Mjörnbotorget, Gråbo",
+            "contactPerson": "Jesper BC.",
+            "customerNumber": 107463380,
+            "active": true
+        }
+    ]
+}
