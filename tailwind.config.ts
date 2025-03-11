@@ -6,6 +6,7 @@ export default {
         extend: {
           backgroundImage: {
             'gradient-primary': "linear-gradient(180deg, #1A1A1A 20%, #0D0D0D 100%)",
+            'gradient-card': "linear-gradient(45deg, #262626 0%, #1A1A1A 100%)"
           },
           colors: {
             Branding: {
