@@ -10,11 +10,11 @@ export default {
           },
           colors: {
             Branding: {
-              textPrimary: "#fff",
-              textSecondary: "#fff/75",
+              textPrimary: "#ffffff",
+              textSecondary: "#9A9A9A",
               textAccent: "#E8B923",
               input: "#2C2B30",
-              loginButton: '#403f44',
+              primaryButton: '#403f44',
             },
           },
           fontFamily: {
