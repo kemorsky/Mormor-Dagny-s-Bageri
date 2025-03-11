@@ -1,6 +1,25 @@
-import Card from "../../blocks/card"
+import { Card, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber } from "../../blocks/card"
+import customersData from '../../../customers.json';
+
+type Address = {
+    street: string;
+    postalCode: string;
+    city: string;
+}
+
+type Customer = {
+    date: string;
+    address: Address;
+    name: string;
+    contactPerson: string;
+    customerNumber: number;
+    active: boolean;
+}
+
 
 export default function DashBoard() {
+    const customers: Customer[] = customersData.customers;
+
     return (
         <main className="min-h-[59.75rem] w-full bg-gradient-primary inline-flex flex-col items-center justify-start pt-[3.125rem]">
             <div className="w-[25.5rem] inline-flex flex-col items-center justify-start gap-6">
@@ -13,8 +32,21 @@ export default function DashBoard() {
                             <button>Se alla</button>
                         </article>
                         <div className="inline-flex items-center justify-center gap-3 py-2">
-                            <Card />
-                            <Card />
+                            {customers.map((customer) => (
+                                <Card key={customer.customerNumber}>
+                                <CardDate>{customer.date}</CardDate>
+                                <CardHeader>
+                                    <CardStore>{customer.name}</CardStore>
+                                    <CardAddress>
+                                    {customer.address.street} {customer.address.postalCode} {customer.address.city}
+                                    </CardAddress>
+                                </CardHeader>
+                                <CardFooter>
+                                    <CardClientName>{customer.contactPerson}</CardClientName>
+                                    <CardClientNumber>{customer.customerNumber}</CardClientNumber>
+                                </CardFooter>
+                                </Card>
+                            ))}
                         </div>
                     </div>
                     <button>Skapa ny beställning</button>
