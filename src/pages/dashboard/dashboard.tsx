@@ -38,7 +38,7 @@ export default function DashBoard() {
                                 <CardHeader>
                                     <CardStore>{customer.name}</CardStore>
                                     <CardAddress>
-                                    {customer.address.street} {customer.address.postalCode} {customer.address.city}
+                                        {customer.address.street} {customer.address.postalCode} {customer.address.city}
                                     </CardAddress>
                                 </CardHeader>
                                 <CardFooter>
