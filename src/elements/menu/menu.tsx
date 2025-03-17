@@ -8,10 +8,10 @@ export default function Menu() {
     }
 
     return (
-        <header className="w-full">
-            <nav className="inline-flex flex-col items-start justify-center relative transition-all self-start">
+        <header className="w-full inline-flex items-start justify-between">
+            <nav onClick={handleClick}  className="inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
                 <div className="inline-flex items-center justify-start gap-2">
-                    <section onClick={handleClick} className="h-10 w-10 bg-blue-200 rounded-full">
+                    <section className="h-10 w-10 bg-blue-200 rounded-full">
                         <img src="" alt="" />
                     </section>
                     <article className="inline-flex flex-col gap-1">
@@ -33,6 +33,11 @@ export default function Menu() {
                     </ul>
                 : null }
             </nav>
+            <section className="inline-flex items-center justify-between gap-4">
+                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/dashboard">Hem</a>
+                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/">Leverans</a>
+                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/order-page">Ny Beställning</a>
+                </section>
         </header> 
     )
 }
