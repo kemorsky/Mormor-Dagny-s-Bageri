@@ -2,6 +2,7 @@
     "customers":
     [
         {
+            "date": "om 1-3dagar",
             "address":
             {
                 "street": "Olbersgatan 2",
@@ -14,6 +15,7 @@
             "active": true
         },
         {
+            "date": "om 1-3dagar",
             "address":
             {
                 "street": "Kungsmässan",
@@ -26,6 +28,7 @@
             "active": true
         },
         {
+            "date": "om 1-3dagar",
             "address":
             {
                 "street": "Månstensvägen 2",
@@ -38,6 +41,7 @@
             "active": true
         },
         {
+            "date": "om 1-3dagar",
             "address":
             {
                 "street": "Mjörnbotorget 6",
