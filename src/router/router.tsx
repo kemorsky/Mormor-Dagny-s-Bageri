@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import LandingPage from '../pages/landing-page/landing-page';
 import LoginPage from '../pages/login-page/login-page';
 import RecoverPassword from '../pages/recover-password/recover-password';
-import SignUpPage from '../pages/sign-up-page/sign-up-page';
 import Dashboard from '../pages/dashboard/dashboard';
 import OrderPage from '../pages/order-page/order-page';
 
@@ -18,10 +17,6 @@ const router = createBrowserRouter([
     {
         path: '/recover-password',
         element: <RecoverPassword />,
-    },
-    {
-        path: '/signup',
-        element: <SignUpPage />,
     },
     {
         path: '/dashboard',
