@@ -11,15 +11,35 @@ type User = {
 };
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const userData = User = {username, password}
-        navigate('/dashboard')
+        const userData: User = {username, password}
+        const API_URL = 'http://localhost:5139/api/auth/login'
+        try {
+            console.log(userData);
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            console.log(response);
+            if (!response.ok) {
+                throw new Error('Något gick snett med POST-förfrågan vi gjorde :(((')
+            }
+            const data = await response.json();
+            console.log(data);
+            sessionStorage.setItem('token', data.token);
+            navigate('/dashboard')
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -33,7 +53,7 @@ export default function LoginPage() {
                 </div>
                 <div className="w-full flex flex-col items-center justify-center">
                     <div className="w-[24.5rem] flex flex-col items-center justify-center gap-6">
-                        <form className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" onSubmit={handleSubmit} action="submit">
+                        <form onSubmit={handleSubmit} className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
                                 <InputLogin type="text" 
@@ -49,9 +69,10 @@ export default function LoginPage() {
                                             
                                 /><PiEye className="absolute fill-white/75 w-6 h-6 inset-0 top-[16.875rem] left-[23.125rem]"/>
                             </label>
+                            <ButtonPrimary type="submit">Logga In</ButtonPrimary>
+
                         </form>
                         <section className="w-full flex flex-col items-center justify-center gap-4">
-                            <ButtonPrimary type="submit">Logga In</ButtonPrimary>
                             <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
                             <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
                         </section>
