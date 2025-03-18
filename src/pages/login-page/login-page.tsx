@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import ButtonPrimary from "../../components/ui/button";
-import InputLogin from "../../components/ui/login-input";
+import { ButtonPrimary } from "../../components/ui/button";
+import { InputPrimary } from "../../components/ui/input";
 
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 
@@ -36,14 +36,14 @@ export default function LoginPage() {
                         <form className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" onSubmit={handleSubmit} action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
-                                <InputLogin type="text" 
+                                <InputPrimary type="text" 
                                             value={username}
                                             onChange={(e) => {setUsername(e.target.value)}} 
                                 />
                             </label>
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[0.875rem] leading-[0.875rem] font-semibold">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold">Lösenord</span>
-                                <InputLogin type="password"
+                                <InputPrimary type="password"
                                             value={password}
                                             onChange={(e) => {setPassword(e.target.value)}}
                                             
