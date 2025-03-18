@@ -54,7 +54,7 @@ export default function LoginPage() {
                         <form onSubmit={handleSubmit} className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
-                                <InputLogin type="text"
+                                <InputPrimary type="text"
                                             name="username"
                                             value={formData.username}
                                             onChange={handleChange} 
@@ -62,7 +62,7 @@ export default function LoginPage() {
                             </label>
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[0.875rem] leading-[0.875rem] font-semibold">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold">Lösenord</span>
-                                <InputLogin type={showPassword ? "text" : "password"}
+                                <InputPrimary type={showPassword ? "text" : "password"}
                                             name="password"
                                             value={formData.password}
                                             onChange={handleChange}
