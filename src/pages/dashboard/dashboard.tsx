@@ -1,5 +1,6 @@
 import { Card, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber } from "../../blocks/card";
 import customersData from '../../../customers.json';
+import { ButtonSecondary, ButtonTertiary } from './../../components/ui/button';
 
 type Address = {
     street: string;
@@ -33,7 +34,7 @@ export default function DashBoard() {
                             <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
                                 Dina pågående beställningar
                             </p>
-                            <button>Se alla</button>
+                            <ButtonSecondary>Se alla</ButtonSecondary>
                         </article>
                         <div className="inline-flex items-center justify-center gap-3 py-2">
                             {customers.map((customer) => (
@@ -62,7 +63,7 @@ export default function DashBoard() {
                         <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
                             Dina tidigare beställningar
                         </p>
-                        <button>Se alla</button>
+                        <ButtonTertiary>Se alla</ButtonTertiary> {/* The third button */}
                     </article>
                     <div className="inline-flex items-center justify-center gap-3 py-2">
                         {previousOrders.map((order) => (
