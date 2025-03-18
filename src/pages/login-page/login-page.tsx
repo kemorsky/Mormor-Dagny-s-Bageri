@@ -5,29 +5,27 @@ import InputLogin from "../../components/ui/login-input";
 
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 
-type User = {
-    username: string;
-    password: string;
-};
-
 export default function LoginPage() {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [formData, setFormData] = useState({ username: '', password: '' });
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const userData: User = {username, password}
         const API_URL = 'http://localhost:5139/api/auth/login'
         try {
-            console.log(userData);
+            console.log(formData);
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(userData)
+                body: JSON.stringify(formData)
             });
             console.log(response);
             if (!response.ok) {
@@ -56,21 +54,31 @@ export default function LoginPage() {
                         <form onSubmit={handleSubmit} className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
-                                <InputLogin type="text" 
-                                            value={username}
-                                            onChange={(e) => {setUsername(e.target.value)}} 
+                                <InputLogin type="text"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleChange} 
                                 />
                             </label>
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[0.875rem] leading-[0.875rem] font-semibold">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold">Lösenord</span>
-                                <InputLogin type="password"
-                                            value={password}
-                                            onChange={(e) => {setPassword(e.target.value)}}
-                                            
-                                /><PiEye className="absolute fill-white/75 w-6 h-6 inset-0 top-[16.875rem] left-[23.125rem]"/>
+                                <InputLogin type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                />
+                                {showPassword ? 
+                                    <PiEyeSlash 
+                                        className="absolute cursor-pointer w-6 h-6 text-gray-500 right-4 top-10"
+                                        onClick={() => setShowPassword(false)} 
+                                    /> : 
+                                    <PiEye 
+                                        className="absolute cursor-pointer w-6 h-6 text-gray-500 right-4 top-10"
+                                        onClick={() => setShowPassword(true)} 
+                                    />
+                                }
                             </label>
                             <ButtonPrimary type="submit">Logga In</ButtonPrimary>
-
                         </form>
                         <section className="w-full flex flex-col items-center justify-center gap-4">
                             <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
