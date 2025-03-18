@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-[190px] h-[190px] px-1.5 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
+      "w-[190px] h-[190px] px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
       className
     )}
     {...props}
@@ -122,7 +122,82 @@ const CardClientNumber = React.forwardRef<
 ))
 CardClientNumber.displayName = "CardClientNumber"
 
-export {Card, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber}
+const ProductListCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "w-full px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl inline-flex flex-col items-start justify-center gap-3",
+      className
+    )}
+    {...props}
+  />
+))
+ProductListCard.displayName = "ProductListCard"
+
+const ProductCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "w-full py-1 inline-flex items-center justify-between text-[1rem] leading-[1.1875rem]",
+      className
+    )}
+    {...props}
+  />
+))
+ProductCard.displayName = "ProductCard"
+
+const ProductCardName = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "text-Branding-textPrimary font-inter font-semibold",
+      className
+    )}
+    {...props}
+  />
+))
+ProductCardName.displayName = "ProductCardName"
+
+const ProductCardPrice = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "text-Branding-textSecondary font-inter font-medium",
+      className
+    )}
+    {...props}
+  />
+))
+ProductCardPrice.displayName = "ProductCardPrice"
+
+const ProductCardAmount = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "text-Branding-textSecondary font-inter font-medium",
+      className
+    )}
+    {...props}
+  />
+))
+ProductCardAmount.displayName = "ProductCardAmount"
+
+export {Card, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount}
 
 
 // export default function Card() {

@@ -1,6 +1,6 @@
 import { useState } from "react"
-import ButtonPrimary from "../../components/ui/button"
-import InputLogin from "../../components/ui/login-input"
+import { ButtonPrimary } from "../../components/ui/button"
+import { InputPrimary } from "../../components/ui/input"
 
 export default function RecoverPassword() {
 
@@ -19,7 +19,7 @@ export default function RecoverPassword() {
                         <div className="w-[24.5rem] flex flex-col items-center justify-center gap-6">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">E-mail</span>
-                                <InputLogin type="text" 
+                                <InputPrimary type="text" 
                                             value={recoverPassword}
                                             onChange={(e) => {setRecoverPassword(e.target.value)}} 
                                 />

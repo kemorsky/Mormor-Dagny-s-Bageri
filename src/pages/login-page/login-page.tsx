@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import ButtonPrimary from "../../components/ui/button";
-import InputLogin from "../../components/ui/login-input";
+import { ButtonPrimary } from "../../components/ui/button";
+import { InputPrimary } from "../../components/ui/input";
 
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 
