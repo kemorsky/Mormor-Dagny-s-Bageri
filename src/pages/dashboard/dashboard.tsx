@@ -81,21 +81,6 @@ export default function DashBoard() {
                                 </CardFooter>
                             </Card>
                         ))}
-                        {previousOrders.map((order) => (
-                            <Card key={order.customerNumber + "2"}>
-                                <CardDate>{order.date}</CardDate>
-                                <CardHeader>
-                                    <CardStore>{order.name}</CardStore>
-                                    <CardAddress>
-                                        {order.address.street} {order.address.postalCode} {order.address.city}
-                                    </CardAddress>
-                                </CardHeader>
-                                <CardFooter>
-                                    <CardClientName>{order.contactPerson}</CardClientName>
-                                    <CardClientNumber>{order.customerNumber}</CardClientNumber>
-                                </CardFooter>
-                            </Card>
-                        ))}
                     </div>
                 </div>
             </div>
