@@ -8,7 +8,7 @@
                 "city": "Göteborg"
             },
             "name": "Tempo Skatås",
-            "contactPerson": "",
+            "contactPerson": "Otto",
             "customerNumber": 317075550,
             "active": true
         },
@@ -60,7 +60,19 @@
             "name": "ICA Bollebygd",
             "contactPerson": "Stefan Holmqvist",
             "customerNumber": 112568980,
-            "active": true
+            "active": false
+        },
+        {
+            "date": "om 4-6 dagar",
+            "address": {
+                "street": "Storgatan 5",
+                "postalCode": "12345",
+                "city": "Göteborg"
+            },
+            "name": "Coop Hisingen",
+            "contactPerson": "Anna Andersson",
+            "customerNumber": 112568981,
+            "active": false
         }
     ]
 }
