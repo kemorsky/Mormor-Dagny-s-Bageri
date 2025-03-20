@@ -2,30 +2,30 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
-
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 
 export default function LoginPage() {
-    const [formData, setFormData] = useState({ username: '', password: '' });
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const userData = {
+            "användarnamn": username,
+            "lösenord": password
+          };
         const API_URL = 'http://localhost:5139/api/auth/login'
         try {
-            console.log(formData);
+            console.log(userData);
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(userData)
             });
             console.log(response);
             if (!response.ok) {
@@ -56,16 +56,16 @@ export default function LoginPage() {
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
                                 <InputPrimary type="text"
                                             name="username"
-                                            value={formData.username}
-                                            onChange={handleChange} 
+                                            value={username}
+                                            onChange={(e) => { setUsername(e.target.value) }} 
                                 />
                             </label>
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[0.875rem] leading-[0.875rem] font-semibold">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold">Lösenord</span>
                                 <InputPrimary type={showPassword ? "text" : "password"}
                                             name="password"
-                                            value={formData.password}
-                                            onChange={handleChange}
+                                            value={password}
+                                            onChange={(e) => { setPassword(e.target.value) }}
                                 />
                                 {showPassword ? 
                                     <PiEyeSlash 
@@ -78,12 +78,12 @@ export default function LoginPage() {
                                     />
                                 }
                             </label>
-                            <ButtonPrimary type="submit">Logga In</ButtonPrimary>
-                        </form>
-                        <section className="w-full flex flex-col items-center justify-center gap-4">
-                            <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
-                            <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
+                            <section className="w-full flex flex-col items-center justify-center gap-4 mt-[1.5rem]">
+                                <ButtonPrimary type="submit">Logga In</ButtonPrimary>
+                                <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
+                                <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
                         </section>
+                        </form>
                     </div>
                 </div>
             </div>
