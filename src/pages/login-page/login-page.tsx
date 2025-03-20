@@ -1,25 +1,43 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import ButtonPrimary from "../../components/ui/button";
-import InputLogin from "../../components/ui/login-input";
-
+import { ButtonPrimary } from "../../components/ui/button";
+import { InputPrimary } from "../../components/ui/input";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 
-type User = {
-    username: string;
-    password: string;
-};
-
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const userData = User = {username, password}
-        navigate('/dashboard')
+        const userData = {
+            "användarnamn": username,
+            "lösenord": password
+          };
+        const API_URL = 'http://localhost:5139/api/auth/login'
+        try {
+            console.log(userData);
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            console.log(response);
+            if (!response.ok) {
+                throw new Error('Något gick snett med POST-förfrågan vi gjorde :(((')
+            }
+            const data = await response.json();
+            console.log(data);
+            sessionStorage.setItem('token', data.token);
+            navigate('/dashboard')
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -33,28 +51,39 @@ export default function LoginPage() {
                 </div>
                 <div className="w-full flex flex-col items-center justify-center">
                     <div className="w-[24.5rem] flex flex-col items-center justify-center gap-6">
-                        <form className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" onSubmit={handleSubmit} action="submit">
+                        <form onSubmit={handleSubmit} className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
-                                <InputLogin type="text" 
+                                <InputPrimary type="text"
+                                            name="username"
                                             value={username}
-                                            onChange={(e) => {setUsername(e.target.value)}} 
+                                            onChange={(e) => { setUsername(e.target.value) }} 
                                 />
                             </label>
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2 text-[0.875rem] leading-[0.875rem] font-semibold">
                                 <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold">Lösenord</span>
-                                <InputLogin type="password"
+                                <InputPrimary type={showPassword ? "text" : "password"}
+                                            name="password"
                                             value={password}
-                                            onChange={(e) => {setPassword(e.target.value)}}
-                                            
-                                /><PiEye className="absolute fill-white/75 w-6 h-6 inset-0 top-[16.875rem] left-[23.125rem]"/>
+                                            onChange={(e) => { setPassword(e.target.value) }}
+                                />
+                                {showPassword ? 
+                                    <PiEyeSlash 
+                                        className="absolute cursor-pointer w-6 h-6 text-gray-500 right-4 top-10"
+                                        onClick={() => setShowPassword(false)} 
+                                    /> : 
+                                    <PiEye 
+                                        className="absolute cursor-pointer w-6 h-6 text-gray-500 right-4 top-10"
+                                        onClick={() => setShowPassword(true)} 
+                                    />
+                                }
                             </label>
-                        </form>
-                        <section className="w-full flex flex-col items-center justify-center gap-4">
-                            <ButtonPrimary type="submit">Logga In</ButtonPrimary>
-                            <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
-                            <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
+                            <section className="w-full flex flex-col items-center justify-center gap-4 mt-[1.5rem]">
+                                <ButtonPrimary type="submit">Logga In</ButtonPrimary>
+                                <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
+                                <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
                         </section>
+                        </form>
                     </div>
                 </div>
             </div>

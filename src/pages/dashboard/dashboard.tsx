@@ -64,6 +64,7 @@ export default function DashBoard() {
                                 Dina pågående beställningar
                             </p>
                             <ButtonSecondary>Se alla</ButtonSecondary>
+                            <ButtonSecondary>Se alla</ButtonSecondary>
                         </article>
 
                         {/* Carousel Container */}
