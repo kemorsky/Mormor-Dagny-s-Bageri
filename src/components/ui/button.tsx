@@ -14,7 +14,7 @@ export const ButtonSecondary: React.FC<ButtonProps> = ({ className, ...props }) 
     return (
         <button
             className={cn(
-                "font-lato font-semibold w-auto px-4 py-3 bg-blue-800 hover:bg-blue-900 text-white border border-gray-300 rounded-[12px] transition-colors inline-flex justify-center items-center text-[1.125rem] leading-[1.5rem]",
+                "font-lato font-semibold w-auto px-4 py-3 bg-blue-800 hover:bg-blue-600 text-white border border-gray-300 rounded-[12px] transition-colors inline-flex justify-center items-center text-[1.125rem] leading-[1.5rem]",
                 className
             )}
             {...props}
@@ -28,7 +28,7 @@ export const ButtonTertiary: React.FC<ButtonProps> = ({ className, ...props }) =
     return (
         <button
             className={cn(
-                "font-lato font-semibold w-auto px-4 py-3 bg-gray-500 hover:bg-gray-600 text-[rgb(232,185,35)] border border-[rgb(232,185,35)] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1.125rem] leading-[1.5rem]",
+                "font-lato font-semibold w-auto px-4 py-3 bg-gray-800 hover:bg-gray-700 text-[rgb(232,185,35)] border border-[rgb(232,185,35)] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1.125rem] leading-[1.5rem]",
                 className
             )}
             {...props}
