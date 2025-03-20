@@ -6,7 +6,6 @@ import { Card, CardHeader, ProductListCard, ProductCard, ProductCardName, Produc
 
 export default function ConfirmationPage() {
 
-
     return (
         <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-center bg-red-900">
             <div className="w-full inline-flex flex-col items-start justify-center gap-6 px-3 py-3">

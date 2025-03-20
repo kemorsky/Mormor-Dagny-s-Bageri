@@ -5,6 +5,7 @@ import RecoverPassword from '../pages/recover-password/recover-password';
 import Dashboard from '../pages/dashboard/dashboard';
 import OrderPage from '../pages/order-page/order-page';
 import ConfirmationPage from '../pages/confirmation.page/confirmation-page';
+import OrdersPage from '../pages/orders/orders';
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
     {
         path: '/confirm-order',
         element: <ConfirmationPage />,
+    },
+    {
+        path: '/orders',
+        element: <OrdersPage />,
     },
 
 ])
