@@ -44,4 +44,13 @@ export const fetchStores = async () => {
       console.error("Error fetching stores:", error);
       throw error;
     }
-  };
+};
+
+export const fetchProducts = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/produkter`);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
