@@ -8,7 +8,7 @@ export default function Menu() {
 
     return (
         <header className="w-full inline-flex items-start justify-between">
-            <nav onClick={handleClick}  className="inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
+            <nav onClick={handleClick} className="inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
                 <div className="inline-flex items-center justify-start gap-2">
                     <section className="h-10 w-10 bg-blue-200 rounded-full inline-flex items-center justify-center overflow-hidden">
                         <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
@@ -20,6 +20,7 @@ export default function Menu() {
                 </div>
                 {isOpen ? 
                     <ul className="z-50 absolute top-[2.875rem] bg-black rounded-[0.375rem] divide-y-2 divide-gray-500 divide-solid">
+
                         <li className="flex items-center w-[11.875rem] px-1 h-[1.875rem]">
                             <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Profil</a>
                         </li>
@@ -30,13 +31,13 @@ export default function Menu() {
                             <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Inställningar</a>
                         </li>
                     </ul>
-                : null }
+                    : null}
             </nav>
             <section className="inline-flex items-center justify-between gap-4">
-                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/dashboard">Hem</a>
-                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/deliveries">Leverans</a>
-                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/order">Ny Beställning</a>
-                </section>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/dashboard">Hem</a>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/deliveries">Leverans</a>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/order">Ny Beställning</a>
+            </section>
         </header> 
     )
 }
