@@ -51,19 +51,23 @@
     ],
     "previousOrders": [
         {
-            "date": "om 1-3 dagar",
-            "address": {
-                "street": "Långgatan 18",
-                "postalCode": "",
-                "city": "Kållered"
-            },
-            "name": "ICA Bollebygd",
-            "contactPerson": "Stefan Holmqvist",
-            "customerNumber": 112568980,
-            "active": false
+            "previousOrders": [
+                {
+                    "date": "för 1-3 dagar",
+                    "address": {
+                        "street": "Långgatan 18",
+                        "postalCode": "",
+                        "city": "Kållered"
+                    },
+                    "name": "ICA Bollebygd",
+                    "contactPerson": "Stefan Holmqvist",
+                    "customerNumber": 112568980,
+                    "active": false
+                }
+            ]
         },
         {
-            "date": "om 4-6 dagar",
+            "date": "för 4-6 dagar",
             "address": {
                 "street": "Storgatan 5",
                 "postalCode": "12345",
@@ -72,6 +76,30 @@
             "name": "Coop Hisingen",
             "contactPerson": "Anna Andersson",
             "customerNumber": 112568981,
+            "active": false
+        },
+        {
+            "date": "för 1 vecka",
+            "address": {
+                "street": "Avenyn 1",
+                "postalCode": "41136",
+                "city": "Göteborg"
+            },
+            "name": "Hemköp Avenyn",
+            "contactPerson": "Maria Svensson",
+            "customerNumber": 987654321,
+            "active": false
+        },
+        {
+            "date": "för 2 veckor sedan",
+            "address": {
+                "street": "Östra Hamngatan 25",
+                "postalCode": "41110",
+                "city": "Göteborg"
+            },
+            "name": "Willys Nordstan",
+            "contactPerson": "Johan Eriksson",
+            "customerNumber": 456123789,
             "active": false
         }
     ]
