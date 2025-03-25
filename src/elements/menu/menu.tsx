@@ -4,7 +4,7 @@ export default function Menu() {
 
     const handleClick = () => {
         setIsOpen(!isOpen);
-    }
+    };
 
     return (
         <header className="w-full inline-flex items-start justify-between">

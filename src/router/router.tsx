@@ -8,7 +8,7 @@ import OrdersPage from '../pages/orders/orders';
 
 const router = createBrowserRouter([
     {
-        path: '/login',
+        path: '/',
         element: <LoginPage />,
     },
     {

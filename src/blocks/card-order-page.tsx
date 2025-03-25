@@ -9,7 +9,7 @@ const CardStore = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full p-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl inline-flex items-center justify-center",
+      "w-full min-h-[8.5rem] flex flex-col items-start justify-start p-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl",
       className
     )}
     {...props}

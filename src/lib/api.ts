@@ -4,9 +4,8 @@ type RequestOptions = {
     body?: string;
   }
 
-const BASE_URL = "http://localhost:5139/api"; // Base API URL
+const BASE_URL = "http://localhost:5139/api";
 
-// General API request function (to avoid code repetition)
 export const apiRequest = async (url: string, options: RequestOptions = {}) => {
     try {
       const token = sessionStorage.getItem("token");
