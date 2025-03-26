@@ -41,3 +41,18 @@ export const ButtonTertiary: React.FC<ButtonProps> = ({ className, ...props }) =
         </button>
     );
 };
+
+export const ButtonOrder: React.FC<ButtonProps> = ({ className, ...props }) => {
+    return (
+        <button
+            type="submit"
+            className={cn(
+                "font-lato font-semibold w-auto px-4 py-3 bg-gray-700 hover:bg-gray-500 text-[rgb(232,185,35)] border border-[rgb(232,185,35)] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1.125rem] leading-[1.5rem]",
+                className
+            )}
+            {...props}
+        >
+            Lägga beställningen
+        </button>
+    );
+};

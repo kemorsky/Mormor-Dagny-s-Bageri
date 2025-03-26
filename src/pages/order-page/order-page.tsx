@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from "react"
+import { useNavigate } from "react-router";
 import { Store, Product } from '../../types/types';
 import Fuse from "fuse.js";
 import Menu from "../../elements/menu/menu"
 import { fetchStores, fetchProducts } from "../../lib/api";
-import { InputAmount, InputOrderDropdown } from "../../components/ui/input"
+import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
+import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
 
 export default function OrderPage() {
@@ -13,8 +15,12 @@ export default function OrderPage() {
     const [loading, isLoading] = useState<string | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [products, setProducts] = useState<Product[] | null>(null);
+    const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
+    const [discount, setDiscount] = useState<number>(0);
 
     const allStoresRef = useRef<Store[] | null>(null);
+
+    const navigate = useNavigate();
 
     const options = useMemo(() => ({
         keys: [
@@ -86,6 +92,31 @@ export default function OrderPage() {
         setQuery('');
         setIsActive(false);
     };
+
+    const totalPrice = Object.keys(productQuantities).reduce((acc, productId) => {
+        const product = products?.find((p) => p.produktId === parseInt(productId));
+        const price = product?.baspris ? parseFloat(product.baspris) : 0;
+        const roundedPrice = Math.round(price * 100) / 100;
+        return acc + (productQuantities[productId as unknown as number] || 0) * roundedPrice;
+      }, 0);
+
+      const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let discountValue = e.target.value === '' ? 0 : parseInt(e.target.value);
+
+        if (discountValue < 0) {
+            discountValue = 0;
+        } else if (discountValue > 100) {
+            discountValue = 100;
+        };
+
+        if (!isNaN(discountValue)) {
+          setDiscount(discountValue);
+        }
+      };
+
+      const finalPrice = totalPrice !== undefined && discount !== undefined
+      ? totalPrice - (totalPrice * discount / 100)  // Applying discount percentage to totalPrice
+      : 0;
 
     return (
         <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
@@ -167,12 +198,30 @@ export default function OrderPage() {
                                     <CardProduct key={product.produktId}>
                                         <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.namn}</p>
                                         <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.baspris} kr</p>
-                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">Antal: <InputAmount /></p>
+                                        <InputAmount 
+                                            value={productQuantities[product.produktId] || 0 }
+                                            onChange={(e) => {
+                                                setProductQuantities((prevQuantities) => ({
+                                                    ...prevQuantities,
+                                                    [product.produktId]: parseInt(e.target.value)
+                                                }))
+                                        }}
+                                        />
                                     </CardProduct>
                                 ))
                             ) : (
                                 <p>Error loading products:</p>
                             )} 
+                            <hr className="bg-white h-[1px] w-full"/>
+                            <section className="self-end flex flex-col items-end gap-2">
+                                <p>Totallt: {totalPrice.toFixed(2)}</p>
+                                <InputDiscount 
+                                    value={discount || 0}
+                                    onChange={handleDiscountChange}
+                                    />
+                                <p>Totallt med rabatt: {finalPrice.toFixed(2)}</p>
+                                <ButtonOrder />
+                            </section>
                         </CardStoreContent>
                     </CardStore>               
                 </section>
