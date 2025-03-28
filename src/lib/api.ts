@@ -54,18 +54,27 @@ export const fetchProducts = async () => {
   }
 };
 
-export const fetchUserType = async () => {
-  try {
-    return await apiRequest(`${BASE_URL}/användare`)
-  } catch (error) {
-    console.log("Failed to fetch user", error)
-    throw Error;
-  }
-};
+// export const pushOrder = async () => {
+//   try {
+//     return await apiRequest(`${BASE_URL}/beställningdetaljer`);
+//   } catch (error) {
+//     console.error("Error pushing order:", error);
+//     throw error;
+//   }
+// }
 
-export const pushOrder = async () => {
+// export const createOrder = async () => {
+//   try {
+//     return await apiRequest(`${BASE_URL}/beställningar`);
+//   } catch (error) {
+//     console.error("Error pushing order:", error);
+//     throw error;
+//   }
+// }
+
+export const fetchOrder = async () => {
   try {
-    return await apiRequest(`${BASE_URL}/bestallningar`);
+    return await apiRequest(`${BASE_URL}/beställningar`);
   } catch (error) {
     console.error("Error pushing order:", error);
     throw error;

@@ -33,7 +33,9 @@ export default function LoginPage() {
             }
             const data = await response.json();
             console.log(data);
-            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem("token", data.Token);
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("roll", data.Roll);
             navigate('/dashboard')
         } catch (error) {
             console.error(error);
