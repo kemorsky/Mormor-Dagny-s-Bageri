@@ -73,41 +73,34 @@
                 "postalCode": "12345",
                 "city": "Göteborg"
             },
-            {
-                "date": "för 4-6 dagar",
-                "address": {
-                    "street": "Storgatan 5",
-                    "postalCode": "12345",
-                    "city": "Göteborg"
-                },
-                "name": "Coop Hisingen",
-                "contactPerson": "Anna Andersson",
-                "customerNumber": 112568981,
-                "active": false
+            "name": "Coop Hisingen",
+            "contactPerson": "Anna Andersson",
+            "customerNumber": 112568981,
+            "active": false
+        },
+        {
+            "date": "för 1 vecka",
+            "address": {
+                "street": "Avenyn 1",
+                "postalCode": "41136",
+                "city": "Göteborg"
             },
-            {
-                "date": "för 1 vecka",
-                "address": {
-                    "street": "Avenyn 1",
-                    "postalCode": "41136",
-                    "city": "Göteborg"
-                },
-                "name": "Hemköp Avenyn",
-                "contactPerson": "Maria Svensson",
-                "customerNumber": 987654321,
-                "active": false
+            "name": "Hemköp Avenyn",
+            "contactPerson": "Maria Svensson",
+            "customerNumber": 987654321,
+            "active": false
+        },
+        {
+            "date": "för 2 veckor sedan",
+            "address": {
+                "street": "Östra Hamngatan 25",
+                "postalCode": "41110",
+                "city": "Göteborg"
             },
-            {
-                "date": "för 2 veckor sedan",
-                "address": {
-                    "street": "Östra Hamngatan 25",
-                    "postalCode": "41110",
-                    "city": "Göteborg"
-                },
-                "name": "Willys Nordstan",
-                "contactPerson": "Johan Eriksson",
-                "customerNumber": 456123789,
-                "active": false
-            }
-        ]
-    }
+            "name": "Willys Nordstan",
+            "contactPerson": "Johan Eriksson",
+            "customerNumber": 456123789,
+            "active": false
+        }
+    ]
+}
