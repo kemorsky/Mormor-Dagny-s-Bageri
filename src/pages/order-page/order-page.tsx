@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from "react"
+import { useNavigate } from "react-router";
 import { Store, Product } from '../../types/types';
 import Fuse from "fuse.js";
 import Menu from "../../elements/menu/menu"
 import { fetchStores, fetchProducts } from "../../lib/api";
-import { InputAmount, InputOrderDropdown } from "../../components/ui/input"
+import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
+import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
 
 export default function OrderPage() {
@@ -13,8 +15,12 @@ export default function OrderPage() {
     const [loading, isLoading] = useState<string | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [products, setProducts] = useState<Product[] | null>(null);
+    const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
+    const [discount, setDiscount] = useState<number>(0);
 
     const allStoresRef = useRef<Store[] | null>(null);
+
+    const navigate = useNavigate();
 
     const options = useMemo(() => ({
         keys: [
@@ -58,6 +64,19 @@ export default function OrderPage() {
         };
     }, [query, options]);
 
+    const handleSelectedStore = (store: Store) => {
+        console.log("Store selected:", store)
+        setSelected(store);
+        setQuery('');
+        setIsActive(false)
+    };
+
+    const handleClearInput = () => {
+        setSelected(null);
+        setQuery('');
+        setIsActive(false);
+    };
+
     useEffect(() => {
         const getProducts = async () => {
             try {
@@ -74,17 +93,33 @@ export default function OrderPage() {
           });
     }, []);
 
-    const handleSelectedStore = (store: Store) => {
-        console.log("Store selected:", store)
-        setSelected(store);
-        setQuery('');
-        setIsActive(false)
+    const totalPrice = products ? products.reduce((acc, product) => {
+        const quantity = productQuantities[product.produktId] || 0;
+        return acc + (quantity * parseFloat(product.baspris));
+      }, 0) : 0;
+
+    const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let discountValue = e.target.value === '' ? 0 : parseInt(e.target.value);
+
+    if (discountValue < 0) {
+        discountValue = 0;
+    } else if (discountValue > 100) {
+        discountValue = 100;
     };
 
-    const handleClearInput = () => {
-        setSelected(null);
-        setQuery('');
-        setIsActive(false);
+    if (!isNaN(discountValue)) {
+        setDiscount(discountValue);
+    }
+    };
+
+    const finalPrice = totalPrice !== undefined && discount !== undefined
+    ? totalPrice - (totalPrice * discount / 100)
+    : 0;
+
+    const handleOrderSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        isLoading("Laddar...");
+        console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
     };
 
     return (
@@ -158,24 +193,44 @@ export default function OrderPage() {
                 <section className="w-full inline-flex flex-col items-center justify-center">
                     <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>                
                 </section>
-                <section className="w-full inline-flex flex-col items-center justify-center gap-3">
-                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
-                    <CardStore className="p-2">
-                        <CardStoreContent className="gap-3">
-                            {products ? (
-                                products.map((product) => (
-                                    <CardProduct key={product.produktId}>
-                                        <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.namn}</p>
-                                        <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.baspris} kr</p>
-                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">Antal: <InputAmount /></p>
-                                    </CardProduct>
-                                ))
-                            ) : (
-                                <p>Error loading products:</p>
-                            )} 
-                        </CardStoreContent>
-                    </CardStore>               
-                </section>
+                <form className="w-full" onSubmit={handleOrderSubmit}>
+                    <section className="w-full inline-flex flex-col items-center justify-center gap-3">
+                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
+                        <CardStore className="p-2">
+                            <CardStoreContent className="gap-3">
+                                {products ? (
+                                    products.map((product) => (
+                                        <CardProduct key={product.produktId}>
+                                            <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.namn}</p>
+                                            <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.baspris} kr</p>
+                                            <InputAmount 
+                                                value={productQuantities[product.produktId] || 0 }
+                                                onChange={(e) => {
+                                                    setProductQuantities((prevQuantities) => ({
+                                                        ...prevQuantities,
+                                                        [product.produktId]: parseInt(e.target.value)
+                                                    }))
+                                            }}
+                                            />
+                                        </CardProduct>
+                                    ))
+                                ) : (
+                                    <p>Error loading products:</p>
+                                )} 
+                                <hr className="bg-white h-[1px] w-full"/>
+                                <section className="self-end flex flex-col items-end gap-2">
+                                    <p>Totallt: {totalPrice.toFixed(2)}</p>
+                                    <InputDiscount 
+                                        value={discount || 0}
+                                        onChange={handleDiscountChange}
+                                        />
+                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)}</p>
+                                    <ButtonOrder />
+                                </section>
+                            </CardStoreContent>
+                        </CardStore>               
+                    </section>
+                </form>
             </div>
         </main>
     );
