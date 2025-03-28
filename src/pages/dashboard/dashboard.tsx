@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import {
-    Card,
+    WideCard as Card,
     CardDate,
     CardHeader,
-    CardStore,
     CardAddress,
     CardFooter,
     CardClientName,
     CardClientNumber,
+    CardStore,
 } from "../../blocks/card";
 import customersData from "../../../customers.json";
 import { ButtonSecondary, ButtonTertiary } from "./../../components/ui/button";
@@ -21,10 +21,11 @@ type Address = {
 
 type Customer = {
     date: string;
+    customerNumber: number;
     address: Address;
     name: string;
-    contactPerson: string;
-    customerNumber: number;
+    storeOwner: string;
+    breadManager: string;
     active: boolean;
 };
 
@@ -39,26 +40,26 @@ export default function DashBoard() {
     // Scroll-function for current orders
     const scrollLeftCurrent = () => {
         if (scrollRefCurrent.current) {
-            scrollRefCurrent.current.scrollBy({ left: -300, behavior: "smooth" });
+            scrollRefCurrent.current.scrollBy({ left: -320, behavior: "smooth" });
         }
     };
 
     const scrollRightCurrent = () => {
         if (scrollRefCurrent.current) {
-            scrollRefCurrent.current.scrollBy({ left: 300, behavior: "smooth" });
+            scrollRefCurrent.current.scrollBy({ left: 320, behavior: "smooth" });
         }
     };
 
-    // Scroll-function fro previous orders
+    // Scroll-function for previous orders
     const scrollLeftPrevious = () => {
         if (scrollRefPrevious.current) {
-            scrollRefPrevious.current.scrollBy({ left: -300, behavior: "smooth" });
+            scrollRefPrevious.current.scrollBy({ left: -320, behavior: "smooth" });
         }
     };
 
     const scrollRightPrevious = () => {
         if (scrollRefPrevious.current) {
-            scrollRefPrevious.current.scrollBy({ left: 300, behavior: "smooth" });
+            scrollRefPrevious.current.scrollBy({ left: 320, behavior: "smooth" });
         }
     };
 
@@ -92,22 +93,28 @@ export default function DashBoard() {
                                 scrollbarWidth: "none",
                                 msOverflowStyle: "none",
                             }}
-                            className="w-full overflow-x-hidden scrollbar-hide inline-flex flex-row gap-5 snap-x snap-mandatory scroll-smooth"
+                            className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
                         >
                             {customers.map((customer) => (
-                                <div key={customer.customerNumber} className="snap-center min-w-[200px]">
+                                <div key={customer.customerNumber} className="snap-center min-w-[320px]">
                                     <Card>
-                                        <CardDate>{customer.date}</CardDate>
+                                        <div className="flex justify-between items-center w-full">
+                                            <CardClientNumber className="ml-0">{`${customer.customerNumber}`}</CardClientNumber>
+                                            <CardDate className="ml-auto">{customer.date}</CardDate>
+                                        </div>
                                         <CardHeader>
                                             <CardStore>{customer.name}</CardStore>
                                             <CardAddress>
-                                                {customer.address.street} {customer.address.postalCode}{" "}
-                                                {customer.address.city}
+                                                {customer.address.street} {customer.address.postalCode} {customer.address.city}
                                             </CardAddress>
                                         </CardHeader>
-                                        <CardFooter>
-                                            <CardClientName>{customer.contactPerson}</CardClientName>
-                                            <CardClientNumber>{customer.customerNumber}</CardClientNumber>
+                                        <CardFooter className="flex w-full items-center gap-1">
+                                            <CardClientName className="flex-1 truncate">
+                                                Butiksägare: {customer.storeOwner}
+                                            </CardClientName>
+                                            <CardClientName className="flex-1 truncate text-right">
+                                                Brödansvarig: {customer.breadManager}
+                                            </CardClientName>
                                         </CardFooter>
                                     </Card>
                                 </div>
@@ -136,7 +143,6 @@ export default function DashBoard() {
 
                 {/* Carousel Container for Previous Orders */}
                 <div className="relative w-full">
-                    {/* Button for left scroll */}
                     <button
                         onClick={scrollLeftPrevious}
                         className="absolute left-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"
@@ -144,40 +150,33 @@ export default function DashBoard() {
                         ←
                     </button>
 
-                    {/* Scrollable container for previous orders */}
                     <div
                         ref={scrollRefPrevious}
-                        style={{
-                            scrollbarWidth: "none",
-                            msOverflowStyle: "none",
-                        }}
-                        className="w-full overflow-x-hidden scrollbar-hide inline-flex flex-row gap-5 snap-x snap-mandatory scroll-smooth"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                        className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
                     >
                         {previousOrders.map((order) => (
-                            <div key={order.customerNumber} className="snap-center min-w-[200px]">
+                            <div key={order.customerNumber} className="snap-center min-w-[320px]">
                                 <Card>
-                                    <CardDate>{order.date}</CardDate>
+                                    <div className="flex justify-between items-center w-full">
+                                        <CardClientNumber className="ml-0">{`#${order.customerNumber}`}</CardClientNumber>
+                                        <CardDate className="ml-auto">{order.date}</CardDate>
+                                    </div>
                                     <CardHeader>
                                         <CardStore>{order.name}</CardStore>
                                         <CardAddress>
-                                            {/* Make sure the address exists */}
-                                            {order.address && order.address.street ? (
-                                                `${order.address.street} ${order.address.postalCode} ${order.address.city}`
-                                            ) : (
-                                                'Ingen adress tillgänglig'
-                                            )}
+                                            {order.address.street} {order.address.postalCode} {order.address.city}
                                         </CardAddress>
                                     </CardHeader>
-                                    <CardFooter>
-                                        <CardClientName>{order.contactPerson}</CardClientName>
-                                        <CardClientNumber>{order.customerNumber}</CardClientNumber>
+                                    <CardFooter className="flex justify-between w-full">
+                                        <CardClientName className="ml-0">Butiksägare: {order.storeOwner}</CardClientName>
+                                        <CardClientName className="ml-auto">Brödansvarig: {order.breadManager}</CardClientName>
                                     </CardFooter>
                                 </Card>
                             </div>
                         ))}
                     </div>
 
-                    {/* Button for right scroll */}
                     <button
                         onClick={scrollRightPrevious}
                         className="absolute right-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"

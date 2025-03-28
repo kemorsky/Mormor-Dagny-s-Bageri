@@ -197,7 +197,22 @@ const ProductCardAmount = React.forwardRef<
 ))
 ProductCardAmount.displayName = "ProductCardAmount"
 
-export {Card, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount}
+const WideCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "w-[320px] h-[200px] px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
+      className
+    )}
+    {...props}
+  />
+));
+WideCard.displayName = "WideCard";
+
+export { Card, WideCard, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount }
 
 
 // export default function Card() {
