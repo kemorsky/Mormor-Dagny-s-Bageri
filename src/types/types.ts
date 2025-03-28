@@ -17,3 +17,9 @@ export type Product = {
     namn: string;
     baspris: string;
 };
+
+export type User = {
+    användarnamn: string;
+    lösenord: string;
+    roll: string;
+};

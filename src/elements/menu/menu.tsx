@@ -1,6 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { fetchUserType } from "../../lib/api";
+import { User } from "../../types/types";
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const getUserType = async () => {
+            try {
+                const userType = await fetchUserType();
+                const data = userType
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+                throw error;
+            }
+        }
+        getUserType().catch((error) => {
+            console.error("Uncaught error:", error);
+          });
+    }, [])  
 
     const handleClick = () => {
         setIsOpen(!isOpen);

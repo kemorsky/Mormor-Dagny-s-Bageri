@@ -15,7 +15,7 @@ export const InputAmount: React.FC<InputProps> = ({className, ...props}) =>  {
 
 export const InputDiscount: React.FC<InputProps> = ({className, ...props}) =>  {
     return <section className="flex items-center justify-center gap-2">
-                <label htmlFor="amount" className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">Rabatt: </label>
+                <label htmlFor="amount" className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">Rabatt(%): </label>
                 <input type="text" className={cn("bg-white w-[3.5rem] h-[2.625rem] rounded-[0.5rem] text-[1rem] leading-[1.1875rem] text-black text-center px-2 py-1 focus:outline-none", className)} {...props}/>
             </section>
 };

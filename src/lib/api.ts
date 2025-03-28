@@ -53,3 +53,21 @@ export const fetchProducts = async () => {
     throw error;
   }
 };
+
+export const fetchUserType = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/användare`)
+  } catch (error) {
+    console.log("Failed to fetch user", error)
+    throw Error;
+  }
+};
+
+export const pushOrder = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/bestallningar`);
+  } catch (error) {
+    console.error("Error pushing order:", error);
+    throw error;
+  }
+}

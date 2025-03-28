@@ -219,12 +219,12 @@ export default function OrderPage() {
                                 )} 
                                 <hr className="bg-white h-[1px] w-full"/>
                                 <section className="self-end flex flex-col items-end gap-2">
-                                    <p>Totallt: {totalPrice.toFixed(2)}</p>
+                                    <p>Totallt: {totalPrice.toFixed(2)} kr</p>
                                     <InputDiscount 
                                         value={discount || 0}
                                         onChange={handleDiscountChange}
                                         />
-                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)}</p>
+                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
                                     <ButtonOrder />
                                 </section>
                             </CardStoreContent>
