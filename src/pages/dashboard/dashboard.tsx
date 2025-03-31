@@ -27,6 +27,8 @@ type Customer = {
     storeOwner: string;
     breadManager: string;
     active: boolean;
+    phoneNumber: string;
+    contactPerson?: string;
 };
 
 export default function DashBoard() {
@@ -100,21 +102,30 @@ export default function DashBoard() {
                                     <Card>
                                         <div className="flex justify-between items-center w-full">
                                             <CardClientNumber className="ml-0">{`${customer.customerNumber}`}</CardClientNumber>
-                                            <CardDate className="ml-auto">{customer.date}</CardDate>
+                                            <CardDate className="ml-auto"><strong>{customer.date}</strong></CardDate>
                                         </div>
                                         <CardHeader>
                                             <CardStore>{customer.name}</CardStore>
-                                            <CardAddress>
-                                                {customer.address.street} {customer.address.postalCode} {customer.address.city}
+                                            <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
+                                                <span>{customer.address.street}</span>
+                                                <span className="text-sm font-normal">{customer.address.postalCode} {customer.address.city}</span>
                                             </CardAddress>
                                         </CardHeader>
-                                        <CardFooter className="flex w-full items-center gap-1">
-                                            <CardClientName className="flex-1 truncate">
-                                                Butiksägare: {customer.storeOwner}
-                                            </CardClientName>
-                                            <CardClientName className="flex-1 truncate text-right">
-                                                Brödansvarig: {customer.breadManager}
-                                            </CardClientName>
+                                        <CardFooter className="flex justify-between w-full items-center">
+                                            <div className="flex-1 min-w-0 flex flex-col">
+                                                <span>Butiksägare</span>
+                                                <CardClientName className="font-normal text-gray-500 text-sm overflow-hidden flex flex-col text-[#9A9A9A]">
+                                                    <span>{customer.storeOwner}</span>
+                                                    <span>{customer.phoneNumber}</span>
+                                                </CardClientName>
+                                            </div>
+                                            <div className="flex-1 min-w-0 flex flex-col text-right">
+                                                <span>Brödansvarig</span>
+                                                <CardClientName className="whitespace-nowrap overflow-hidden text-[#9A9A9A]">
+                                                    {customer.breadManager}
+                                                </CardClientName>
+                                                <span className="text-sm text-[#9A9A9A]">{customer.phoneNumber}</span>
+                                            </div>
                                         </CardFooter>
                                     </Card>
                                 </div>
@@ -160,17 +171,30 @@ export default function DashBoard() {
                                 <Card>
                                     <div className="flex justify-between items-center w-full">
                                         <CardClientNumber className="ml-0">{`#${order.customerNumber}`}</CardClientNumber>
-                                        <CardDate className="ml-auto">{order.date}</CardDate>
+                                        <CardDate className="ml-auto font-bold">{order.date}</CardDate>
                                     </div>
                                     <CardHeader>
                                         <CardStore>{order.name}</CardStore>
-                                        <CardAddress>
-                                            {order.address.street} {order.address.postalCode} {order.address.city}
+                                        <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
+                                            <span>{order.address.street}</span>
+                                            <span>{order.address.postalCode} {order.address.city}</span>
                                         </CardAddress>
                                     </CardHeader>
-                                    <CardFooter className="flex justify-between w-full">
-                                        <CardClientName className="ml-0">Butiksägare: {order.storeOwner}</CardClientName>
-                                        <CardClientName className="ml-auto">Brödansvarig: {order.breadManager}</CardClientName>
+                                    <CardFooter className="flex justify-between w-full items-center">
+                                        <div className="flex-1 min-w-0 flex flex-col">
+                                            <span className="font-semibold">Butiksägare</span>
+                                            <CardClientName className="whitespace-nowrap overflow-hidden flex flex-col text-[#9A9A9A]">
+                                                <span>{order.contactPerson || "Ej angiven"}</span>
+                                                <span>{order.phoneNumber}</span>
+                                            </CardClientName>
+                                        </div>
+                                        <div className="flex-1 min-w-0 flex flex-col text-right">
+                                            <span className="font-semibold">Brödansvarig</span>
+                                            <CardClientName className=" font-normal overflow-hidden flex flex-col text-[#9A9A9A]">
+                                                <span>{order.breadManager || "Ej angiven"}</span>
+                                                <span>{order.phoneNumber}</span>
+                                            </CardClientName>
+                                        </div>
                                     </CardFooter>
                                 </Card>
                             </div>

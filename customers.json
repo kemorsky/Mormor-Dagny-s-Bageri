@@ -1,61 +1,65 @@
 {
     "customers": [
         {
-            "date": "om 1-3 dagar",
+            "date": "22.03.2025",
             "address": {
                 "street": "Olbersgatan 2",
                 "postalCode": "41655",
                 "city": "Göteborg"
             },
             "name": "Tempo Skatås",
-            "storeOwner": "Otto",
-            "breadManager": "Ej angiven",
+            "phoneNumber": "031-123456",
+            "storeOwner": "Otto Lindgren",
+            "breadManager": "Rikard Svensson",
             "customerNumber": "#317075550",
             "active": true
         },
         {
-            "date": "om 1-3 dagar",
+            "date": "21.03.2025",
             "address": {
                 "street": "Kungsmässan",
                 "postalCode": "434 38",
-                "city": "KUNGSBACKA"
+                "city": "Kungsbacka"
             },
             "name": "ICA Kvantum Kungsbacka",
-            "storeOwner": "Mattias",
-            "breadManager": "Ej angiven",
+            "phoneNumber": "0300-123456",
+            "storeOwner": "Mattias Johansson",
+            "breadManager": "Lukas Andersson",
             "customerNumber": "#30051150",
             "active": true
         },
         {
-            "date": "om 1-3 dagar",
+            "date": "19.03.2025",
             "address": {
                 "street": "Månstensvägen 2",
                 "postalCode": "43451",
                 "city": "Kungsbacka"
             },
             "name": "Coop Kolla Parkstad",
-            "storeOwner": "Tobias",
-            "breadManager": "Ej angiven",
+            "phoneNumber": "0300-654321",
+            "storeOwner": "Tobias Karlsson",
+            "breadManager": "Erik Olsson",
             "customerNumber": "#46766352150",
             "active": true
         },
         {
-            "date": "om 1-3 dagar",
+            "date": "17.03.2025",
             "address": {
                 "street": "Mjörnbotorget 6",
                 "postalCode": "443 42",
                 "city": "Gråbo"
             },
             "name": "Coop Mjörnbotorget, Gråbo",
-            "storeOwner": "Jesper",
-            "breadManager": "Ej angiven",
+            "phoneNumber": "031-987654",
+            "storeOwner": "Jesper Nilsson",
+            "breadManager": "Tony Persson",
             "customerNumber": "#107463380",
             "active": true
         }
     ],
     "previousOrders": [
         {
-            "date": "för 1-3 dagar",
+            "date": "14.03.2025",
             "address": {
                 "street": "Långgatan 18",
                 "postalCode": "",
@@ -63,42 +67,50 @@
             },
             "name": "ICA Bollebygd",
             "contactPerson": "Stefan Holmqvist",
+            "phoneNumber": "031-123456",
+            "breadManager": "Erik Olsson",
             "customerNumber": 112568980,
             "active": false
         },
         {
-            "date": "för 4-6 dagar",
+            "date": "12.03.2025",
             "address": {
                 "street": "Storgatan 5",
                 "postalCode": "12345",
                 "city": "Göteborg"
             },
             "name": "Coop Hisingen",
+            "phoneNumber": "031-654321",
             "contactPerson": "Anna Andersson",
+            "breadManager": "Lukas Andersson",
             "customerNumber": 112568981,
             "active": false
         },
         {
-            "date": "för 1 vecka",
+            "date": "10.03.2025",
             "address": {
                 "street": "Avenyn 1",
                 "postalCode": "41136",
                 "city": "Göteborg"
             },
             "name": "Hemköp Avenyn",
+            "phoneNumber": "031-987654",
             "contactPerson": "Maria Svensson",
+            "breadManager": "Rikard Svensson",
             "customerNumber": 987654321,
             "active": false
         },
         {
-            "date": "för 2 veckor sedan",
+            "date": "08.03.2025",
             "address": {
                 "street": "Östra Hamngatan 25",
                 "postalCode": "41110",
                 "city": "Göteborg"
             },
             "name": "Willys Nordstan",
+            "phoneNumber": "031-123456",
             "contactPerson": "Johan Eriksson",
+            "breadManager": "Tony Persson",
             "customerNumber": 456123789,
             "active": false
         }
