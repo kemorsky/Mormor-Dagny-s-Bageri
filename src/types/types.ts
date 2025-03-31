@@ -16,6 +16,7 @@ export type Product = {
     ProduktId: number;
     Namn: string;
     Baspris: string;
+    isDeleted: boolean;
 };
 
 export type OrderDetails = {

@@ -1,3 +1,5 @@
+import { OrderDetails, Order } from "../types/types";
+
 type RequestOptions = {
     method?: string;
     headers?: { [key: string]: string };
@@ -54,14 +56,17 @@ export const fetchProducts = async () => {
   }
 };
 
-// export const pushOrder = async () => {
-//   try {
-//     return await apiRequest(`${BASE_URL}/beställningdetaljer`);
-//   } catch (error) {
-//     console.error("Error pushing order:", error);
-//     throw error;
-//   }
-// }
+export const pushOrder = async (orderDetails: OrderDetails) => {
+  try {
+    return await apiRequest(`${BASE_URL}/beställningsdetaljer`, {
+      method: 'POST',
+      body: JSON.stringify(orderDetails),
+  });
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw error;
+  }
+}
 
 // export const createOrder = async () => {
 //   try {

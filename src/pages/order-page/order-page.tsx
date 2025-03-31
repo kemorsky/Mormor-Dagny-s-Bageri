@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from "react"
 import { useNavigate } from "react-router";
-import { Store, Product, Order } from '../../types/types';
+import { Store, Product, OrderDetails, Order } from '../../types/types';
 import Fuse from "fuse.js";
 import Menu from "../../elements/menu/menu"
-import { fetchStores, fetchProducts, fetchOrder } from "../../lib/api";
+import { fetchStores, fetchProducts, fetchOrder, pushOrder } from "../../lib/api";
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
@@ -17,7 +17,7 @@ export default function OrderPage() {
     const [products, setProducts] = useState<Product[] | null>(null);
     const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
     const [discount, setDiscount] = useState<number>(0);
-    const [order, setOrder] = useState<Order | null>(null);
+    const [orderDetails, setOrderDetails] = useState<OrderDetails | null>();
 
     const allStoresRef = useRef<Store[] | null>(null);
 
@@ -130,19 +130,18 @@ export default function OrderPage() {
     ? totalPrice - (totalPrice * discount / 100)
     : 0;
 
-    // useEffect(() => {
-    //     const pushOrder = async () => {
-    //         try {
-                
-    //         } catch (error) {
-                
-    //         }
-    //     }
-    // })
-
-    const handleOrderSubmit = (e: React.FormEvent) => {
+    const handleOrderSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         isLoading("Laddar...");
+        const orderDetailsData = await pushOrder(orderDetails as OrderDetails);
+        console.log(orderDetailsData)
+        setOrderDetails(orderDetailsData);
+        try {
+            const response = await pushOrder(orderDetailsData);
+            console.log(response)
+        } catch (error) {
+            console.error("Error pushing order:", error);
+        }
         console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
     };
 
