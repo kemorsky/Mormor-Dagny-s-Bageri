@@ -1,19 +1,41 @@
 export type Store = {
-    butikId: number;
-    butikNummer: string;
-    butikNamn: string;
-    besöksadress: string;
-    brödansvarigNamn: string;
-    brödansvarigTelefon: string;
-    butikschefNamn: string;
-    butikschefTelefon: string;
-    fakturaadress: string;
-    låst: boolean;
-    telefonnummer: string;
+    ButikId: number;
+    ButikNummer: string;
+    ButikNamn: string;
+    Besöksadress: string;
+    BrödansvarigNamn: string;
+    BrödansvarigTelefon: string;
+    ButikschefNamn: string;
+    ButikschefTelefon: string;
+    Fakturaadress: string;
+    Låst: boolean;
+    Telefonnummer: string;
 };
 
 export type Product = {
-    produktId: number;
-    namn: string;
-    baspris: string;
+    ProduktId: number;
+    Namn: string;
+    Baspris: string;
+    isDeleted: boolean;
+};
+
+export type OrderDetails = {
+    BeställningsdetaljId: number,
+    BeställningId: number,
+    ProduktId: number,
+    Antal: number,
+    Styckpris: number,
+    Rabatt: number,
+    Produkt: Product[]
+}
+
+export type Order = {
+    BeställningId: number,
+    ButikId: number,
+    Beställningsdatum: string,
+    Beställare: string,
+    Säljare: string,
+    PreliminärtLeveransdatum: string,
+    Beställningsdetaljer: OrderDetails[],
+    Butik: Store[]
 };

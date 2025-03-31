@@ -2,6 +2,9 @@ import { useState } from "react"
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
 
+    const userName = sessionStorage.getItem("username");
+    const userType = sessionStorage.getItem("roll");
+
     const handleClick = () => {
         setIsOpen(!isOpen);
     };
@@ -14,8 +17,12 @@ export default function Menu() {
                         <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
                     </section>
                     <article className="inline-flex flex-col gap-1">
-                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textPrimary font-inter font-semibold">Regina</p>
-                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textSecondary font-inter">Säljare</p>
+                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textPrimary font-inter font-semibold">
+                            {userName}
+                        </p>
+                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textSecondary font-inter">
+                            {userType}
+                        </p>
                     </article>
                 </div>
                 {isOpen ? 
