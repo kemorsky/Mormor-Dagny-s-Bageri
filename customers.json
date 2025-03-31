@@ -82,10 +82,16 @@
             "name": "Coop Hisingen",
             "phoneNumber": "031-654321",
             "contactPerson": "Anna Andersson",
-            "breadManager": "Lukas Andersson",
+            "breadManager": "Lukas Andersson"
         },
         {
+            "name": "ICA Maxi Bergsjön",
             "date": "10.03.2025",
+            "address": {
+                "street": " Storgatan 10",
+                "postalCode": " 12345",
+                "city": "Göteborg"
+            },
             "phoneNumber": "031-987654",
             "contactPerson": "Maria Svensson",
             "breadManager": "Rikard Svensson",
