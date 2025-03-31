@@ -83,17 +83,9 @@
             "phoneNumber": "031-654321",
             "contactPerson": "Anna Andersson",
             "breadManager": "Lukas Andersson",
-            "customerNumber": 112568981,
-            "active": false
         },
         {
             "date": "10.03.2025",
-            "address": {
-                "street": "Avenyn 1",
-                "postalCode": "41136",
-                "city": "Göteborg"
-            },
-            "name": "Hemköp Avenyn",
             "phoneNumber": "031-987654",
             "contactPerson": "Maria Svensson",
             "breadManager": "Rikard Svensson",

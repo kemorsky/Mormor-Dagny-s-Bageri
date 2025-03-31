@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from "react"
 import { useNavigate } from "react-router";
-import { Store, Product } from '../../types/types';
+import { Store, Product, OrderDetails, Order } from '../../types/types';
 import Fuse from "fuse.js";
 import Menu from "../../elements/menu/menu"
-import { fetchStores, fetchProducts } from "../../lib/api";
+import { fetchStores, fetchProducts, fetchOrder, pushOrder } from "../../lib/api";
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
@@ -17,6 +17,7 @@ export default function OrderPage() {
     const [products, setProducts] = useState<Product[] | null>(null);
     const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
     const [discount, setDiscount] = useState<number>(0);
+    const [orderDetails, setOrderDetails] = useState<OrderDetails | null>();
 
     const allStoresRef = useRef<Store[] | null>(null);
 
@@ -24,10 +25,10 @@ export default function OrderPage() {
 
     const options = useMemo(() => ({
         keys: [
-            'butikNummer', 'butikNamn', 'besöksadress', 
-            'brödansvarigNamn', 'brödansvarigTelefon', 
-            'butikschefNamn', 'butikschefTelefon', 
-            'fakturaadress', 'telefonnummer'
+            'ButikNummer', 'ButikNamn', 'Besöksadress', 
+            'BrödansvarigNamn', 'BrödansvarigTelefon', 
+            'ButikschefNamn', 'ButikschefTelefon', 
+            'Fakturaadress', 'Telefonnummer'
         ],
         threshold: 0.3,
         minMatchCharLength: 3
@@ -81,7 +82,6 @@ export default function OrderPage() {
         const getProducts = async () => {
             try {
                 const productsData = await fetchProducts();
-                console.log(productsData)
                 setProducts(productsData);
             } catch (error) {
                 console.error("Fetch Error:", error);
@@ -93,9 +93,23 @@ export default function OrderPage() {
           });
     }, []);
 
+    useEffect (() => {
+        const getOrder = async () => {
+            try {
+                const orderData = await fetchOrder();
+                console.log(orderData.Data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getOrder().catch((error) => {
+            console.error("Uncaught error:", error);
+          });
+    }, []);
+
     const totalPrice = products ? products.reduce((acc, product) => {
-        const quantity = productQuantities[product.produktId] || 0;
-        return acc + (quantity * parseFloat(product.baspris));
+        const quantity = productQuantities[product.ProduktId] || 0;
+        return acc + (quantity * parseFloat(product.Baspris));
       }, 0) : 0;
 
     const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,9 +130,18 @@ export default function OrderPage() {
     ? totalPrice - (totalPrice * discount / 100)
     : 0;
 
-    const handleOrderSubmit = (e: React.FormEvent) => {
+    const handleOrderSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         isLoading("Laddar...");
+        const orderDetailsData = await pushOrder(orderDetails as OrderDetails);
+        console.log(orderDetailsData)
+        setOrderDetails(orderDetailsData);
+        try {
+            const response = await pushOrder(orderDetailsData);
+            console.log(response)
+        } catch (error) {
+            console.error("Error pushing order:", error);
+        }
         console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
     };
 
@@ -138,11 +161,11 @@ export default function OrderPage() {
                         <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
                             {stores.map((store) => (
                                 <li
-                                key={store.butikId}
+                                key={store.ButikId}
                                 onClick={() => handleSelectedStore(store)}
                                 className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
                                 >
-                                    {store.butikNamn}, {store.besöksadress}
+                                    {store.ButikNamn}, {store.Besöksadress}
                                 </li>
                             ))}
                         </ul>
@@ -154,24 +177,24 @@ export default function OrderPage() {
                         <CardStore className="">
                             <CardStoreContent>
                                 <CardStoreInformation>
-                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{selected.butikNamn} 
-                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {selected.butikNummer}</span>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{selected.ButikNamn} 
+                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {selected.ButikNummer}</span>
                                     </p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.besöksadress}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.Besöksadress}</p>
                                 </CardStoreInformation>
                                 <CardStoreContacts>
                                     <CardStoreOwner>
                                         <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
                                         <article className="w-full flex items-center justify-start gap-1.5">
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.butikschefNamn}</p>
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.butikschefTelefon}</p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.ButikschefNamn}</p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.ButikschefTelefon}</p>
                                         </article>
                                     </CardStoreOwner>
                                     <CardStoreBreadperson>
                                         <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
                                         <article className="w-full flex items-center justify-start gap-1.5">
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.brödansvarigNamn}</p>
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.brödansvarigTelefon}</p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.BrödansvarigNamn}</p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.BrödansvarigTelefon}</p>
                                         </article>
                                     </CardStoreBreadperson>
                                 </CardStoreContacts>
@@ -200,15 +223,15 @@ export default function OrderPage() {
                             <CardStoreContent className="gap-3">
                                 {products ? (
                                     products.map((product) => (
-                                        <CardProduct key={product.produktId}>
-                                            <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.namn}</p>
-                                            <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.baspris} kr</p>
+                                        <CardProduct key={product.ProduktId}>
+                                            <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.Namn}</p>
+                                            <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.Baspris} kr</p>
                                             <InputAmount 
-                                                value={productQuantities[product.produktId] || 0 }
+                                                value={productQuantities[product.ProduktId] || 0 }
                                                 onChange={(e) => {
                                                     setProductQuantities((prevQuantities) => ({
                                                         ...prevQuantities,
-                                                        [product.produktId]: parseInt(e.target.value)
+                                                        [product.ProduktId]: parseInt(e.target.value)
                                                     }))
                                             }}
                                             />
@@ -219,12 +242,12 @@ export default function OrderPage() {
                                 )} 
                                 <hr className="bg-white h-[1px] w-full"/>
                                 <section className="self-end flex flex-col items-end gap-2">
-                                    <p>Totallt: {totalPrice.toFixed(2)}</p>
+                                    <p>Totallt: {totalPrice.toFixed(2)} kr</p>
                                     <InputDiscount 
                                         value={discount || 0}
                                         onChange={handleDiscountChange}
                                         />
-                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)}</p>
+                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
                                     <ButtonOrder />
                                 </section>
                             </CardStoreContent>
