@@ -3,40 +3,25 @@ import { useNavigate } from "react-router";
 import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
+import { useAuth } from "../../components/auth/AuthProvider";
 
 export default function LoginPage() {
+    const { handleLogin, currentUser } = useAuth();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
-
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const userData = {
-            "användarnamn": username,
-            "lösenord": password
-          };
-        const API_URL = 'http://localhost:5139/api/auth/login'
         try {
-            console.log(userData);
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-            console.log(response);
-            if (!response.ok) {
-                throw new Error('Något gick snett med POST-förfrågan vi gjorde :(((')
-            }
-            const data = await response.json();
-            console.log(data);
-            sessionStorage.setItem("token", data.Token);
-            sessionStorage.setItem("username", username);
-            sessionStorage.setItem("roll", data.Roll);
-            navigate('/dashboard')
+            const userType = currentUser?.Roll; 
+            await handleLogin(username, password);
+                  // TODO - fix forcing the user to press the button twice
+            if (userType === 1) {
+                navigate('/seller-dashboard');
+            } 
         } catch (error) {
             console.error(error);
         }

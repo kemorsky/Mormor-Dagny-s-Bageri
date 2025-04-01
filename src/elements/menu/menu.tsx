@@ -1,9 +1,11 @@
 import { useState } from "react"
+import { useAuth } from "../../components/auth/AuthProvider";
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
+    const {currentUser} = useAuth();
 
-    const userName = sessionStorage.getItem("username");
-    const userType = sessionStorage.getItem("roll");
+    const userName = currentUser?.Användarnamn;
+    const userType = currentUser?.Roll;
 
     const handleClick = () => {
         setIsOpen(!isOpen);
