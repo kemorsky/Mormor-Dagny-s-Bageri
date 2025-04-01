@@ -10,7 +10,7 @@ import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, C
 
 export default function OrderPage() {
     const [stores, setStores] = useState<Store[] | null>(null);
-    const [selected, setSelected] = useState<Store | null>();
+    const [selected, setSelected] = useState<Store | null>(null);
     const [query, setQuery] = useState<string>("");
     const [loading, isLoading] = useState<string | null>(null);
     const [isActive, setIsActive] = useState(false);
@@ -93,23 +93,23 @@ export default function OrderPage() {
           });
     }, []);
 
-    useEffect (() => {
-        const getOrder = async () => {
-            try {
-                const orderData = await fetchOrder();
-                console.log(orderData.Data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getOrder().catch((error) => {
-            console.error("Uncaught error:", error);
-          });
-    }, []);
+    // useEffect (() => {
+    //     const getOrder = async () => {
+    //         try {
+    //             const orderDetails = await fetchOrder();
+    //             setOrderDetails(orderDetails);
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getOrder().catch((error) => {
+    //         console.error("Uncaught error:", error);
+    //       });
+    // }, []);
 
     const totalPrice = products ? products.reduce((acc, product) => {
         const quantity = productQuantities[product.ProduktId] || 0;
-        return acc + (quantity * parseFloat(product.Baspris));
+        return acc + (quantity * product.Baspris);
       }, 0) : 0;
 
     const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,17 +133,40 @@ export default function OrderPage() {
     const handleOrderSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         isLoading("Laddar...");
-        const orderDetailsData = await pushOrder(orderDetails as OrderDetails);
-        console.log(orderDetailsData)
-        setOrderDetails(orderDetailsData);
+        const orderDetails: OrderDetails = {
+            BeställningsdetaljId: 0,
+            BeställningId: 0,
+            ProduktId: 0,
+            Antal: Object.values(productQuantities).reduce((acc, quantity) => acc + quantity, 0),
+            Styckpris: finalPrice, // - inte finalPrice. Skapa ny variabel i Table i databasen
+            Rabatt: discount,
+            Produkt: products?.filter((product) => productQuantities[product.ProduktId] > 0).map((product) => ({
+                ProduktId: product.ProduktId,
+                Namn: product.Namn,
+                Baspris: product.Baspris,
+                isDeleted: false,
+                Antal: productQuantities[product.ProduktId],
+                Styckpris: product.Baspris * productQuantities[product.ProduktId], // Inte totallt pris men pris per 1st produkt. Behöver totallt pris
+              })) as Product[]
+          };
+        setOrderDetails(orderDetails);
+        console.log(orderDetails)
         try {
-            const response = await pushOrder(orderDetailsData);
-            console.log(response)
+            const response = await pushOrder(orderDetails);
+            if (!response) {
+                console.error("Error submitting order:", response.error);
+              }
         } catch (error) {
             console.error("Error pushing order:", error);
         }
-        console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
+        // console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
     };
+
+    // TODO:
+    // - Fixa beställningsdetaljer response (utkastar 404 just nu)
+    // - Skapa ny Table med totalltpris 
+    // - Ändra/anpassa Produkt Table i Beställningsdetaljer så att det är likadan/exakt samma som Produkt Table i /produkter
+    // - dela komponenten i mindre delar så att det inte blir 300 linjer lång
 
     return (
         <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">

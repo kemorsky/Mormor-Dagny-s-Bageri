@@ -15,8 +15,19 @@ export type Store = {
 export type Product = {
     ProduktId: number;
     Namn: string;
-    Baspris: string;
+    Baspris: number;
     isDeleted: boolean;
+};
+
+export type Order = {
+    BeställningId: number,
+    ButikId: number,
+    Beställningsdatum: string,
+    Beställare: string,
+    PreliminärtLeveransdatum: string,
+    Beställningsdetaljer: OrderDetails[],
+    Säljare: string
+    Butik: Store[]
 };
 
 export type OrderDetails = {
@@ -24,18 +35,9 @@ export type OrderDetails = {
     BeställningId: number,
     ProduktId: number,
     Antal: number,
-    Styckpris: number,
+    Produkt: Product[],
     Rabatt: number,
-    Produkt: Product[]
+    Styckpris: number,
 }
 
-export type Order = {
-    BeställningId: number,
-    ButikId: number,
-    Beställningsdatum: string,
-    Beställare: string,
-    Säljare: string,
-    PreliminärtLeveransdatum: string,
-    Beställningsdetaljer: OrderDetails[],
-    Butik: Store[]
-};
+// export type CompleteProduct = Product & ProductDetails
