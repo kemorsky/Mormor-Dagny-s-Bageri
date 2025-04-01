@@ -82,7 +82,8 @@
             "name": "Coop Hisingen",
             "phoneNumber": "031-654321",
             "contactPerson": "Anna Andersson",
-            "breadManager": "Lukas Andersson"
+            "breadManager": "Lukas Andersson",
+            "customerNumber": 123456789
         },
         {
             "name": "ICA Maxi Bergsjön",
