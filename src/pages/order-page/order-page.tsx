@@ -7,6 +7,7 @@ import { fetchStores, fetchProducts, fetchOrder, pushOrder } from "../../lib/api
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
+import { useAuth } from "../../components/auth/authContext";
 
 export default function OrderPage() {
     const [stores, setStores] = useState<Store[] | null>(null);

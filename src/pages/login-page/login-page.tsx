@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
-import { useAuth } from "../../components/auth/AuthProvider";
+import { useAuth } from "../../components/auth/authContext";
+import UserTypes from "../../lib/userTypes";
 
 export default function LoginPage() {
     const { handleLogin, currentUser } = useAuth();
@@ -16,16 +17,24 @@ export default function LoginPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const userType = currentUser?.Roll; 
             await handleLogin(username, password);
-                  // TODO - fix forcing the user to press the button twice
-            if (userType === 1) {
-                navigate('/seller-dashboard');
-            } 
         } catch (error) {
             console.error(error);
         }
     };
+    
+    useEffect(() => {
+        if (currentUser) {
+          const userType = UserTypes(currentUser);
+          if (userType === 'Säljare') {
+            navigate('/order');
+          } else if (userType === 'Admin') {
+            navigate('/admin-dashboard')
+          } else {
+            console.log("Something broke")
+          }
+        }
+      }, [currentUser, navigate]);
 
     return (
         <main className="bg-gradient-primary min-h-[59.75rem] relative">

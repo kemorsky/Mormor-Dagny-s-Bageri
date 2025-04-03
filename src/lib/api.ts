@@ -9,10 +9,10 @@ type RequestOptions = {
 const BASE_URL = "http://localhost:5139/api";
 
 export const apiRequest = async (url: string, options: RequestOptions = {}) => {
-  console.log(`Making request to ${url} with options:`, options);
+  // console.log(`Making request to ${url} with options:`, options);
 
     try {
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("No token found");
       }

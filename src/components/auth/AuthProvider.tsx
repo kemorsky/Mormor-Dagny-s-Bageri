@@ -1,20 +1,27 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
-import { User, Role } from "../../types/types";
+import { PropsWithChildren, useState, useEffect } from "react";
+import AuthContext from './authContext'
+import { User } from "../../types/types";
 
-type AuthContext = {
-    authToken?: string | null;
-    currentUser?: User | null;
-    handleLogin: (username: string, password: string) => Promise<void>;
-    handleLogOut: () => Promise<void>;
-};
-
-const AuthContext = createContext<AuthContext | undefined>(undefined);
-
-type AuthProviderProps = PropsWithChildren
+type AuthProviderProps = PropsWithChildren;
 
 export default function AuthProvider({children}: AuthProviderProps) {
     const [authToken, setAuthToken] = useState<string | null>();
     const [currentUser, setCurrentUser] = useState<User | null>();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const storedToken = localStorage.getItem("token"); // 
+      const storedUser = localStorage.getItem("currentUser");
+      if (storedToken) {
+          setAuthToken(storedToken);
+      };
+      if (storedUser) {
+        if (storedUser) {
+          setCurrentUser(JSON.parse(storedUser));
+        }
+      };
+      setIsLoading(false)
+  }, []);
 
     async function handleLogin(username: string, password: string) {
         const userData = {
@@ -30,38 +37,32 @@ export default function AuthProvider({children}: AuthProviderProps) {
             },
             body: JSON.stringify(userData)
           });
-          console.log(response);
           if (!response.ok) {
             throw new Error('Något gick snett med POST-förfrågan vi gjorde :(((')
           }
           const data = await response.json();
           console.log(data);
           const authToken = data.Token;
-          const currentUser = { Användarnamn: userData.användarnamn, Roll: Role[data.Roll as keyof typeof Role] } as User
+          const currentUser = { Användarnamn: userData.användarnamn, Roll: data.Roll } as User;
+          localStorage.setItem("token", authToken); // change to localStorage??
+          localStorage.setItem("currentUser", JSON.stringify(currentUser));
           setAuthToken(authToken);
           setCurrentUser(currentUser);
-          // fix so that the role can be used as both number and string (for the menu)
-          console.log(currentUser);
+          console.log("login successful:", authToken, currentUser);
         } catch (error) {
           console.error(error);
         }
       }
 
-    const handleLogOut = async () => {
+    const handleLogOut = async () => { // TODO: Fixa så att det redigerar till inloggningssidan. Nu kastar användaren ut till access-denied
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
         setAuthToken(null)
         setCurrentUser(null)
+        console.log("Successfully logged out") 
     }
 
-    return <AuthContext.Provider value={{authToken, currentUser, handleLogin, handleLogOut}}>
+    return <AuthContext.Provider value={{authToken, currentUser, handleLogin, handleLogOut, isLoading}}>
                 {children}
             </AuthContext.Provider>
-};
-
-export function useAuth() {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error("useAuth must be used within a AuthProvider");
-    }
-
-    return context;
 };

@@ -2,15 +2,15 @@ export type User = {
     AnvändareId?: number;
     Användarnamn: string;
     LösenordHash?: string;
-    Roll: number;
+    Roll: number | string;
     Email?: string;
     Låst?: boolean;
 }
 
 export enum Role {
-    "Admin" = 0,
-    "Säljare" = 1,
-    "Produktplanerare" = 2
+    Admin = 0,
+    Säljare = 1,
+    Planerare = 2
 };
 
 export type UserLogin = {
