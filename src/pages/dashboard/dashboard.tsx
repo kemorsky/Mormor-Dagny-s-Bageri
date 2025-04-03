@@ -101,8 +101,8 @@ export default function DashBoard() {
                                 <div key={customer.customerNumber} className="snap-center min-w-[320px]">
                                     <Card>
                                         <div className="flex justify-between items-center w-full">
-                                            <CardClientNumber className="ml-0">{`${customer.customerNumber}`}</CardClientNumber>
-                                            <CardDate className="ml-auto"><strong>{customer.date}</strong></CardDate>
+                                            <CardClientNumber className="ml-0 text-lg front-bold">{`${customer.customerNumber}`}</CardClientNumber>
+                                            <CardDate className="ml-auto text-lg font-bold"><strong>{customer.date}</strong></CardDate>
                                         </div>
                                         <CardHeader>
                                             <CardStore>{customer.name}</CardStore>
@@ -170,8 +170,8 @@ export default function DashBoard() {
                             <div key={order.customerNumber} className="snap-center min-w-[320px]">
                                 <Card>
                                     <div className="flex justify-between items-center w-full">
-                                        <CardClientNumber className="ml-0">{`#${order.customerNumber}`}</CardClientNumber>
-                                        <CardDate className="ml-auto font-bold">{order.date}</CardDate>
+                                        <CardClientNumber className="ml-0 text-lg front-bold">{`#${order.customerNumber}`}</CardClientNumber>
+                                        <CardDate className="ml-auto text-lg font-bold">{order.date}</CardDate>
                                     </div>
                                     <CardHeader>
                                         <CardStore>{order.name}</CardStore>
