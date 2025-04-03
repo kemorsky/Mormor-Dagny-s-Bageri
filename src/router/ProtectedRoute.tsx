@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
-import { useAuth } from "../components/auth/authContext";
+import { useAuth } from "../components/auth/AuthContext";
 import UserTypes from "../lib/userTypes";
 
 type ProtectedRouteProps = {

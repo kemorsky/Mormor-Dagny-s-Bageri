@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState, useEffect } from "react";
-import AuthContext from './authContext'
+import AuthContext from './AuthContext'
 import { User } from "../../types/types";
 
 type AuthProviderProps = PropsWithChildren;

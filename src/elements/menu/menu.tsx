@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router";
-import { useAuth } from "../../components/auth/authContext";
+import { useAuth } from "../../components/auth/AuthContext";
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
     const { currentUser, handleLogOut } = useAuth();

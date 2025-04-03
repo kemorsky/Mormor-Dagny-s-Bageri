@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
-import { useAuth } from "../../components/auth/authContext";
+import { useAuth } from "../../components/auth/AuthContext";
 import UserTypes from "../../lib/userTypes";
 
 export default function LoginPage() {
