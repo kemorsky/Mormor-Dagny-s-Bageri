@@ -9,6 +9,7 @@ import SellerDashboard from '../pages/seller-dashboard/seller-dashboard';
 import OrderPage from '../pages/order-page/order-page';
 import ConfirmationPage from '../pages/confirmation.page/confirmation-page';
 import OrdersPage from '../pages/orders/orders';
+import AddUser from '../pages/admin/add-user';
 
 const router = createBrowserRouter([
     {
@@ -44,6 +45,16 @@ const router = createBrowserRouter([
                 path="/admin-dashboard"
                 element={<AdminDashboard />}
                 roles={[0, "Admin"]}
+            />
+        )
+    },
+    {
+        path: '/add-user',
+        element: (
+            <ProtectedRoute
+                path='/add-user'
+                element= {<AddUser />}
+                roles={[0, 'Admin']}
             />
         )
     },

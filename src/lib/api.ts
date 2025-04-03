@@ -1,4 +1,4 @@
-import { OrderDetails, Order } from "../types/types";
+import { OrderDetails, Order, User } from "../types/types";
 
 type RequestOptions = {
     method?: string;
@@ -65,6 +65,20 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
     throw error;
   }
 };
+
+export const addUser = async (user: User) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/auth/registrera`, {
+      method: 'POST',
+      body: JSON.stringify(user)
+    });
+    const data = await response.json();
+    console.log(data)
+  } catch (error) {
+    console.error("Error pushing order:", error);
+    throw error;
+  }
+}
 
 // export const createOrder = async () => {
 //   try {
