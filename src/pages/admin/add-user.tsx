@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { addUser } from "../../lib/api"
-import { User } from "../../types/types"
+import { RegisterUser } from "../../types/types"
 import Menu from "../../elements/menu/menu";
 import UserTypes from "../../lib/userTypes";
 
@@ -9,11 +9,11 @@ export default function AddUser() {
     const [password, setPassword] = useState<string>('');
     const [role, setRole] = useState<number | string>();
     const [email, setEmail] = useState<string>('');
-    const [locked, setLocked] = useState<boolean>();
+    const [locked, setLocked] = useState<boolean>(false);
     
-    const user: User = {
+    const user: RegisterUser = {
         Användarnamn: username,
-        LösenordHash: password,
+        Lösenord: password,
         Roll: role ?? '',
         Email: email,
         Låst: locked
@@ -21,7 +21,7 @@ export default function AddUser() {
 
     console.log(user)
 
-    const handleAddUser = async (user: User) => {
+    const handleAddUser = async (user: RegisterUser) => {
         try {
             await addUser(user)
             console.log("added user", user)

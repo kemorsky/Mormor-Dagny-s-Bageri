@@ -7,6 +7,14 @@ export type User = {
     Låst?: boolean;
 }
 
+export type RegisterUser = {
+    Användarnamn: string;
+    Lösenord: string;
+    Roll: number | string;
+    Email: string;
+    Låst: boolean;
+}
+
 export enum Role {
     Admin = 0,
     Säljare = 1,

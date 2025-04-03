@@ -1,4 +1,4 @@
-import { OrderDetails, Order, User } from "../types/types";
+import { OrderDetails, Order, RegisterUser } from "../types/types";
 
 type RequestOptions = {
     method?: string;
@@ -57,6 +57,9 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
   try {
     const response = await apiRequest(`${BASE_URL}/beställningsdetaljer`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(orderDetails),
   });
       return await response.json();   
@@ -66,14 +69,13 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
   }
 };
 
-export const addUser = async (user: User) => {
+export const addUser = async (user: RegisterUser) => {
   try {
     const response = await apiRequest(`${BASE_URL}/auth/registrera`, {
       method: 'POST',
       body: JSON.stringify(user)
     });
-    const data = await response.json();
-    console.log(data)
+    return response.ok
   } catch (error) {
     console.error("Error pushing order:", error);
     throw error;
