@@ -1,0 +1,41 @@
+{
+    "orders": [
+      {
+        "BeställningId": 1,
+        "ButikId": 1,
+        "Beställningsdatum": "22.03.2025"
+      },
+      {
+        "BeställningId": 2,
+        "ButikId": 2,
+        "Beställningsdatum": "21.03.2025"
+      }
+    ],
+    "stores": [
+      {
+        "ButikID": 1,
+        "ButikNummer":"B001",
+        "ButikNamn":"Centralbutiken",
+        "Telefonnummer":"0701234567",
+        "Besöksadress": "Storgatan 1, 123 45 Stockholm",
+        "Fakturaadress":"Storgatan 1, 123 45 Stockholm",
+        "ButikschefNamn": "Anna Nilsson",
+        "ButikschefTelefon": "0709876543",
+        "BrödansvarigNamn": "Erik Andersson",
+        "Brödansvarigtelefon":"0705554444",
+        "låst": true
+      },
+      {
+        "ButikID": 2,
+        "ButikNummer":"B002",
+        "ButikNamn": "Ica",
+        "Telefonnummer":"0707890123",
+        "Besöksadress": "Lillvägen 1, 123 45 Göteborg",
+        "Fakturaadress":"Lillvägen 1, 123 45 Göteborg",
+        "ButikschefNamn": "Bertil Bertilsson",
+        "ButikschefTelefon": "0709876543",
+        "BrödansvarigNamn": "Hanna Hanson",
+        "Brödansvarigtelefon":"0705554444"
+      }
+    ]
+  }
