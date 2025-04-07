@@ -5,11 +5,15 @@ import LoginPage from '../pages/login-page/login-page';
 import RecoverPassword from '../pages/recover-password/recover-password';
 import Dashboard from '../pages/dashboard/dashboard';
 import AdminDashboard from '../pages/admin-dashboard/admin-dashboard';
+import AddUser from '../pages/admin/add-user';
+import EditUser from '../pages/admin/edit-user';
+import RemoveUser from '../pages/admin/remove-user';
 import SellerDashboard from '../pages/seller-dashboard/seller-dashboard';
 import OrderPage from '../pages/order-page/order-page';
 import ConfirmationPage from '../pages/confirmation.page/confirmation-page';
 import OrdersPage from '../pages/orders/orders';
-import AddUser from '../pages/admin/add-user';
+import Stores from '../pages/admin/stores';
+import Products from '../pages/admin/products';
 
 const router = createBrowserRouter([
     {
@@ -54,6 +58,46 @@ const router = createBrowserRouter([
             <ProtectedRoute
                 path='/add-user'
                 element= {<AddUser />}
+                roles={[0, 'Admin']}
+            />
+        )
+    },
+    {
+        path: '/edit-user',
+        element: (
+            <ProtectedRoute
+                path='/edit-user'
+                element= {<EditUser />}
+                roles={[0, 'Admin']}
+            />
+        )
+    },
+    {
+        path: '/remove-user',
+        element: (
+            <ProtectedRoute
+                path='/remove-user'
+                element= {<RemoveUser />}
+                roles={[0, 'Admin']}
+            />
+        )
+    },
+    {
+        path: '/stores',
+        element: (
+            <ProtectedRoute
+                path='/stores'
+                element= {<Stores />}
+                roles={[0, 'Admin']}
+            />
+        )
+    },
+    {
+        path: '/products',
+        element: (
+            <ProtectedRoute
+                path='/products'
+                element= {<Products />}
                 roles={[0, 'Admin']}
             />
         )

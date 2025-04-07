@@ -2,7 +2,6 @@ import { useState } from "react"
 import { addUser } from "../../lib/api"
 import { RegisterUser } from "../../types/types"
 import Menu from "../../elements/menu/menu";
-import UserTypes from "../../lib/userTypes";
 
 export default function AddUser() {
     const [username, setUsername] = useState<string>('');
@@ -17,10 +16,8 @@ export default function AddUser() {
         Roll: role ?? '',
         Email: email,
         Låst: locked
-    }
-
-    console.log(user)
-
+    };
+    
     const handleAddUser = async (user: RegisterUser) => {
         try {
             await addUser(user)
