@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../../components/auth/AuthContext";
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
-    const { currentUser, handleLogOut } = useAuth();
+    const { currentUser, isLoading, handleLogOut } = useAuth();
 
     const navigate = useNavigate();
     
@@ -42,7 +42,13 @@ export default function Menu() {
                             <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Inställningar</a>
                         </li>
                         <li className="flex items-center bg-black w-[11.875rem] px-1 h-[1.875rem]">
-                            <button onClick={() => {handleLogOut(); navigate("/")}} className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Logga ut</button>
+                            <button onClick={() => {handleLogOut();
+                                                    if (isLoading)
+                                                         {return <div>Loading data...</div>};
+                                                    navigate("/")}}
+                                    className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">
+                                Logga ut
+                            </button>
                         </li>
                         
                     </ul>

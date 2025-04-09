@@ -27,7 +27,7 @@ export default function LoginPage() {
         if (currentUser) {
           const userType = UserTypes(currentUser);
           if (userType === 'Säljare') {
-            navigate('/order');
+            navigate('/seller-dashboard');
           } else if (userType === 'Admin') {
             navigate('/admin-dashboard')
           } else {

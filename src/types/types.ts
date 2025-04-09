@@ -1,10 +1,18 @@
 export type User = {
     AnvändareId?: number;
-    Användarnamn: string;
+    Användarnamn?: string;
     LösenordHash?: string;
-    Roll: number | string;
+    Roll?: number | string;
     Email?: string;
     Låst?: boolean;
+}
+
+export type RegisterUser = {
+    Användarnamn: string;
+    Lösenord: string;
+    Roll: number | string;
+    Email: string;
+    Låst: boolean;
 }
 
 export enum Role {
@@ -20,7 +28,7 @@ export type UserLogin = {
 }
 
 export type Store = {
-    ButikId: number;
+    ButikId?: number;
     ButikNummer: string;
     ButikNamn: string;
     Besöksadress: string;
@@ -34,10 +42,10 @@ export type Store = {
 };
 
 export type Product = {
-    ProduktId: number;
-    Namn: string;
-    Baspris: number;
-    isDeleted: boolean;
+    ProduktId?: number;
+    Namn?: string;
+    Baspris?: number;
+    isDeleted?: boolean;
 };
 
 export type Order = {
