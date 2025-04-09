@@ -1,4 +1,4 @@
-import Menu from "../../elements/menu/menu";
+import Menu from "../../../elements/menu/menu";
 
 export default function RemoveUser() {
     return (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Menu from "../../elements/menu/menu"
-import { User } from '../../types/types'
-import { getUser, editUser, editUserPassword } from "../../lib/api";
+import Menu from "../../../elements/menu/menu";
+import { User } from '../../../types/types'
+import { getUser, editUser, editUserPassword } from "../../../lib/api";
 
 export default function EditUser() {
     const [users, setUsers] = useState<User[] | null>(null);

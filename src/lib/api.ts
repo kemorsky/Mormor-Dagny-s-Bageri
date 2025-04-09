@@ -134,7 +134,7 @@ export const addStore = async (store: Store) => {
 export const deleteStore = async (ButikId: number) => { // NOT YET USED IN PRODUCTION
   try {
     const response = await apiRequest(`${BASE_URL}/butiker/${ButikId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     });
     return response.ok
   } catch (error) {
@@ -178,7 +178,7 @@ export const editProduct = async (product: Product) => {
         isDeleted: product.isDeleted
       })
     });
-    return response.ok
+    return response.ok;
     } catch (error) {
       console.log("couldn't edit product", error)
       throw error;

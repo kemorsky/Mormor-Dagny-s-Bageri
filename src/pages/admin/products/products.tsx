@@ -1,37 +1,24 @@
-import { useState, useEffect } from "react"
-import { fetchProducts, addProduct, deleteProduct, editProduct } from "../../lib/api"
-import { Product } from "../../types/types"
-import { CardProduct } from "../../blocks/card-order-page"
+import { useState } from "react"
+import { addProduct, deleteProduct, editProduct } from "../../../lib/api"
+import { Product } from "../../../types/types"
+import { CardProduct } from "../../../blocks/card-order-page"
+import { useProducts } from "../../../components/auth/ProductContext"
 
 export default function Products() {
-    const [products, setProducts] = useState<Product[] | null>(null)
+    const { products, setProducts } = useProducts()
+    
     const [editingProduct, setEditingProduct] = useState<Product | null>(null)
     const [newProduct, setNewProduct] = useState<Product>({
         Namn: '',
         Baspris: undefined,
     })
-    
-    useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const productsData = await fetchProducts();
-                setProducts(productsData);
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                throw error;
-            }
-        }
-        getProducts().catch((error) => {
-            console.error("Uncaught error:", error);
-          });
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             await addProduct(newProduct)
             console.log(newProduct)
-            setProducts((prevProducts) => [...(prevProducts || []), newProduct]);
+            setProducts((prevProducts) => [...prevProducts, newProduct]);
             setNewProduct(newProduct);
         } catch (error) {
             console.log("Could not add new product", error)
@@ -42,7 +29,7 @@ export default function Products() {
         try {
             await deleteProduct(ProduktId)
             console.log("deleting items with ProduktId:", ProduktId)
-            setProducts((prevProducts) => prevProducts?.filter(product => product.ProduktId !== ProduktId) || []);        
+            setProducts((prevProducts) => prevProducts?.filter(product => product.ProduktId !== ProduktId));        
         } catch (error) {
             console.log("failed to delete product", error)
         }
@@ -59,11 +46,13 @@ export default function Products() {
             const success = await editProduct(editingProduct)
             console.log(editingProduct)
             if (success) {
-                setProducts((prevProducts) => // TODO fix rerender not launching after successful edit
-                    prevProducts?.map((prod) =>
-                      prod.ProduktId === editingProduct.ProduktId ? {...prod, ...editingProduct } : prod
-                    ) || []
-                  );
+                setProducts((prevProducts) =>
+                    prevProducts.map((prod) =>
+                        prod.ProduktId === editingProduct.ProduktId
+                            ? { ...prod, ...editingProduct }
+                            : prod
+                    )
+                );
                 setEditingProduct(null)
             }
         }
@@ -86,13 +75,13 @@ export default function Products() {
                                     type="text"
                                     placeholder="Edit Namn"
                                     value={editingProduct?.Namn}
-                                    onChange={(e) => setEditingProduct({ ...editingProduct, Namn: e.target.value })}
+                                    onChange={(e) => {setEditingProduct({ ...editingProduct, Namn: e.target.value })}}
                                 />
                                 <input
                                     type="number"
                                     placeholder="Edit Baspris"
                                     value={editingProduct?.Baspris}
-                                    onChange={(e) => setEditingProduct({ ...editingProduct, Baspris: Number(e.target.value) })}
+                                    onChange={(e) => {setEditingProduct({ ...editingProduct, Baspris: Number(e.target.value) })}}
                                 />
                                 <button type="submit">Save changes</button>
                                 <button
