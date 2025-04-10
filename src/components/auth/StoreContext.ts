@@ -6,7 +6,8 @@ type StoreContext = {
     setStores: React.Dispatch<React.SetStateAction<Store[]>>;
     loading: boolean,
     getStore: (butikId: number) => Store | null,
-    searchStores: (query: string) => Store[]
+    searchStores: (query: string) => Store[],
+    allStoresRef: React.RefObject<Store[]>, // ← add this
 }
 
 const StoreContext = createContext<StoreContext | null>(null);
@@ -17,7 +18,7 @@ export const useStores = () => {
         throw new Error("useAuth must be used within a AuthProvider");
     }
 
-    return { stores: context.stores ?? [], setStores: context.setStores, loading: context.loading, getStore: context.getStore, searchStores: context.searchStores };
+    return { stores: context.stores ?? [], setStores: context.setStores, loading: context.loading, getStore: context.getStore, searchStores: context.searchStores, allStoresRef: context.allStoresRef };
 }
 
 export default StoreContext

@@ -10,7 +10,7 @@ export default function StoreProvider({children}: StoreProviderProps) {
     const [stores, setStores] = useState<Store[]>([])
     const [loading, setLoading] = useState(false);
 
-    const allStoresRef = useRef<Store[] | null>(null);
+    const allStoresRef = useRef<Store[]>([]);
 
     const options = useMemo(() => ({
             keys: [
@@ -28,8 +28,8 @@ export default function StoreProvider({children}: StoreProviderProps) {
             setLoading(true)
             try {
                 const storesData = await fetchStores();
-                allStoresRef.current = storesData;
                 setStores(storesData)
+                allStoresRef.current = storesData;
             } catch (error) {
                 console.error("Error fetching stores:", error);
                 throw error;
@@ -51,12 +51,19 @@ export default function StoreProvider({children}: StoreProviderProps) {
         }
     }
 
+    // const searchStores = (query: string) => {
+    //     const fuse = new Fuse(stores, options);
+    //     const results = fuse.search(query).map(result => result.item);
+    //     setStores(results);
+    //     return results
+    // }
+
     const getStore = (butikId: number) => {
         return stores.find((store) => store.ButikId === butikId) || null
     }
 
     return (
-        <StoreContext.Provider value={{ stores, setStores, loading, getStore, searchStores }}>
+        <StoreContext.Provider value={{ stores, setStores, loading, getStore, searchStores, allStoresRef }}>
             {children}
         </StoreContext.Provider>
     )

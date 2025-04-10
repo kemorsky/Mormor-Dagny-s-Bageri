@@ -31,7 +31,7 @@ export default function OrderPage() {
             setStores([]); // Optionally clear stores if query is too short
         } else {
             setIsActive(true);
-            const results = searchStores(newQuery); // Perform the search via the provider
+            const results = searchStores(newQuery);
             setStores(results);
         }
     };

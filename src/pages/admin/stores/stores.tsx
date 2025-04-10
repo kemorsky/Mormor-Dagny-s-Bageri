@@ -1,15 +1,18 @@
 import { useState } from "react";
 import Menu from "../../../elements/menu/menu";
 import { InputOrderDropdown } from "../../../components/ui/input";
-import { addStore, deleteStore } from "../../../lib/api";
+import { deleteStore } from "../../../lib/api";
 import { Store } from "../../../types/types";
 import { CardStore } from "../../../blocks/card";
 import { CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../../blocks/card-order-page";
 import { useStores } from "../../../components/auth/StoreContext";
+import AddStoreForm from "../../../elements/admin-store-form/admin-store-form";
+import EditStoreForm from "../../../elements/admin-store-form/admin-edit-store-form";
 
 export default function Stores() {
     const [selected, setSelected] = useState<Store | null>(null);
     const [query, setQuery] = useState<string>("");
+    const [editingStore, setEditingStore] = useState<Store | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [newStore, setNewStore] = useState<Store>({
@@ -25,7 +28,7 @@ export default function Stores() {
         Telefonnummer: ''
       });
 
-    const { stores, setStores, searchStores } = useStores()
+    const { stores, setStores, searchStores, allStoresRef } = useStores();
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
@@ -47,46 +50,24 @@ export default function Stores() {
         setIsActive(false)
     };
 
-    const handleClearInput = () => {
-        setSelected(null);
-        setQuery('');
-        setIsActive(false);
-    };
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true)
-        try {
-            await addStore(newStore)
-            console.log("added new store:", newStore)
-            setStores((prevStores) => [...(prevStores || []), newStore]);
-            setNewStore({
-                ButikNummer: '',
-                ButikNamn: '',
-                Besöksadress: '',
-                BrödansvarigNamn: '',
-                BrödansvarigTelefon: '',
-                ButikschefNamn: '',
-                ButikschefTelefon: '',
-                Fakturaadress: '',
-                Låst: false,
-                Telefonnummer: ''
-            });
-        } catch (error) {
-            console.log("Failed to add store", error)
-        }
-    }
-
-    const handleDeleteStore = async (ButikId: number) => { // TODO fix store array not refreshing upon deleting a store
+    const handleDeleteStore = async (ButikId: number) => {
         try {
             await deleteStore(ButikId)
             console.log(`Store with ID ${ButikId} deleted successfully`);
-            setStores((prevStores) => prevStores?.filter(store => store.ButikId !== ButikId) || []);
+            setStores((prev) => { 
+                const updated = prev?.filter(store => store.ButikId !== ButikId)
+                allStoresRef.current = updated;
+                return updated;
+            });
             setSelected(null)
         } catch (error) {
             console.log("Error deleting store", error)
         }
     }; 
+
+    const handleEditStore = (store: Store) => {
+        setEditingStore({...store});
+    };
 
     return (
         <main>
@@ -98,7 +79,7 @@ export default function Stores() {
                             value={query} 
                             onChange={handleQueryChange} 
                             />
-                        <p onClick={handleClearInput} className="text-base cursor-pointer">Avbryt</p>
+                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer">Avbryt</p>
                     </form>
                     {isActive && stores && stores.length > 0 && (
                         <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
@@ -142,6 +123,18 @@ export default function Stores() {
                                     </CardStoreBreadperson>
                                 </CardStoreContacts>
                                 <button onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</button>
+                                <button onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Radera butiken</button>
+                            
+                                {editingStore?.ButikId === selected.ButikId && (
+                                    <EditStoreForm
+                                        isLoading={isLoading}
+                                        selected={selected}
+                                        setSelected={setSelected}
+                                        editingStore={editingStore}
+                                        setEditingStore={setEditingStore}
+                                         />
+                                )}
+                            
                             </CardStoreContent>                                                             
                         </CardStore>
                     </section>
@@ -160,58 +153,12 @@ export default function Stores() {
             </div>
             <div className="flex flex-col items-center justify-center">
                 <h2>Lägg till en butik</h2>
-                <form className="inline-flex flex-col items-center justify-center gap-3" onSubmit={handleSubmit}>
-                    <input type="text"
-                            className=""
-                            placeholder="Butik Nummer"
-                            value={newStore.ButikNummer}
-                            onChange={(e) => setNewStore({ ...newStore, ButikNummer: e.target.value })}
-                             />
-                    <input type="text"
-                            className=""
-                            value={newStore.ButikNamn}
-                            placeholder="Butik Namn"
-                            onChange={(e) => setNewStore({ ...newStore, ButikNamn: e.target.value })} />
-                    <input type="text"
-                            className=""
-                            value={newStore.Besöksadress}
-                            placeholder="Besökadress"
-                            onChange={(e) => setNewStore({ ...newStore, Besöksadress: e.target.value })} />
-                    <input type="text"
-                            className=""
-                            value={newStore.BrödansvarigNamn}
-                            placeholder="Brödansvarig Namn"
-                            onChange={(e) => setNewStore({ ...newStore, BrödansvarigNamn: e.target.value })} />
-                    <input type="text"
-                            className=""
-                            value={newStore.BrödansvarigTelefon}
-                            placeholder="Brödansvarig Telefon"
-                            onChange={(e) => setNewStore({ ...newStore, BrödansvarigTelefon: e.target.value })} />
-                    <input type="text"
-                            className=""
-                            value={newStore.ButikschefNamn}
-                            placeholder="Butikchefs Namn"
-                            onChange={(e) => setNewStore({ ...newStore, ButikschefNamn: e.target.value })} />
-                    <input type="text"
-                            className=""
-                            value={newStore.ButikschefTelefon}
-                            placeholder="Butikchefs Telefon"
-                            onChange={(e) => setNewStore({ ...newStore, ButikschefTelefon: e.target.value })} />
-                    <input type="text"
-                            className=""
-                            value={newStore.Fakturaadress}
-                            placeholder="Fakturaadress"
-                            onChange={(e) => setNewStore({ ...newStore, Fakturaadress: e.target.value })} />
-                    <input type="checkbox"
-                            className="" />
-                    <input type="text"
-                            className=""
-                            value={newStore.Telefonnummer}
-                            placeholder="Butik Namn"
-                            onChange={(e) => setNewStore({ ...newStore, Telefonnummer: e.target.value })} />
-                    <button type="submit">Lägg till butiken</button>
-                    {isLoading ?? <p>Loading...</p>}
-                </form>
+                <AddStoreForm
+                    newStore={newStore}
+                    setNewStore={setNewStore}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                 />
             </div>
         </main>
     )
