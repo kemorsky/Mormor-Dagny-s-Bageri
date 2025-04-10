@@ -8,7 +8,7 @@ export default function Products() {
     const { products, setProducts } = useProducts()
     
     const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-    const [newProduct, setNewProduct] = useState<Product>({
+    const [newProduct, setNewProduct] = useState<Product | null>({
         Namn: '',
         Baspris: undefined,
     })
@@ -16,13 +16,21 @@ export default function Products() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await addProduct(newProduct)
-            console.log(newProduct)
-            setProducts((prev) => {
-                const updated = [...prev, {...newProduct, ProduktId: response.ProduktId}]
-                return updated;
-            })
-            setNewProduct(newProduct);
+            if (newProduct) {
+                const response = await addProduct(newProduct)
+                console.log(newProduct)
+                setProducts((prev) => {
+                    const updated = [...prev, {...newProduct, ProduktId: response.ProduktId}]
+                    return updated;
+                })
+                setNewProduct(newProduct);
+                setNewProduct({
+                    Namn: '',
+                    Baspris: 0 // TODO fix value not resetting upoin successful submit
+                });
+            } else {
+                console.error("newProduct is null, cannot add product")
+            }
         } catch (error) {
             console.log("Could not add new product", error)
         }
@@ -83,8 +91,9 @@ export default function Products() {
                                 <input
                                     type="text"
                                     placeholder="Edit Baspris"
-                                    value={editingProduct?.Baspris}
-                                    onChange={(e) => {setEditingProduct({ ...editingProduct, Baspris: Number(e.target.value) })}}
+                                    defaultValue={editingProduct?.Baspris}
+                                    step="any"
+                                    onChange={(e) => {setEditingProduct({ ...editingProduct, Baspris: parseFloat(e.target.value) })}}
                                 />
                                 <button type="submit">Save changes</button>
                                 <button
@@ -104,12 +113,14 @@ export default function Products() {
                 <form className="flex flex-col items-center justify-center gap-3" action="" onSubmit={handleSubmit}>
                     <input type="text"
                             placeholder="Namn"
-                            value={newProduct.Namn}
+                            value={newProduct?.Namn}
                             onChange={(e) => {setNewProduct({...newProduct, Namn: e.target.value})}} />
-                    <input type="text"
+                    <input type="number"
                             placeholder="Baspris"
-                            value={newProduct.Baspris}
-                            onChange={(e) => {setNewProduct({...newProduct, Baspris: Number(e.target.value)})}} />
+                            defaultValue={newProduct?.Baspris}
+                            step="any"
+                            onChange={(e) => {setNewProduct({ ...newProduct, Baspris: parseFloat(e.target.value) })}}
+                        />
                     <button type="submit">Lägg till produkt</button>
                 </form>
             </div>

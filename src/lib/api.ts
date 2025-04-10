@@ -132,6 +132,31 @@ export const addStore = async (store: Store) => {
   }
 };
 
+export const editStore = async (store: Store) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/butiker/${store.ButikId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ButikId: store.ButikId,
+        ButikNummer: store.ButikNummer,
+        ButikNamn: store.ButikNamn,
+        Besöksadress: store.Besöksadress,
+        BrödansvarigNamn: store.BrödansvarigNamn,
+        BrödansvarigTelefon: store.BrödansvarigTelefon,
+        ButikschefNamn: store.ButikschefNamn,
+        ButikschefTelefon: store.ButikschefTelefon,
+        Fakturaadress: store.Fakturaadress,
+        Låst: store.Låst,
+        Telefonnummer: store.Telefonnummer,
+      })
+    })
+    console.log(response)
+    return response;
+  } catch (error) {
+    console.log("Couldn't edit store", error)
+  }
+};
+
 export const deleteStore = async (ButikId: number) => { // NOT YET USED IN PRODUCTION
   try {
     const response = await apiRequest(`${BASE_URL}/butiker/${ButikId}`, {
