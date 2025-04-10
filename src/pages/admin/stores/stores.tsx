@@ -25,7 +25,7 @@ export default function Stores() {
         Telefonnummer: ''
       });
 
-    const { stores, setStores, searchStores } = useStores()
+    const { stores, setStores, searchStores, allStoresRef } = useStores();
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
@@ -47,19 +47,17 @@ export default function Stores() {
         setIsActive(false)
     };
 
-    const handleClearInput = () => {
-        setSelected(null);
-        setQuery('');
-        setIsActive(false);
-    };
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true)
         try {
-            await addStore(newStore)
-            console.log("added new store:", newStore)
-            setStores((prevStores) => [...(prevStores || []), newStore]);
+            const response = await addStore(newStore)
+            setNewStore({...newStore, ButikId: response.ButikId})
+            setStores((prev) => {
+                const updated = [...prev, {...newStore, ButikId: response.ButikId}];
+                allStoresRef.current = updated;
+                return updated;
+            });
             setNewStore({
                 ButikNummer: '',
                 ButikNamn: '',
@@ -77,11 +75,15 @@ export default function Stores() {
         }
     }
 
-    const handleDeleteStore = async (ButikId: number) => { // TODO fix store array not refreshing upon deleting a store
+    const handleDeleteStore = async (ButikId: number) => {
         try {
             await deleteStore(ButikId)
             console.log(`Store with ID ${ButikId} deleted successfully`);
-            setStores((prevStores) => prevStores?.filter(store => store.ButikId !== ButikId) || []);
+            setStores((prev) => { 
+                const updated = prev?.filter(store => store.ButikId !== ButikId)
+                allStoresRef.current = updated;
+                return updated;
+            });
             setSelected(null)
         } catch (error) {
             console.log("Error deleting store", error)
@@ -98,7 +100,7 @@ export default function Stores() {
                             value={query} 
                             onChange={handleQueryChange} 
                             />
-                        <p onClick={handleClearInput} className="text-base cursor-pointer">Avbryt</p>
+                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer">Avbryt</p>
                     </form>
                     {isActive && stores && stores.length > 0 && (
                         <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
@@ -207,7 +209,7 @@ export default function Stores() {
                     <input type="text"
                             className=""
                             value={newStore.Telefonnummer}
-                            placeholder="Butik Namn"
+                            placeholder="Telefonnummer"
                             onChange={(e) => setNewStore({ ...newStore, Telefonnummer: e.target.value })} />
                     <button type="submit">Lägg till butiken</button>
                     {isLoading ?? <p>Loading...</p>}

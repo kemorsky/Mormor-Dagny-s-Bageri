@@ -62,7 +62,7 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
       },
       body: JSON.stringify(orderDetails),
   });
-      return response.ok 
+      return response; 
   } catch (error) {
     console.error("Error creating order:", error);
     throw error;
@@ -75,7 +75,7 @@ export const addUser = async (user: RegisterUser) => {
       method: 'POST',
       body: JSON.stringify(user)
     });
-    return response.ok
+    return response;
   } catch (error) {
     console.error("Error pushing order:", error);
     throw error;
@@ -98,7 +98,7 @@ export const editUser = async (user: User) => {
       body: JSON.stringify(user)
     });
     console.log(response);
-    return response.ok
+    return response;
   } catch (error) {
     console.error("Error pushing order:", error);
     throw error;
@@ -112,7 +112,7 @@ export const editUserPassword = async (user: User) => {
       body: JSON.stringify(user)
     });
     console.log(response);
-    return response.ok
+    return response;
   } catch (error) {
     console.error("Error editing password:", error)
     throw error;
@@ -125,7 +125,8 @@ export const addStore = async (store: Store) => {
       method: 'POST',
       body: JSON.stringify(store)
     })
-    return response.ok
+    console.log(response)
+    return response;
   } catch (error) {
     console.log("Couldn't add store", error)
   }
@@ -136,7 +137,7 @@ export const deleteStore = async (ButikId: number) => { // NOT YET USED IN PRODU
     const response = await apiRequest(`${BASE_URL}/butiker/${ButikId}`, {
       method: 'DELETE',
     });
-    return response.ok
+    return response;
   } catch (error) {
     console.log("Error deleting store", error)
     throw error;
@@ -149,7 +150,7 @@ export const addProduct = async (newProduct: Product) => {
       method: 'POST',
       body: JSON.stringify(newProduct)
     })
-    return response.ok
+    return response;
   } catch (error) {
     console.log("Error adding product", error)
   }
@@ -161,7 +162,7 @@ export const deleteProduct = async (ProduktId: number) => {
     const response = await apiRequest(`${BASE_URL}/produkter/${ProduktId}`, {
       method: 'DELETE'
     });
-    return response.ok
+    return response;
   } catch (error) {
     console.log("Could not delete product", error)
   }
@@ -178,7 +179,7 @@ export const editProduct = async (product: Product) => {
         isDeleted: product.isDeleted
       })
     });
-    return response.ok;
+    return response;
     } catch (error) {
       console.log("couldn't edit product", error)
       throw error;

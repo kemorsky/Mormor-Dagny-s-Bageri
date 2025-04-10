@@ -16,9 +16,12 @@ export default function Products() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await addProduct(newProduct)
+            const response = await addProduct(newProduct)
             console.log(newProduct)
-            setProducts((prevProducts) => [...prevProducts, newProduct]);
+            setProducts((prev) => {
+                const updated = [...prev, {...newProduct, ProduktId: response.ProduktId}]
+                return updated;
+            })
             setNewProduct(newProduct);
         } catch (error) {
             console.log("Could not add new product", error)
@@ -29,7 +32,7 @@ export default function Products() {
         try {
             await deleteProduct(ProduktId)
             console.log("deleting items with ProduktId:", ProduktId)
-            setProducts((prevProducts) => prevProducts?.filter(product => product.ProduktId !== ProduktId));        
+            setProducts((prev) => prev?.filter(product => product.ProduktId !== ProduktId));        
         } catch (error) {
             console.log("failed to delete product", error)
         }
@@ -78,7 +81,7 @@ export default function Products() {
                                     onChange={(e) => {setEditingProduct({ ...editingProduct, Namn: e.target.value })}}
                                 />
                                 <input
-                                    type="number"
+                                    type="text"
                                     placeholder="Edit Baspris"
                                     value={editingProduct?.Baspris}
                                     onChange={(e) => {setEditingProduct({ ...editingProduct, Baspris: Number(e.target.value) })}}
@@ -103,7 +106,7 @@ export default function Products() {
                             placeholder="Namn"
                             value={newProduct.Namn}
                             onChange={(e) => {setNewProduct({...newProduct, Namn: e.target.value})}} />
-                    <input type="number"
+                    <input type="text"
                             placeholder="Baspris"
                             value={newProduct.Baspris}
                             onChange={(e) => {setNewProduct({...newProduct, Baspris: Number(e.target.value)})}} />
