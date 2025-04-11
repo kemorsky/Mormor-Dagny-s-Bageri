@@ -1,69 +1,40 @@
-import { useState, useEffect, useRef, useMemo } from "react"
-import { useNavigate } from "react-router";
+import { useState } from "react"
+// import { useNavigate } from "react-router";
 import { Store, Product, OrderDetails, Order } from '../../types/types';
-import Fuse from "fuse.js";
 import Menu from "../../elements/menu/menu"
-import { fetchStores, fetchProducts, fetchOrder, pushOrder } from "../../lib/api";
+// import { pushOrder } from "../../lib/api";
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
+import { useStores } from "../../components/auth/StoreContext";
+import { useProducts } from "../../components/auth/ProductContext";
 
 export default function OrderPage() {
-    const [stores, setStores] = useState<Store[] | null>(null);
     const [selected, setSelected] = useState<Store | null>(null);
     const [query, setQuery] = useState<string>("");
     const [loading, isLoading] = useState<string | null>(null);
     const [isActive, setIsActive] = useState(false);
-    const [products, setProducts] = useState<Product[] | null>(null);
     const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
     const [discount, setDiscount] = useState<number>(0);
-    const [orderDetails, setOrderDetails] = useState<OrderDetails | null>();
+    // const [orderDetails, setOrderDetails] = useState<OrderDetails | null>();
 
-    const allStoresRef = useRef<Store[] | null>(null);
+    const { products } = useProducts()
+    const { stores, setStores, searchStores } = useStores()
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const options = useMemo(() => ({
-        keys: [
-            'ButikNummer', 'ButikNamn', 'Besöksadress', 
-            'BrödansvarigNamn', 'BrödansvarigTelefon', 
-            'ButikschefNamn', 'ButikschefTelefon', 
-            'Fakturaadress', 'Telefonnummer'
-        ],
-        threshold: 0.3,
-        minMatchCharLength: 3
-    }), []);
-
-    useEffect(() => {
-        const getStores = async () => {
-            try {
-                const storesData = await fetchStores();
-                allStoresRef.current = storesData; 
-                setStores(storesData);
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                throw error;
-            }
-        };
-        getStores().catch((error) => {
-            console.error("Uncaught error:", error);
-          });
-    }, []);
-
-    useEffect(() => {
-        if (query.trim().length < 3) {
-            setStores([]);
+    const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newQuery = e.target.value;
+        setQuery(newQuery);
+        if (newQuery.trim().length < 3) {
             setIsActive(false);
+            setStores([]); // Optionally clear stores if query is too short
         } else {
-            setIsActive(true)
-        };
-
-        if (allStoresRef.current) {
-            const fuse = new Fuse(allStoresRef.current, options);
-            const results = fuse.search(query).map(result => result.item);
+            setIsActive(true);
+            const results = searchStores(newQuery);
             setStores(results);
-        };
-    }, [query, options]);
+        }
+    };
 
     const handleSelectedStore = (store: Store) => {
         console.log("Store selected:", store)
@@ -77,35 +48,6 @@ export default function OrderPage() {
         setQuery('');
         setIsActive(false);
     };
-
-    useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const productsData = await fetchProducts();
-                setProducts(productsData);
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                throw error;
-            }
-        }
-        getProducts().catch((error) => {
-            console.error("Uncaught error:", error);
-          });
-    }, []);
-
-    // useEffect (() => {
-    //     const getOrder = async () => {
-    //         try {
-    //             const orderDetails = await fetchOrder();
-    //             setOrderDetails(orderDetails);
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     getOrder().catch((error) => {
-    //         console.error("Uncaught error:", error);
-    //       });
-    // }, []);
 
     const totalPrice = products ? products.reduce((acc, product) => {
         const quantity = productQuantities[product.ProduktId] || 0;
@@ -130,37 +72,37 @@ export default function OrderPage() {
     ? totalPrice - (totalPrice * discount / 100)
     : 0;
 
-    const handleOrderSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        isLoading("Laddar...");
-        const orderDetails: OrderDetails = {
-            BeställningsdetaljId: 0,
-            BeställningId: 0,
-            ProduktId: 0,
-            Antal: Object.values(productQuantities).reduce((acc, quantity) => acc + quantity, 0),
-            Styckpris: finalPrice, // - inte finalPrice. Skapa ny variabel i Table i databasen
-            Rabatt: discount,
-            Produkt: products?.filter((product) => productQuantities[product.ProduktId] > 0).map((product) => ({
-                ProduktId: product.ProduktId,
-                Namn: product.Namn,
-                Baspris: product.Baspris,
-                isDeleted: false,
-                Antal: productQuantities[product.ProduktId],
-                Styckpris: product.Baspris * productQuantities[product.ProduktId], // Inte totallt pris men pris per 1st produkt. Behöver totallt pris
-              })) as Product[]
-          };
-        setOrderDetails(orderDetails);
-        console.log(orderDetails)
-        try {
-            const response = await pushOrder(orderDetails);
-            if (!response) {
-                console.error("Error submitting order:", response.error);
-              }
-        } catch (error) {
-            console.error("Error pushing order:", error);
-        }
-        // console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
-    };
+    // const handleOrderSubmit = async (e: React.FormEvent) => { // TODO redo from scratch once admin is finished
+    //     e.preventDefault();
+    //     isLoading("Laddar...");
+    //     const orderDetails: OrderDetails = {
+    //         BeställningsdetaljId: 0,
+    //         BeställningId: 0,
+    //         ProduktId: 0,
+    //         Antal: Object.values(productQuantities).reduce((acc, quantity) => acc + quantity, 0),
+    //         Styckpris: finalPrice, // - inte finalPrice. Skapa ny variabel i Table i databasen
+    //         Rabatt: discount,
+    //         Produkt: products?.filter((product) => productQuantities[product.ProduktId] > 0).map((product) => ({
+    //             ProduktId: product.ProduktId,
+    //             Namn: product.Namn,
+    //             Baspris: product.Baspris,
+    //             isDeleted: false,
+    //             Antal: productQuantities[product.ProduktId],
+    //             Styckpris: product.Baspris * productQuantities[product.ProduktId], // Inte totallt pris men pris per 1st produkt. Behöver totallt pris
+    //           })) as Product[]
+    //       };
+    //     setOrderDetails(orderDetails);
+    //     console.log(orderDetails)
+    //     try {
+    //         const response = await pushOrder(orderDetails);
+    //         if (!response) {
+    //             console.error("Error submitting order:", response.error);
+    //           }
+    //     } catch (error) {
+    //         console.error("Error pushing order:", error);
+    //     }
+    //     // console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
+    // };
 
     // TODO:
     // - Fixa beställningsdetaljer response (utkastar 404 just nu)
@@ -176,7 +118,7 @@ export default function OrderPage() {
                     <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
                         <InputOrderDropdown
                             value={query} 
-                            onChange={(e) => setQuery(e.target.value)} 
+                            onChange={handleQueryChange} 
                             />
                         <p onClick={handleClearInput} className="text-base cursor-pointer">Avbryt</p>
                     </form>
@@ -239,7 +181,7 @@ export default function OrderPage() {
                 <section className="w-full inline-flex flex-col items-center justify-center">
                     <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>                
                 </section>
-                <form className="w-full" onSubmit={handleOrderSubmit}>
+                <form className="w-full"> {/*TODO: re-add onSubmit={handleQueryChange} once it works properly*/}
                     <section className="w-full inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         <CardStore className="p-2">
