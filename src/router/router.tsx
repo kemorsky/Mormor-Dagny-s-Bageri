@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/login-page/login-page';
-import RecoverPassword from '../pages/recover-password/recover-password';
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import Dashboard from '../pages/dashboard/dashboard';
 import OrderPage from '../pages/order-page/order-page';
 import ConfirmationPage from '../pages/confirmation.page/confirmation-page';
@@ -12,8 +12,8 @@ const router = createBrowserRouter([
         element: <LoginPage />,
     },
     {
-        path: '/recover-password',
-        element: <RecoverPassword />,
+        path: '/forgot-password',
+        element: <ForgotPassword />,
     },
     {
         path: '/dashboard',
