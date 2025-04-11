@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import AccessDenied from '../pages/access-denied/access-denied';
 import LoginPage from '../pages/login-page/login-page';
-import RecoverPassword from '../pages/recover-password/recover-password';
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import Dashboard from '../pages/dashboard/dashboard';
 import AdminDashboard from '../pages/admin-dashboard/admin-dashboard';
 import AddUser from '../pages/admin/add-user/add-user';
@@ -27,8 +27,8 @@ const router = createBrowserRouter([
         element: <LoginPage />,
     },
     {
-        path: '/recover-password',
-        element: <RecoverPassword />,
+        path: '/forgot-password',
+        element: <ForgotPassword />,
     },
     {
         path: '/dashboard',
