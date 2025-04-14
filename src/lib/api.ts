@@ -33,15 +33,21 @@ export const apiRequest = async (url: string, options: RequestOptions = {}) => {
       console.error("API Error:", error);
       throw error;
     }
-  };
+    return await response.json();
+
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
+};
 
 export const fetchStores = async () => {
-    try {
-      return await apiRequest(`${BASE_URL}/butiker`);
-    } catch (error) {
-      console.error("Error fetching stores:", error);
-      throw error;
-    }
+  try {
+    return await apiRequest(`${BASE_URL}/butiker`);
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+    throw error;
+  }
 };
 
 export const fetchProducts = async () => {
@@ -67,6 +73,15 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
     console.error("Error creating order:", error);
     throw error;
   }
+};
+
+export const fetchOrder = async () => {
+   try {
+     return await apiRequest(`${BASE_URL}/beställningar`);
+   } catch (error) {
+     console.error("Error pushing order:", error);
+     throw error;
+   }
 };
 
 export const fetchUsers = async () => {

@@ -77,7 +77,7 @@ export default function LoginPage() {
                             <section className="w-full flex flex-col items-center justify-center gap-4 mt-[1.5rem]">
                                 <ButtonPrimary type="submit">Logga In</ButtonPrimary>
                                 <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
-                                <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
+                                <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/forgot-password')}>Återställ lösenord</a>
                         </section>
                         </form>
                     </div>
