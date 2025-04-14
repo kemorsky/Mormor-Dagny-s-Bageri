@@ -16,6 +16,7 @@ import Stores from '../pages/admin/stores/stores';
 import Products from '../pages/admin/products/products';
 import StoreProvider from '../components/auth/StoreProvider';
 import ProductProvider from '../components/auth/ProductProvider';
+import UserProvider from '../components/auth/UserProvider';
 
 const router = createBrowserRouter([
     {
@@ -67,21 +68,25 @@ const router = createBrowserRouter([
     {
         path: '/admin-edit-user',
         element: (
-            <ProtectedRoute
-                path='/admin-edit-user'
-                element= {<EditUser />}
-                roles={[0, 'Admin']}
-            />
+            <UserProvider>
+                <ProtectedRoute
+                    path='/admin-edit-user'
+                    element= {<EditUser />}
+                    roles={[0, 'Admin']}
+                />
+            </UserProvider>
         )
     },
     {
         path: '/admin-remove-user',
         element: (
-            <ProtectedRoute
-                path='/admin-remove-user'
-                element= {<RemoveUser />}
-                roles={[0, 'Admin']}
-            />
+            <UserProvider>
+                <ProtectedRoute
+                    path='/admin-remove-user'
+                    element= {<RemoveUser />}
+                    roles={[0, 'Admin']}
+                />
+            </UserProvider>
         )
     },
     {
