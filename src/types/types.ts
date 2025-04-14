@@ -1,19 +1,72 @@
+export type User = {
+    AnvändareId?: number;
+    Användarnamn?: string;
+    LösenordHash?: string;
+    Roll?: number | string;
+    Email?: string;
+    Låst?: boolean;
+}
+
+export type RegisterUser = {
+    Användarnamn: string;
+    Lösenord: string;
+    Roll: number | string;
+    Email: string;
+    Låst: boolean;
+}
+
+export enum Role {
+    Admin = 0,
+    Säljare = 1,
+    Planerare = 2
+};
+
+export type UserLogin = {
+    Användarnamn: string;
+    LösenordHash: string;
+    Roll: string;
+}
+
 export type Store = {
-    butikId: number;
-    butikNummer: string;
-    butikNamn: string;
-    besöksadress: string;
-    brödansvarigNamn: string;
-    brödansvarigTelefon: string;
-    butikschefNamn: string;
-    butikschefTelefon: string;
-    fakturaadress: string;
-    låst: boolean;
-    telefonnummer: string;
+    ButikId?: number;
+    ButikNummer: string;
+    ButikNamn: string;
+    Besöksadress: string;
+    BrödansvarigNamn: string;
+    BrödansvarigTelefon: string;
+    ButikschefNamn: string;
+    ButikschefTelefon: string;
+    Fakturaadress: string;
+    Låst: boolean;
+    Telefonnummer: string;
 };
 
 export type Product = {
-    produktId: number;
-    namn: string;
-    baspris: string;
+    ProduktId?: number;
+    Namn?: string;
+    Baspris?: number;
+    isDeleted?: boolean;
 };
+
+export type Order = {
+    BeställningId: number,
+    ButikId: number,
+    Beställningsdatum: string,
+    Beställare: string,
+    PreliminärtLeveransdatum: string,
+    Beställningsdetaljer: OrderDetails[],
+    Säljare: string
+    Butik: Store[]
+};
+
+export type OrderDetails = {
+    BeställningsdetaljId: number,
+    BeställningId: number,
+    ProduktId: number,
+    Antal: number,
+    Produkt: Product[],
+    Rabatt: number,
+    Styckpris: number,
+}
+
+// export type CompleteProduct = Product & ProductDetails

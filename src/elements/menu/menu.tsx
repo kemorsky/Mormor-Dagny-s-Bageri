@@ -1,6 +1,14 @@
 import { useState } from "react"
+import { useNavigate } from "react-router";
+import { useAuth } from "../../components/auth/AuthContext";
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
+    const { currentUser, isLoading, handleLogOut } = useAuth();
+
+    const navigate = useNavigate();
+    
+    const userName = currentUser?.Användarnamn;
+    const userType = currentUser?.Roll;
 
     const handleClick = () => {
         setIsOpen(!isOpen);
@@ -14,13 +22,16 @@ export default function Menu() {
                         <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
                     </section>
                     <article className="inline-flex flex-col gap-1">
-                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textPrimary font-inter font-semibold">Regina</p>
-                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textSecondary font-inter">Säljare</p>
+                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textPrimary font-inter font-semibold">
+                            {userName}
+                        </p>
+                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textSecondary font-inter">
+                            {userType}
+                        </p>
                     </article>
                 </div>
                 {isOpen ? 
                     <ul className="z-50 absolute top-[2.875rem] bg-black rounded-[0.375rem] divide-y-2 divide-gray-500 divide-solid">
-
                         <li className="flex items-center w-[11.875rem] px-1 h-[1.875rem]">
                             <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Profil</a>
                         </li>
@@ -30,13 +41,23 @@ export default function Menu() {
                         <li className="flex items-center bg-black w-[11.875rem] px-1 h-[1.875rem]">
                             <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Inställningar</a>
                         </li>
+                        <li className="flex items-center bg-black w-[11.875rem] px-1 h-[1.875rem]">
+                            <button onClick={() => {handleLogOut();
+                                                    if (isLoading)
+                                                         {return <div>Loading data...</div>};
+                                                    navigate("/")}}
+                                    className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">
+                                Logga ut
+                            </button>
+                        </li>
+                        
                     </ul>
                     : null}
             </nav>
             <section className="inline-flex items-center justify-between gap-4">
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/dashboard">Hem</a>
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/deliveries">Leverans</a>
-                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/order">Ny Beställning</a>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={() => navigate("/order")}>Ny Beställning</a>
             </section>
         </header> 
     )
