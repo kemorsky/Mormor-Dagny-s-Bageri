@@ -44,7 +44,6 @@ export default function Stores() {
     };
 
     const handleSelectedStore = (store: Store) => {
-        console.log("Store selected:", store)
         setSelected(store);
         setQuery('');
         setIsActive(false)

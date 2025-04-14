@@ -1,34 +1,45 @@
 import { useState } from "react"
 // import { useNavigate } from "react-router";
-import { Store, Product, OrderDetails, Order } from '../../types/types';
+import { Store, OrderDetails, Order } from '../../types/types';
 import Menu from "../../elements/menu/menu"
-// import { pushOrder } from "../../lib/api";
+import { pushOrder } from "../../lib/api";
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
 import { useStores } from "../../components/auth/StoreContext";
 import { useProducts } from "../../components/auth/ProductContext";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../components/auth/AuthContext";
 
 export default function OrderPage() {
-    const [selected, setSelected] = useState<Store | null>(null);
+    const [selected, setSelected] = useState<Store | undefined>(undefined);
     const [query, setQuery] = useState<string>("");
     const [loading, isLoading] = useState<string | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
     const [discount, setDiscount] = useState<number>(0);
-    // const [orderDetails, setOrderDetails] = useState<OrderDetails | null>();
 
+    const { currentUser } = useAuth()
     const { products } = useProducts()
     const { stores, setStores, searchStores } = useStores()
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    const [newOrder, setNewOrder] = useState<Order>({
+        Beställningsdatum: '',
+        Beställare: '',
+        PreliminärtLeveransdatum: '',
+        Säljare: currentUser?.Användarnamn || '',
+        Beställningsdetaljer: [],
+    });
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
         setQuery(newQuery);
         if (newQuery.trim().length < 3) {
             setIsActive(false);
-            setStores([]); // Optionally clear stores if query is too short
+            setStores([]);
         } else {
             setIsActive(true);
             const results = searchStores(newQuery);
@@ -37,78 +48,74 @@ export default function OrderPage() {
     };
 
     const handleSelectedStore = (store: Store) => {
-        console.log("Store selected:", store)
         setSelected(store);
         setQuery('');
         setIsActive(false)
     };
 
     const handleClearInput = () => {
-        setSelected(null);
+        setSelected(undefined);
         setQuery('');
         setIsActive(false);
     };
 
     const totalPrice = products ? products.reduce((acc, product) => {
-        const quantity = productQuantities[product.ProduktId] || 0;
-        return acc + (quantity * product.Baspris);
+        const quantity = productQuantities[product.ProduktId ?? 0] || 0;
+        return acc + (quantity * (product.Baspris ?? 0));
       }, 0) : 0;
 
     const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let discountValue = e.target.value === '' ? 0 : parseInt(e.target.value);
+        let discountValue = e.target.value === '' ? 0 : parseInt(e.target.value);
 
-    if (discountValue < 0) {
-        discountValue = 0;
-    } else if (discountValue > 100) {
-        discountValue = 100;
-    };
+        if (discountValue < 0) {
+            discountValue = 0;
+        } else if (discountValue > 100) {
+            discountValue = 100;
+        };
 
-    if (!isNaN(discountValue)) {
-        setDiscount(discountValue);
-    }
+        if (!isNaN(discountValue)) {
+            setDiscount(discountValue);
+        }
     };
 
     const finalPrice = totalPrice !== undefined && discount !== undefined
     ? totalPrice - (totalPrice * discount / 100)
     : 0;
 
-    // const handleOrderSubmit = async (e: React.FormEvent) => { // TODO redo from scratch once admin is finished
-    //     e.preventDefault();
-    //     isLoading("Laddar...");
-    //     const orderDetails: OrderDetails = {
-    //         BeställningsdetaljId: 0,
-    //         BeställningId: 0,
-    //         ProduktId: 0,
-    //         Antal: Object.values(productQuantities).reduce((acc, quantity) => acc + quantity, 0),
-    //         Styckpris: finalPrice, // - inte finalPrice. Skapa ny variabel i Table i databasen
-    //         Rabatt: discount,
-    //         Produkt: products?.filter((product) => productQuantities[product.ProduktId] > 0).map((product) => ({
-    //             ProduktId: product.ProduktId,
-    //             Namn: product.Namn,
-    //             Baspris: product.Baspris,
-    //             isDeleted: false,
-    //             Antal: productQuantities[product.ProduktId],
-    //             Styckpris: product.Baspris * productQuantities[product.ProduktId], // Inte totallt pris men pris per 1st produkt. Behöver totallt pris
-    //           })) as Product[]
-    //       };
-    //     setOrderDetails(orderDetails);
-    //     console.log(orderDetails)
-    //     try {
-    //         const response = await pushOrder(orderDetails);
-    //         if (!response) {
-    //             console.error("Error submitting order:", response.error);
-    //           }
-    //     } catch (error) {
-    //         console.error("Error pushing order:", error);
-    //     }
-    //     // console.log("Order submitted:", selected, productQuantities, finalPrice.toFixed(2));
-    // };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        isLoading("Laddar...");
 
-    // TODO:
-    // - Fixa beställningsdetaljer response (utkastar 404 just nu)
-    // - Skapa ny Table med totalltpris 
-    // - Ändra/anpassa Produkt Table i Beställningsdetaljer så att det är likadan/exakt samma som Produkt Table i /produkter
-    // - dela komponenten i mindre delar så att det inte blir 300 linjer lång
+        const orderDetails: OrderDetails[] = products?.map((product) => ({
+            ProduktId: product.ProduktId || 0,
+            Antal: productQuantities[product.ProduktId ?? 0] || 0,
+            Styckpris: (product.Baspris ?? 0) * productQuantities[product.ProduktId ?? 0],
+            Rabatt: discount, // TODO: fix bug where the discount exceeds the price of the item
+                             //  (for example if a 50% discount is applied but product 4 costs 48kr)
+        })).filter(item => item.Antal > 0);
+
+        const sentOrder = {
+            ...newOrder,
+            ButikId: selected?.ButikId || 0,
+            Beställare: selected ? selected.ButikNamn : '',
+            Beställningsdatum: newOrder.Beställningsdatum || new Date().toISOString(),
+            PreliminärtLeveransdatum: newOrder.PreliminärtLeveransdatum || new Date().toISOString(),
+            Beställningsdetaljer: orderDetails,
+        };
+        console.log(sentOrder)
+        console.log("Selected store before order:", selected);
+
+        try {
+            if (sentOrder) {
+                await pushOrder(sentOrder)
+                setNewOrder(sentOrder)
+                console.log(sentOrder)
+                // navigate('/confirmation-page')
+            }
+        } catch (error) {
+            console.error("Error creating order:", error);
+        }
+    }
 
     return (
         <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
@@ -181,7 +188,7 @@ export default function OrderPage() {
                 <section className="w-full inline-flex flex-col items-center justify-center">
                     <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>                
                 </section>
-                <form className="w-full"> {/*TODO: re-add onSubmit={handleQueryChange} once it works properly*/}
+                <form className="w-full" onSubmit={handleSubmit}> 
                     <section className="w-full inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         <CardStore className="p-2">
@@ -192,11 +199,11 @@ export default function OrderPage() {
                                             <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.Namn}</p>
                                             <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.Baspris} kr</p>
                                             <InputAmount 
-                                                value={productQuantities[product.ProduktId] || 0 }
+                                                value={productQuantities[product.ProduktId ?? 0] || 0 }
                                                 onChange={(e) => {
                                                     setProductQuantities((prevQuantities) => ({
                                                         ...prevQuantities,
-                                                        [product.ProduktId]: parseInt(e.target.value)
+                                                        [product.ProduktId ?? 0]: parseInt(e.target.value)
                                                     }))
                                             }}
                                             />
