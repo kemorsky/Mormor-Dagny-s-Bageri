@@ -23,7 +23,7 @@ export default function StoreProvider({children}: StoreProviderProps) {
             minMatchCharLength: 3
         }), []);
 
-    useEffect( () => {
+    useEffect(() => {
         const getStores = async () => {
             setLoading(true)
             try {
@@ -50,13 +50,6 @@ export default function StoreProvider({children}: StoreProviderProps) {
             return [];
         }
     }
-
-    // const searchStores = (query: string) => {
-    //     const fuse = new Fuse(stores, options);
-    //     const results = fuse.search(query).map(result => result.item);
-    //     setStores(results);
-    //     return results
-    // }
 
     const getStore = (butikId: number) => {
         return stores.find((store) => store.ButikId === butikId) || null

@@ -33,12 +33,6 @@ export const apiRequest = async (url: string, options: RequestOptions = {}) => {
       console.error("API Error:", error);
       throw error;
     }
-    return await response.json();
-
-  } catch (error) {
-    console.error("API Error:", error);
-    throw error;
-  }
 };
 
 export const fetchStores = async () => {
@@ -75,7 +69,7 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
   }
 };
 
-export const fetchOrder = async () => {
+export const fetchOrders = async () => {
    try {
      return await apiRequest(`${BASE_URL}/beställningar`);
    } catch (error) {

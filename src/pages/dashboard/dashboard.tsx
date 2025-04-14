@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Order, Store } from "../../types/types";
 import {
     WideCard as Card,
     CardDate,
@@ -17,27 +18,6 @@ type Address = {
     street: string;
     postalCode: string;
     city: string;
-};
-
-type Store = {
-    id: number;
-    customerNumber: string;
-    name: string;
-    date: string;
-    address: Address;
-    storeOwner: string;
-    storeOwnerPhone: string;
-    breadManager: string;
-    breadManagerPhone: string;
-};
-
-type Order = {
-    BeställningId: number;
-    PreliminärtLeveransdatum: string;
-    Beställare: string;
-    Säljare: string;
-    Beställningsdetaljer: any[];
-    Butik: Store;
 };
 
 export default function DashBoard() {

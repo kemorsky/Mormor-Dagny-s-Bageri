@@ -38,11 +38,13 @@ const router = createBrowserRouter([
     {
         path: '/seller-dashboard',
         element: (
-            <ProtectedRoute
-                path="/seller-dashboard"
-                element={<SellerDashboard />}
-                roles={[0, "Admin", 1, "Säljare"]}
-            />
+            <StoreProvider>
+                <ProtectedRoute
+                    path="/seller-dashboard"
+                    element={<SellerDashboard />}
+                    roles={[0, "Admin", 1, "Säljare"]}
+                />
+            </StoreProvider>
         )
     },
     {
