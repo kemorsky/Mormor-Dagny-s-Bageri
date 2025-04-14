@@ -1,39 +1,56 @@
-import { useState, useEffect } from "react";
 import Menu from "../../../elements/menu/menu";
 import { User } from '../../../types/types'
-import { getUser, editUser, editUserPassword } from "../../../lib/api";
+import { editUser, editUserPassword } from "../../../lib/api";
+import { useUser } from "../../../components/auth/UserContext";
+import { useState } from "react";
 
 export default function EditUser() {
-    const [users, setUsers] = useState<User[] | null>(null);
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [role, setRole] = useState<number | string>();
-    const [email, setEmail] = useState<string>('');
-    const [locked, setLocked] = useState<boolean>(false);
+    const {users, setUsers} = useUser();
 
-    useEffect(() => {
-        const getUsers = async () => {
-            try {
-                const usersData = await getUser()
-                setUsers(usersData)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getUsers().catch((error) => {
-            console.log(error)
-        })
-    }, [])
-
-    const handleEditPassword = async () => {
+    const [lockedUser, setLockedUser] = useState<string | null>();
+    const [editingPassword, setEditingPassword] = useState<User | null>();
+    
+    const handleCheckboxChange = async (user: User) => {
         try {
-            const editPassword = await editUserPassword({ AnvändareId: 1, LösenordHash: password })
-        } catch (error) {
+            const userLocked = !user.Låst
+            setLockedUser(user.Användarnamn)
             
-        }
-    }
+            await editUser(userLocked, user.Användarnamn ?? '');
 
-    console.log(users)
+            setUsers((prevUsers) =>
+                prevUsers.map((u) =>
+                  u.Användarnamn === user.Användarnamn
+                    ? { ...u, Låst: userLocked }
+                    : u
+                )
+              );
+            setLockedUser(null);
+        } catch (error) {
+            console.log("Failed to update user:", error);
+        } 
+    };
+
+    const handleEdit = (user: User) => {
+            console.log(user)
+            setEditingPassword({...user})
+        }
+
+    const handlePasswordChange = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (editingPassword) {
+            const success = await editUserPassword(editingPassword)
+            if (success) {
+                setUsers((prevUsers) =>
+                    prevUsers.map((u) =>
+                      u.Användarnamn === editingPassword.Användarnamn
+                        ? { ...u, LösenordHash: editingPassword.LösenordHash }
+                        : u
+                    )
+                  );
+                  setEditingPassword(null)
+            }
+        } 
+    }
 
     return (
         <main className="flex flex-col items-center justify-center gap-4">
@@ -42,19 +59,38 @@ export default function EditUser() {
                 users.map((user) => (
                     <div key={user.AnvändareId}>
                         <p>{user.Användarnamn}</p>
-                        <p>{user.Roll}</p>
                         <p>{user.Email}</p>
-                        <p>{user.Låst}</p>
+                        <p>{user.Roll}</p>
+                        <label className="flex items-center gap-2 mt-2">
+                            <input
+                                type="checkbox"
+                                checked={user.Låst ?? false}
+                                disabled={lockedUser === user.Användarnamn}
+                                onChange={() => handleCheckboxChange(user)}
+                            />
+                            {user.Låst ? "Locked" : "Unlocked"}
+                        </label>
+                        {editingPassword?.Användarnamn === user.Användarnamn ? (
+                            <form className="flex flex-col gap-3" onSubmit={handlePasswordChange}>
+                                <input
+                                    type="password"
+                                    value={editingPassword?.LösenordHash ?? ''}
+                                    onChange={(e) => setEditingPassword({ ...editingPassword, LösenordHash: e.target.value })}
+                                />
+                                <div className="inline-flex items-center justify-center gap-3">
+                                    <button type="submit">Spara</button>
+                                    <button onClick={() => {setEditingPassword(null)}}>Avbryt</button>
+                                </div>
+                                
+                            </form> 
+                            ) : (
+                                <button onClick={() => handleEdit(user)}>Redigera lösenord</button>
+                            )}
                     </div>
                 ))
             ) : (
                 <div>Error fetching users</div>
             )}
-            <input type="text" />
-            <input type="text" />
-            <input type="text" />
-            <input type="text" />
-            <input type="text" />
         </main>
     )
 };

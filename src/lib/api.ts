@@ -69,6 +69,15 @@ export const pushOrder = async (orderDetails: OrderDetails) => {
   }
 };
 
+export const fetchUsers = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/auth/users`);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+}
+
 export const addUser = async (user: RegisterUser) => {
   try {
     const response = await apiRequest(`${BASE_URL}/auth/registrera`, {
@@ -82,22 +91,12 @@ export const addUser = async (user: RegisterUser) => {
   }
 };
 
-export const getUser = async () => { // TODO fix later, no correct endpoint as of right now
+export const editUser = async (Låst: boolean, Användarnamn: string) => {
   try {
-    return await apiRequest(`${BASE_URL}/användare`);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    throw error;
-  }
-}
-
-export const editUser = async (user: User) => {
-  try {
-    const response = await apiRequest(`${BASE_URL}/användare`, {
+    const response = await apiRequest(`${BASE_URL}/auth/lås-användare/${Användarnamn}`, {
       method: 'PUT',
-      body: JSON.stringify(user)
+      body: JSON.stringify(Låst)
     });
-    console.log(response);
     return response;
   } catch (error) {
     console.error("Error pushing order:", error);
@@ -107,15 +106,26 @@ export const editUser = async (user: User) => {
 
 export const editUserPassword = async (user: User) => {
   try {
-    const response = await apiRequest(`${BASE_URL}/auth/ändra-lösenord/`, {
+    const response = await apiRequest(`${BASE_URL}/auth/ändra-lösenord/${user.Användarnamn}`, {
       method: 'PUT',
-      body: JSON.stringify(user)
+      body: JSON.stringify(user.LösenordHash)
     });
-    console.log(response);
     return response;
   } catch (error) {
-    console.error("Error editing password:", error)
+    console.error("Error pushing order:", error);
     throw error;
+  }
+}
+
+export const deleteUser = async (Användarnamn: string) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/auth/ta-bort-användare/${Användarnamn}`, {
+      method: 'DELETE',
+    })
+    console.log(response)
+    return response;
+  } catch (error) {
+    console.log(error)
   }
 }
 

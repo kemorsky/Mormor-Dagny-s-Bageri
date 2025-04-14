@@ -46,9 +46,15 @@ export default function AddUser() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)} />
-            <input type="checkbox" checked={locked ?? false}
-                placeholder="Låst"
-                onChange={(e) => setLocked(e.target.checked)} />
+            <label className="flex items-center gap-2 mt-2">
+                Låst: 
+                <input
+                    type="checkbox"
+                    checked={locked ?? false}
+                    onChange={(e) => setLocked(e.target.checked)}
+                />
+                {locked ? "Locked" : "Unlocked"}
+            </label>         
             <button onClick={() => {handleAddUser(user)}}>Lägg till</button>
         </main>
     )
