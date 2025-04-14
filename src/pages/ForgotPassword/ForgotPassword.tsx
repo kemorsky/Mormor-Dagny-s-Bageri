@@ -12,7 +12,7 @@ type User = {
 
 export default function ResetPasswordPage() {
   const [users, setUsers] = useState<User[]>([
-    { id: 0, role: "admin", username: "michael", password: "" },
+    { id: 0, role: "admin", username: "michael", password: "admin123" },
     { id: 1, role: "Säljare", username: "lisa", password: ""},
     { id: 2, role: "Planerare", username: "kalle", password: ""}
   ]);
