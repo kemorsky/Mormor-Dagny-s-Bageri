@@ -1,8 +1,6 @@
 import { useState } from "react"
-// import { useNavigate } from "react-router";
 import { Store, OrderDetails, Order } from '../../types/types';
 import Menu from "../../elements/menu/menu"
-import { pushOrder } from "../../lib/api";
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
@@ -89,10 +87,9 @@ export default function OrderPage() {
         const orderDetails: OrderDetails[] = products?.map((product) => ({
             ProduktId: product.ProduktId || 0,
             Antal: productQuantities[product.ProduktId ?? 0] || 0,
-            Styckpris: product.Baspris ?? 0,
-            Totalltpris: (product.Baspris ?? 0) * productQuantities[product.ProduktId ?? 0],
-            Rabatt: discount,                   // TODO: fix bug where the discount exceeds the price of the item
-            TotalltBeställningpris: finalPrice //  (for example if a 50% discount is applied but product 4 costs 48kr)
+            Styckpris: (product.Baspris ?? 0) * productQuantities[product.ProduktId ?? 0],
+            Rabatt: discount,                // TODO: fix bug where the discount exceeds the price of the item
+                                            //  (for example if a 50% discount is applied but product 4 costs 48kr)
         })).filter(item => item.Antal > 0);
 
         const sentOrder = {
@@ -106,11 +103,11 @@ export default function OrderPage() {
 
         try {
             if (sentOrder) {
-                const createdOrder = await pushOrder(sentOrder)
+                // const createdOrder = await pushOrder(sentOrder)
                 setNewOrder(sentOrder)
                 console.log(sentOrder)
                 // navigate(`/confirmation-page/${createdOrder.BeställningId}`);
-                navigate('/confirm-order', {state: {order: createdOrder}} )
+                navigate('/confirm-order', {state: {order: sentOrder}} )
             }
         } catch (error) {
             console.error("Error creating order:", error);

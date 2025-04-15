@@ -65,8 +65,6 @@ export type OrderDetails = {
     ProduktId: number,
     Antal: number,
     Styckpris: number,
-    Totalltpris: number,
     Rabatt: number,
-    TotalltBeställningpris: number,
     Produkt?: Product,  
 };
