@@ -38,6 +38,11 @@ export default function OrderDetailsPage() {
 
     console.log(order)
 
+    const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => { // TODO implementent PUT method of order details alteration
+        e.preventDefault();
+
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true)
@@ -111,6 +116,7 @@ export default function OrderDetailsPage() {
                     <p>Laddar orderdetaljer...</p>
                     )}
                 </section>
+                <button>Ändra detaljer</button>
                 <button className={`${loading ? 'cursor-not-allowed' : ''}`} type='submit'>Lägg till beställningen</button>
             </form>
         </main>

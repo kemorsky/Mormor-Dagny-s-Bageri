@@ -71,6 +71,19 @@ export const fetchSpecificOrder = async (BeställningId: number) => {
   }
 };
 
+export const editOrder = async (orderDetails: OrderDetails) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/${orderDetails.BeställningsdetaljId}`, {
+      method: 'PUT',
+      body: JSON.stringify(orderDetails),
+    });
+    return response;
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw error;
+  }
+}
+
 export const pushOrder = async (order: Order) => {
   try {
     const response = await apiRequest(`${BASE_URL}/beställningar`, {
@@ -93,20 +106,6 @@ export const fetchOrderDetails = async (orderId: number) => {
   } catch (error) {
     console.error("Error fetching order:", error);
      throw error;
-  }
-};
-
-export const pushFinalOrder = async (orderDetails: OrderDetails) => {
-  try {
-    const response = await apiRequest(`${BASE_URL}/beställningar`, {
-      method: 'POST',
-      body: JSON.stringify(orderDetails),
-  });
-    console.log(orderDetails)
-      return response; 
-  } catch (error) {
-    console.error("Error creating order:", error);                                         
-    throw error;
   }
 };
 
