@@ -10,7 +10,7 @@ import EditUser from '../pages/admin/edit-user/edit-user';
 import RemoveUser from '../pages/admin/remove-user/remove-user';
 import SellerDashboard from '../pages/seller-dashboard/seller-dashboard';
 import OrderPage from '../pages/order-page/order-page';
-import ConfirmationPage from '../pages/confirmation.page/confirmation-page';
+import OrderDetailsPage from '../pages/order-details/order-details';
 import OrdersPage from '../pages/orders/orders';
 import Stores from '../pages/admin/stores/stores';
 import Products from '../pages/admin/products/products';
@@ -131,7 +131,13 @@ const router = createBrowserRouter([
     },
     {
         path: '/confirm-order',
-        element: <ConfirmationPage />,
+        element: (
+            <ProtectedRoute
+                path="/order"
+                element={<OrderDetailsPage />}
+                roles={[0, "Admin", 1, "Säljare"]}
+            />
+        )
     },
     {
         path: '/orders',

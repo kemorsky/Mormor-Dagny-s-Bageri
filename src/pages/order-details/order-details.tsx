@@ -1,0 +1,105 @@
+import { useState, useEffect } from "react"
+import Menu from "../../elements/menu/menu"
+import { fetchOrderDetails } from "../../lib/api"
+import { OrderDetails } from "../../types/types"
+import { useLocation, useNavigate } from "react-router"
+import { InputPrimary } from "../../components/ui/input"
+import { InputAmount } from "../../components/ui/input"
+import { Card, CardHeader, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount  } from "../../blocks/card"
+import { Order } from "../../types/types"
+import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
+
+export default function OrderDetailsPage() {
+    const [details, setDetails] = useState<OrderDetails[]>([]);
+    const navigate = useNavigate();
+
+    const { state } = useLocation();
+
+    const order = state?.order
+
+    useEffect(() => {
+        const getOrderDetails = async () => {
+            if (order?.BeställningId) {
+                try {
+                  const data = await fetchOrderDetails(order.BeställningId);
+                  setDetails(data);
+                } catch (error) {
+                  console.error("Error fetching order details:", error);
+                }
+              }
+        }
+        getOrderDetails().catch(console.error)
+    }, [order?.BeställningId])
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
+    return (
+        <main>
+            <Menu />
+            <h1>Bekräfta beställning</h1>
+            <section>
+                <h2>Orderinformation</h2>
+                <CardStore className="">
+                    <CardStoreContent>
+                        <CardStoreInformation>
+                            <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik.ButikNamn} 
+                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Butik.ButikNummer}</span>
+                            </p>
+                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.Besöksadress}</p>
+                        </CardStoreInformation>
+                        <CardStoreContacts>
+                            <CardStoreOwner>
+                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
+                                <article className="w-full flex items-center justify-start gap-1.5">
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.ButikschefNamn}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.ButikschefTelefon}</p>
+                                </article>
+                            </CardStoreOwner>
+                            <CardStoreBreadperson>
+                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
+                                <article className="w-full flex items-center justify-start gap-1.5">
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.BrödansvarigNamn}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.BrödansvarigTelefon}</p>
+                                </article>
+                            </CardStoreBreadperson>
+                        </CardStoreContacts>
+                    </CardStoreContent>                                                             
+                </CardStore>
+                <p><strong>BeställningId:</strong> {order.BeställningId}</p> {/* DEBUG ONLY, REMOVE AT THE END */}
+                <p><strong>Beställare:</strong> {order.Beställare}</p>
+                <p><strong>Säljare:</strong> {order.Säljare}</p>
+                <p><strong>Datum:</strong> {order.Beställningsdatum}</p>
+                <p><strong>Leveransdatum:</strong> {order.PreliminärtLeveransdatum}</p>
+                <p><strong>Rabatt: {order.Rabatt}</strong></p>
+                <p><strong>Totalpris:</strong> {order.TotalltBeställningpris}</p>
+            </section>
+            <section>
+                <h2>Produkter</h2>
+                {details.length > 0 ? (
+                <div> 
+                    <ul>
+                        {details.map((product, key) => (
+                        <li key={key}>
+                            <ProductCard>
+                                <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                                <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
+                                <ProductCardPrice>Styckpris: {product.Styckpris}</ProductCardPrice>
+                                <ProductCardPrice>Tottaltpris: {product.Totalltpris}</ProductCardPrice>
+                            </ProductCard>
+                        </li>
+                        ))}
+                    </ul>
+                </div>
+                ) : (
+                <p>Laddar orderdetaljer...</p>
+                )}
+            </section>
+        </main>
+    )
+}

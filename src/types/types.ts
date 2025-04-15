@@ -55,7 +55,7 @@ export type Order = {
     Beställare: string,
     PreliminärtLeveransdatum: string,
     Beställningsdetaljer: OrderDetails[],
-    Säljare: string
+    Säljare: string,
     Butik?: Store
 };
 
@@ -65,6 +65,8 @@ export type OrderDetails = {
     ProduktId: number,
     Antal: number,
     Styckpris: number,
+    Totalltpris: number,
     Rabatt: number,
+    TotalltBeställningpris: number,
     Produkt?: Product,  
 };

@@ -60,7 +60,7 @@ export default function AuthProvider({children}: AuthProviderProps) {
         setAuthToken(null)
         setCurrentUser(null)
         console.log("Successfully logged out") 
-    }
+    };
 
     return <AuthContext.Provider value={{authToken, currentUser, handleLogin, handleLogOut, isLoading}}>
                 {children}

@@ -89,9 +89,10 @@ export default function OrderPage() {
         const orderDetails: OrderDetails[] = products?.map((product) => ({
             ProduktId: product.ProduktId || 0,
             Antal: productQuantities[product.ProduktId ?? 0] || 0,
-            Styckpris: (product.Baspris ?? 0) * productQuantities[product.ProduktId ?? 0],
-            Rabatt: discount, // TODO: fix bug where the discount exceeds the price of the item
-                             //  (for example if a 50% discount is applied but product 4 costs 48kr)
+            Styckpris: product.Baspris ?? 0,
+            Totalltpris: (product.Baspris ?? 0) * productQuantities[product.ProduktId ?? 0],
+            Rabatt: discount,                   // TODO: fix bug where the discount exceeds the price of the item
+            TotalltBeställningpris: finalPrice //  (for example if a 50% discount is applied but product 4 costs 48kr)
         })).filter(item => item.Antal > 0);
 
         const sentOrder = {
@@ -102,15 +103,14 @@ export default function OrderPage() {
             PreliminärtLeveransdatum: newOrder.PreliminärtLeveransdatum || new Date().toISOString(),
             Beställningsdetaljer: orderDetails,
         };
-        console.log(sentOrder)
-        console.log("Selected store before order:", selected);
 
         try {
             if (sentOrder) {
-                await pushOrder(sentOrder)
+                const createdOrder = await pushOrder(sentOrder)
                 setNewOrder(sentOrder)
                 console.log(sentOrder)
-                // navigate('/confirmation-page')
+                // navigate(`/confirmation-page/${createdOrder.BeställningId}`);
+                navigate('/confirm-order', {state: {order: createdOrder}} )
             }
         } catch (error) {
             console.error("Error creating order:", error);

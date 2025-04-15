@@ -53,6 +53,15 @@ export const fetchProducts = async () => {
   }
 };
 
+export const fetchOrders = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/beställningar`);
+  } catch (error) {
+    console.error("Error pushing order:", error);
+    throw error;
+  }
+};
+
 export const pushOrder = async (order: Order) => {
   try {
     const response = await apiRequest(`${BASE_URL}/beställningar`, {
@@ -62,28 +71,34 @@ export const pushOrder = async (order: Order) => {
     console.log(order)
       return response; 
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error("Error creating order:", error);                                         
     throw error;
   }
 };
 
-export const fetchOrderDetails = async (orderDetails: OrderDetails) => {
+export const fetchOrderDetails = async (orderId: number) => {
   try {
-    const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/beställning/${orderDetails.BeställningId}`)
+    const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/beställning/${orderId}`)
     console.log(response)
+    return response;
   } catch (error) {
     console.error("Error fetching order:", error);
      throw error;
   }
 };
 
-export const fetchOrders = async () => {
-   try {
-     return await apiRequest(`${BASE_URL}/beställningar`);
-   } catch (error) {
-     console.error("Error pushing order:", error);
-     throw error;
-   }
+export const pushFinalOrder = async (orderDetails: OrderDetails) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/beställningar`, {
+      method: 'POST',
+      body: JSON.stringify(orderDetails),
+  });
+    console.log(orderDetails)
+      return response; 
+  } catch (error) {
+    console.error("Error creating order:", error);                                         
+    throw error;
+  }
 };
 
 export const fetchUsers = async () => {
@@ -237,21 +252,3 @@ export const editProduct = async (product: Product) => {
       throw error;
     }
 }
-
-// export const createOrder = async () => {
-//   try {
-//     return await apiRequest(`${BASE_URL}/beställningar`);
-//   } catch (error) {
-//     console.error("Error pushing order:", error);
-//     throw error;
-//   }
-// }
-
-// export const fetchOrder = async () => {
-//   try {
-//     return await apiRequest(`${BASE_URL}/beställningar`);
-//   } catch (error) {
-//     console.error("Error pushing order:", error);
-//     throw error;
-//   }
-// };
