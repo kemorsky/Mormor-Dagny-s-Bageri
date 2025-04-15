@@ -62,6 +62,15 @@ export const fetchOrders = async () => {
   }
 };
 
+export const fetchSpecificOrder = async (BeställningId: number) => {
+  try {
+    return await apiRequest(`${BASE_URL}/beställningar/order/{${BeställningId}}`)
+  } catch (error) {
+    console.error("Error fetching this order:", error)
+    throw error;
+  }
+};
+
 export const pushOrder = async (order: Order) => {
   try {
     const response = await apiRequest(`${BASE_URL}/beställningar`, {

@@ -16,7 +16,7 @@ export const useProducts = () => {
         throw new Error("useAuth must be used within a AuthProvider");
     }
 
-    return {products: context.products ?? [], setProducts: context.setProducts}
+    return {products: context.products ?? [], setProducts: context.setProducts, getProduct: context.getProduct}
 }
 
 export default ProductContext
