@@ -53,19 +53,27 @@ export const fetchProducts = async () => {
   }
 };
 
-export const pushOrder = async (orderDetails: OrderDetails) => {
+export const pushOrder = async (order: Order) => {
   try {
-    const response = await apiRequest(`${BASE_URL}/beställningar/id`, { // TODO fix id and replace with proper value
+    const response = await apiRequest(`${BASE_URL}/beställningar`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(orderDetails),
+      body: JSON.stringify(order),
   });
+    console.log(order)
       return response; 
   } catch (error) {
     console.error("Error creating order:", error);
     throw error;
+  }
+};
+
+export const fetchOrderDetails = async (orderDetails: OrderDetails) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/beställning/${orderDetails.BeställningId}`)
+    console.log(response)
+  } catch (error) {
+    console.error("Error fetching order:", error);
+     throw error;
   }
 };
 

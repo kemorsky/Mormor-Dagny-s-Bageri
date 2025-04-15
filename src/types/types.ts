@@ -49,24 +49,22 @@ export type Product = {
 };
 
 export type Order = {
-    BeställningId: number,
-    ButikId: number,
+    BeställningId?: number,
+    ButikId?: number,
     Beställningsdatum: string,
     Beställare: string,
     PreliminärtLeveransdatum: string,
     Beställningsdetaljer: OrderDetails[],
     Säljare: string
-    Butik: Store[]
+    Butik?: Store
 };
 
 export type OrderDetails = {
-    BeställningsdetaljId: number,
-    BeställningId: number,
+    BeställningsdetaljId?: number,
+    BeställningId?: number,
     ProduktId: number,
     Antal: number,
-    Produkt: Product[],
-    Rabatt: number,
     Styckpris: number,
-}
-
-// export type CompleteProduct = Product & ProductDetails
+    Rabatt: number,
+    Produkt?: Product,  
+};
