@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { Order, Store } from "../../types/types";
+import { useRef, useState, useEffect } from "react";
 import {
     WideCard as Card,
     CardDate,
@@ -10,10 +9,9 @@ import {
     CardClientNumber,
     CardStore,
 } from "../../blocks/card";
-import { ButtonSecondary, ButtonTertiary } from "../../components/ui/button";
-import Menu from "../../elements/menu/menu";
-import { fetchStores, fetchOrders } from "../../lib/api";
-import { useStores } from "../../components/auth/StoreContext";
+import { ButtonSecondary, ButtonTertiary } from "./../../components/ui/button";
+import Menu from "./../../elements/menu/menu";
+import { fetchStores } from "../../lib/api";
 
 type Address = {
     street: string;
@@ -21,56 +19,67 @@ type Address = {
     city: string;
 };
 
-export default function SellerDashBoard() {
+type Customer = {
+    date: string;
+    customerNumber: number;
+    address: Address;
+    name: string;
+    storeOwner: string;
+    breadManager: string;
+    active: boolean;
+    phoneNumber: string;
+    contactPerson?: string;
+};
 
-    const { stores, setStores } = useStores()
+// Omvandla data från backend till frontend-struktur
+const transformData = (stores: any[]) => {
+    return stores.map(store => ({
+        customerNumber: store.ButikNummer,
+        name: store.ButikNamn,
+        phoneNumber: store.Telefonnummer,
+        address: {
+            street: store.Besöksadress.split(",")[0], // Hämtar gatan från Besöksadress
+            postalCode: store.Besöksadress.split(",")[1]?.trim() || "", // Hämtar postnummer från Besöksadress
+            city: store.Besöksadress.split(",")[2]?.trim() || "" // Hämtar stad från Besöksadress
+        },
+        storeOwner: store.ButikschefNamn,
+        breadManager: store.BrödansvarigNamn,
+        active: !store.Låst, // Om "Låst" är true, sätt butiken som inaktiv
+        contactPerson: store.ButikschefTelefon, // Eller sätt det till butikschefens telefonnummer
+        date: new Date().toLocaleDateString(), // Sätt dagens datum för demo
+    }));
+};
 
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [pastOrders, setPastOrders] = useState<Order[]>([]);
+export default function DashBoard() {
+    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [previousOrders, setPreviousOrders] = useState<Customer[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const scrollRef = useRef<HTMLDivElement>(null);
 
+    const scrollRefCurrent = useRef<HTMLDivElement>(null);
+    const scrollRefPrevious = useRef<HTMLDivElement>(null);
+
+    // Hämtar data när komponenten mountas
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             setError(null);
             try {
-                // Hämta butiker
-                const storeData = await fetchStores();
-                console.log("Data från backend (butiker):", storeData);
+                const stores = await fetchStores();
+                console.log("Stores from backend:", stores);
 
-                const mappedStores = storeData
-                    .filter((store: any) => store.ButikId >= 1 && store.ButikId <= 4)
-                    .map((store: any) => {
-                        const fullAddress = store.Besöksadress ?? "";
-                        const [streetRaw, postalCityRaw] = fullAddress.split(",");
-                        const street = streetRaw?.trim() ?? "";
-                        const postalCity = postalCityRaw?.trim() ?? "";
-                        const [postalCode, ...cityParts] = postalCity.split(" ");
-                        const city = cityParts.join(" ");
+                // Omvandla data till korrekt struktur
+                const transformedStores = transformData(stores);
 
-                        return {
-                            id: store.ButikId,
-                            customerNumber: store.ButikNummer,
-                            name: store.ButikNamn,
-                            date: new Date().toLocaleDateString("sv-SE"),
-                            address: {
-                                street,
-                                postalCode,
-                                city,
-                            },
-                            storeOwner: store.ButikschefNamn,
-                            storeOwnerPhone: store.ButikschefTelefon,
-                            breadManager: store.BrödansvarigNamn,
-                            breadManagerPhone: store.BrödansvarigTelefon,
-                        };
-                    });
+                // Dela upp butiker i aktiva och inaktiva
+                const activeOrders = transformedStores.filter((store: Customer) => store.active);
+                const pastOrders = transformedStores.filter((store: Customer) => !store.active);
 
-                setStores(mappedStores);
+                setCustomers(activeOrders);
+                setPreviousOrders(pastOrders);
             } catch (err) {
-                console.error("Fel vid hämtning av butiker:", err);
-                setError("Kunde inte hämta data.");
+                console.error("Failed to fetch stores:", err);
+                setError("Kunde inte hämta kunddata.");
             } finally {
                 setLoading(false);
             }
@@ -79,205 +88,77 @@ export default function SellerDashBoard() {
         getData();
     }, []);
 
-    useEffect(() => {
-        const getData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                // Hämta beställningar
-                const orderData = await fetchOrders();
-                console.log("Data från backend (beställningar):", orderData);
-
-                if (Array.isArray(orderData.Data)) {
-                    console.log("Alla beställningar:", orderData.Data);
-
-                    const activeOrders = orderData.Data.filter((order: Order) => {
-                        const deliveryDate = new Date(order.PreliminärtLeveransdatum);
-                        console.log(
-                            "Order ID:",
-                            order.BeställningId,
-                            "PreliminärtLeveransdatum:",
-                            order.PreliminärtLeveransdatum,
-                            "Parsed Date:",
-                            deliveryDate,
-                            "Is Future Date:",
-                            deliveryDate > new Date()
-                        );
-                        return deliveryDate > new Date();
-                    });
-
-                    console.log("Active orders:", activeOrders);
-
-                    const pastOrders = orderData.Data.filter((order: Order) => {
-                        const deliveryDate = new Date(order.PreliminärtLeveransdatum);
-                        return deliveryDate <= new Date();
-                    });
-
-                    setOrders(activeOrders);
-                    setPastOrders(pastOrders);
-                } else {
-                    console.error("Fel: orderData.Data är inte en array.", orderData);
-                    setError("Kunde inte hämta beställningar korrekt.");
-                }
-            } catch (err) {
-                console.error("Fel vid hämtning:", err);
-                setError("Kunde inte hämta data.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getData();
-    }, []);
-
-    const scrollLeft = () => {
-        scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
+    // Scrollfunktioner
+    const scrollLeft = (ref: React.RefObject<HTMLDivElement>) => {
+        ref.current?.scrollBy({ left: -320, behavior: "smooth" });
     };
 
-    const scrollRight = () => {
-        scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
+    const scrollRight = (ref: React.RefObject<HTMLDivElement>) => {
+        ref.current?.scrollBy({ left: 320, behavior: "smooth" });
     };
 
     return (
-        <main className="min-h-screen w-full bg-gradient-primary flex flex-col items-center justify-start pt-12 relative">
+        <main className="min-h-[59.75rem] w-full bg-gradient-primary inline-flex flex-col items-center justify-start pt-[3.125rem] relative">
             <Menu />
 
             {loading && <p className="text-white mt-4">Laddar data...</p>}
             {error && <p className="text-red-500 mt-4">{error}</p>}
 
             {!loading && !error && (
-                <div className="flex-grow w-full flex flex-col items-center gap-10">
-                    {/* Pågående Beställningar */}
-                    <div className="w-full flex flex-col items-center gap-3">
-                        <article className="w-[90%] max-w-[480px] flex items-center justify-between">
+                <>
+                    {/* Pågående beställningar */}
+                    <div className="w-full inline-flex flex-col items-center justify-center gap-3 mt-5">
+                        <article className="w-[380px] flex items-center justify-between">
                             <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
                                 Dina pågående beställningar
                             </p>
                             <ButtonSecondary>Se alla</ButtonSecondary>
                         </article>
 
-                        <div className="relative w-full max-w-[90vw]">
+                        <div className="relative w-full">
                             <button
-                                onClick={scrollLeft}
-                                className="absolute left-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 text-white rounded-full z-10"
+                                onClick={() => scrollLeft(scrollRefCurrent)}
+                                className="absolute left-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"
                             >
                                 ←
                             </button>
 
                             <div
-                                ref={scrollRef}
-                                className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth px-10"
-                                style={{
-                                    scrollbarWidth: "none",
-                                    msOverflowStyle: "none",
-                                }}
+                                ref={scrollRefCurrent}
+                                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
                             >
-                                {orders.length > 0 ? (
-                                    orders.map((order) => (
-                                        <div key={order.BeställningId} className="snap-center min-w-[320px] max-w-[320px]">
-                                            <Card>
-                                                <div className="flex justify-between items-center w-full">
-                                                    <CardClientNumber className="ml-0 text-lg font-bold">
-                                                        {order.Butik.ButikNummer}
-                                                    </CardClientNumber>
-                                                    <CardDate className="ml-auto text-lg font-bold">
-                                                        {new Date(order.PreliminärtLeveransdatum).toLocaleDateString("sv-SE")}
-                                                    </CardDate>
-                                                </div>
-                                                <CardHeader>
-                                                    <CardStore>{order.Butik.ButikNamn}</CardStore>
-                                                    <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
-                                                        <span>{order.Butik.Fakturaadress}</span>
-                                                    </CardAddress>
-                                                </CardHeader>
-                                                <CardFooter className="flex justify-between w-full items-center">
-                                                    <div className="flex-1 min-w-0 flex flex-col">
-                                                        <span>Butiksägare</span>
-                                                        <CardClientName className="text-sm text-[#9A9A9A] flex flex-col">
-                                                            <span>{order.Butik.ButikschefNamn}</span>
-                                                            <span>{order.Butik.ButikschefTelefon}</span>
-                                                        </CardClientName>
-                                                    </div>
-                                                    <div className="flex-1 min-w-0 flex flex-col text-right">
-                                                        <span>Brödansvarig</span>
-                                                        <CardClientName className="text-sm text-[#9A9A9A] flex flex-col">
-                                                            <span>{order.Butik.BrödansvarigNamn}</span>
-                                                            <span>{order.Butik.BrödansvarigTelefon}</span>
-                                                        </CardClientName>
-                                                    </div>
-                                                </CardFooter>
-                                            </Card>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-white">Inga pågående beställningar</p>
-                                )}
-                            </div>
-
-                            <button
-                                onClick={scrollRight}
-                                className="absolute right-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 text-white rounded-full z-10"
-                            >
-                                →
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Tidigare Beställningar */}
-                    <div className="w-full flex flex-col items-center gap-3">
-                        <article className="w-[90%] max-w-[480px] flex items-center justify-between">
-                            <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
-                                Dina tidigare beställningar
-                            </p>
-                            <ButtonTertiary>Se alla</ButtonTertiary>
-                        </article>
-
-                        <div className="relative w-full max-w-[90vw]">
-                            <button
-                                onClick={scrollLeft}
-                                className="absolute left-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 text-white rounded-full z-10"
-                            >
-                                ←
-                            </button>
-
-                            <div
-                                ref={scrollRef}
-                                className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth px-10"
-                                style={{
-                                    scrollbarWidth: "none",
-                                    msOverflowStyle: "none",
-                                }}
-                            >
-                                {pastOrders.map((order) => (
-                                    <div key={order.BeställningId} className="snap-center min-w-[320px] max-w-[320px]">
+                                {customers.map((customer) => (
+                                    <div key={customer.customerNumber} className="snap-center min-w-[320px]">
                                         <Card>
                                             <div className="flex justify-between items-center w-full">
-                                                <CardClientNumber className="ml-0 text-lg font-bold">
-                                                    {order.Butik.ButikNummer}
-                                                </CardClientNumber>
-                                                <CardDate className="ml-auto text-lg font-bold">
-                                                    {new Date(order.PreliminärtLeveransdatum).toLocaleDateString("sv-SE")}
-                                                </CardDate>
+                                                <CardClientNumber className="ml-0 text-lg font-bold">{`${customer.customerNumber}`}</CardClientNumber>
+                                                <CardDate className="ml-auto text-lg font-bold">{customer.date}</CardDate>
                                             </div>
                                             <CardHeader>
-                                                <CardStore>{order.Butik.ButikNamn}</CardStore>
+                                                <CardStore>{customer.name}</CardStore>
                                                 <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
-                                                    <span>{order.Butik.Fakturaadress}</span>
+                                                    <span>{customer.address.street}</span>
+                                                    <span>{customer.address.postalCode} {customer.address.city}</span>
                                                 </CardAddress>
                                             </CardHeader>
                                             <CardFooter className="flex justify-between w-full items-center">
                                                 <div className="flex-1 min-w-0 flex flex-col">
                                                     <span>Butiksägare</span>
-                                                    <CardClientName className="text-sm text-[#9A9A9A] flex flex-col">
-                                                        <span>{order.Butik.ButikschefNamn}</span>
-                                                        <span>{order.Butik.ButikschefTelefon}</span>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{customer.storeOwner}</span>
+                                                    </CardClientName>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{customer.phoneNumber}</span>
                                                     </CardClientName>
                                                 </div>
                                                 <div className="flex-1 min-w-0 flex flex-col text-right">
                                                     <span>Brödansvarig</span>
-                                                    <CardClientName className="text-sm text-[#9A9A9A] flex flex-col">
-                                                        <span>{order.Butik.BrödansvarigNamn}</span>
-                                                        <span>{order.Butik.BrödansvarigTelefon}</span>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{customer.breadManager}</span>
+                                                    </CardClientName>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{customer.phoneNumber}</span>
                                                     </CardClientName>
                                                 </div>
                                             </CardFooter>
@@ -287,14 +168,84 @@ export default function SellerDashBoard() {
                             </div>
 
                             <button
-                                onClick={scrollRight}
-                                className="absolute right-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 text-white rounded-full z-10"
+                                onClick={() => scrollRight(scrollRefCurrent)}
+                                className="absolute right-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"
                             >
                                 →
                             </button>
                         </div>
                     </div>
-                </div>
+
+                    {/* Tidigare beställningar */}
+                    <div className="w-full inline-flex flex-col items-center justify-start gap-3 mt-10">
+                        <article className="min-w-[380px] flex items-center justify-between">
+                            <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
+                                Dina tidigare beställningar
+                            </p>
+                            <ButtonTertiary>Se alla</ButtonTertiary>
+                        </article>
+
+                        <div className="relative w-full">
+                            <button
+                                onClick={() => scrollLeft(scrollRefPrevious)}
+                                className="absolute left-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"
+                            >
+                                ←
+                            </button>
+
+                            <div
+                                ref={scrollRefPrevious}
+                                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
+                            >
+                                {previousOrders.map((order) => (
+                                    <div key={order.customerNumber} className="snap-center min-w-[320px]">
+                                        <Card>
+                                            <div className="flex justify-between items-center w-full">
+                                                <CardClientNumber className="ml-0 text-lg font-bold">{`#${order.customerNumber}`}</CardClientNumber>
+                                                <CardDate className="ml-auto text-lg font-bold">{order.date}</CardDate>
+                                            </div>
+                                            <CardHeader>
+                                                <CardStore>{order.name}</CardStore>
+                                                <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
+                                                    <span>{order.address.street}</span>
+                                                    <span>{order.address.postalCode} {order.address.city}</span>
+                                                </CardAddress>
+                                            </CardHeader>
+                                            <CardFooter className="flex justify-between w-full items-center">
+                                                <div className="flex-1 min-w-0 flex flex-col">
+                                                    <span>Butiksägare</span>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{order.contactPerson || "Ej angiven"}</span>
+                                                    </CardClientName>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{order.phoneNumber}</span>
+                                                    </CardClientName>
+                                                </div>
+                                                <div className="flex-1 min-w-0 flex flex-col text-right">
+                                                    <span>Brödansvarig</span>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{order.breadManager || "Ej angiven"}</span>
+                                                    </CardClientName>
+                                                    <CardClientName className="text-sm text-[#9A9A9A]">
+                                                        <span>{order.phoneNumber}</span>
+                                                    </CardClientName>
+                                                </div>
+                                            </CardFooter>
+                                        </Card>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => scrollRight(scrollRefPrevious)}
+                                className="absolute right-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"
+                            >
+                                →
+                            </button>
+                        </div>
+                    </div>
+                </>
             )}
         </main>
     );

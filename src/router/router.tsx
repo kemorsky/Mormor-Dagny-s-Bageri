@@ -3,7 +3,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import AccessDenied from '../pages/access-denied/access-denied';
 import LoginPage from '../pages/login-page/login-page';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
-import Dashboard from '../pages/dashboard/dashboard';
+/* import Dashboard from '../pages/dashboard/dashboard'; */
 import AdminDashboard from '../pages/admin-dashboard/admin-dashboard';
 import AddUser from '../pages/admin/add-user/add-user';
 import EditUser from '../pages/admin/edit-user/edit-user';
@@ -31,10 +31,11 @@ const router = createBrowserRouter([
         path: '/forgot-password',
         element: <ForgotPassword />,
     },
-    {
-        path: '/dashboard',
-        element: <Dashboard />,
-    },
+    /*     {
+            path: '/dashboard',
+            element: <Dashboard />,
+        }, */
+
     {
         path: '/seller-dashboard',
         element: (
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
         element: (
             <ProtectedRoute
                 path='/admin-add-user'
-                element= {<AddUser />}
+                element={<AddUser />}
                 roles={[0, 'Admin']}
             />
         )
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
             <UserProvider>
                 <ProtectedRoute
                     path='/admin-edit-user'
-                    element= {<EditUser />}
+                    element={<EditUser />}
                     roles={[0, 'Admin']}
                 />
             </UserProvider>
@@ -85,7 +86,7 @@ const router = createBrowserRouter([
             <UserProvider>
                 <ProtectedRoute
                     path='/admin-remove-user'
-                    element= {<RemoveUser />}
+                    element={<RemoveUser />}
                     roles={[0, 'Admin']}
                 />
             </UserProvider>
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
             <StoreProvider>
                 <ProtectedRoute
                     path='/admin-stores'
-                    element= {<Stores />}
+                    element={<Stores />}
                     roles={[0, 'Admin']}
                 />
             </StoreProvider>
@@ -109,7 +110,7 @@ const router = createBrowserRouter([
             <ProductProvider>
                 <ProtectedRoute
                     path='/admin-products'
-                    element= {<Products />}
+                    element={<Products />}
                     roles={[0, 'Admin']}
                 />
             </ProductProvider>
