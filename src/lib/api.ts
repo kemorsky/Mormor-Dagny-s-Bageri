@@ -64,7 +64,7 @@ export const fetchOrders = async () => {
 
 export const fetchSpecificOrder = async (BeställningId: number) => {
   try {
-    return await apiRequest(`${BASE_URL}/beställningar/order/{${BeställningId}}`)
+    return await apiRequest(`${BASE_URL}/beställningar/order/${BeställningId}`)
   } catch (error) {
     console.error("Error fetching this order:", error)
     throw error;
@@ -106,6 +106,14 @@ export const fetchOrderDetails = async (orderId: number) => {
   } catch (error) {
     console.error("Error fetching order:", error);
      throw error;
+  }
+};
+
+export const fetchUpcomingDeliveries = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/beställningar/upcoming-deliveries`);
+  } catch (error) {
+    console.error("Error fetching upcoming deliveries:", error);
   }
 };
 

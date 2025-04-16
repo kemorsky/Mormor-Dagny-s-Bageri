@@ -18,6 +18,7 @@ import StoreProvider from '../components/auth/StoreProvider';
 import ProductProvider from '../components/auth/ProductProvider';
 import UserProvider from '../components/auth/UserProvider';
 import ConfirmationPage from '../pages/confirmation-page/confirmation-page';
+import SpecificOrder from '../pages/specific-order/specific-order';
 
 const router = createBrowserRouter([
     {
@@ -137,7 +138,7 @@ const router = createBrowserRouter([
             <StoreProvider>
                 <ProductProvider>
                     <ProtectedRoute
-                        path="/order"
+                        path="/confirm-order"
                         element={<OrderDetailsPage />}
                         roles={[0, "Admin", 1, "Säljare"]}
                     />
@@ -151,12 +152,22 @@ const router = createBrowserRouter([
             <StoreProvider>
                 <ProductProvider>
                     <ProtectedRoute
-                        path="/order"
+                        path="/confirmation-page/:orderId"
                         element={<ConfirmationPage/>}
                         roles={[0, "Admin", 1, "Säljare"]}
                     />
                 </ProductProvider>
             </StoreProvider>
+        )
+    },
+    {
+        path: '/order/:id',
+        element: (
+                <ProtectedRoute
+                    path="/order/:id"
+                    element={<SpecificOrder/>}
+                    roles={[0, "Admin", 1, "Säljare", 2, "Planerare"]}
+                />  
         )
     },
     {

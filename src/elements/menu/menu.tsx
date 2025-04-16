@@ -14,6 +14,16 @@ export default function Menu() {
         setIsOpen(!isOpen);
     };
 
+    const handleNavigateHome = () => {
+        if (userType === "Admin") {
+            navigate("/admin-dashboard");
+        } else if (userType === "Säljare") {
+            navigate("/seller-dashboard");
+        } else {
+            navigate("/planerare-dashboard")
+        }
+    };
+
     return (
         <header className="w-full inline-flex items-start justify-between">
             <nav onClick={handleClick} className="inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
@@ -55,7 +65,7 @@ export default function Menu() {
                     : null}
             </nav>
             <section className="inline-flex items-center justify-between gap-4">
-                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/dashboard">Hem</a>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={handleNavigateHome}>Hem</a>
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/deliveries">Leverans</a>
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={() => navigate("/order")}>Ny Beställning</a>
             </section>

@@ -97,7 +97,7 @@ export default function OrderPage() {
             ButikId: selected?.ButikId || 0,
             Beställare: selected ? selected.ButikNamn : '',
             Beställningsdatum: newOrder.Beställningsdatum || new Date().toISOString(),
-            PreliminärtLeveransdatum: newOrder.PreliminärtLeveransdatum || new Date().toISOString(),
+            PreliminärtLeveransdatum: newOrder.PreliminärtLeveransdatum || new Date(Date.now() + (Math.random() * 72 * 60 * 60 * 1000)).toISOString(),
             Beställningsdetaljer: orderDetails,
         };
 
