@@ -30,9 +30,10 @@ export default function DashBoard() {
             try {
                 const upcomingDeliveries = await fetchUpcomingDeliveries();
                 console.log(upcomingDeliveries)
-                setUpcoming(upcomingDeliveries);
+                setUpcoming(upcomingDeliveries ?? []);
             } catch (error) {
                 console.error("Error fetching upcoming deliveries:", error);
+                setUpcoming([]);
             }
         }
         getUpcomingDeliveries();
