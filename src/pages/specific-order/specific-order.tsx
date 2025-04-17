@@ -24,6 +24,12 @@ export default function SpecificOrder() {
         getOrder();
       }, [id]);
 
+      const finalTotal = order?.Beställningsdetaljer?.reduce((acc, item) => {
+        const base = item.Styckpris || 0;
+        const discounted = base * (1 - order?.Beställningsdetaljer?.[0]?.Rabatt / 100);
+        return acc + discounted;
+      }, 0);
+
     return (
         <main>
             <Menu />
@@ -72,28 +78,29 @@ export default function SpecificOrder() {
                     </CardStoreContent>                                                             
                 </CardStore>
             </section>
-            <section>
-                <h2 className="text-2xl">Beställda produkter</h2>
-                {order?.Beställningsdetaljer? (
-                <div> 
-                    <ul>
-                        {order?.Beställningsdetaljer?.map((product, index) => (
-                        <li key={index}>
-                            <ProductCard>
-                                <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
-                                <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                                <ProductCardPrice>Styckpris: {product.Produkt?.Baspris}</ProductCardPrice>
-                                <ProductCardPrice>Tottaltpris: {product.Styckpris}</ProductCardPrice>
-                                <ProductCardPrice>Rabatt: {product.Rabatt}</ProductCardPrice>
-                            </ProductCard>
-                        </li>
-                        ))}
-                    </ul>
-                </div>
-                ) : (
+            {order?.Beställningsdetaljer? (
+                <section>
+                    <h2 className="text-2xl">Beställda produkter</h2>
+                    <div> 
+                        <ul>
+                            {order?.Beställningsdetaljer?.map((product, index) => (
+                            <li key={index}>
+                                <ProductCard>
+                                    <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                                    <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
+                                    <ProductCardPrice>Pris: {product.Produkt?.Baspris}</ProductCardPrice>
+                                    <ProductCardPrice>Tottaltpris: {product.Styckpris}</ProductCardPrice>
+                                </ProductCard>
+                            </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <p>Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
+                    <p className="font-bold">Totallt pris: {finalTotal?.toFixed(2)}kr</p>
+                </section>
+            ) : (
                 <p>Laddar orderdetaljer...</p>
-                )}
-            </section>
+            )}
         </main>
     )
 };

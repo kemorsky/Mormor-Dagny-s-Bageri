@@ -26,23 +26,23 @@ export default function DashBoard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const getUpcomingDeliveries = async () => {
+        if (!upcoming.length) {
+          const getUpcomingDeliveries = async () => {
             try {
-                const upcomingDeliveries = await fetchUpcomingDeliveries();
-                console.log(upcomingDeliveries)
-                setUpcoming(upcomingDeliveries ?? []);
+              const upcomingDeliveries = await fetchUpcomingDeliveries();
+              setUpcoming(upcomingDeliveries ?? []);
             } catch (error) {
-                console.error("Error fetching upcoming deliveries:", error);
-                setUpcoming([]);
+              console.error("Error fetching upcoming deliveries:", error);
+              setUpcoming([]);
             }
+          }
+          getUpcomingDeliveries();
         }
-        getUpcomingDeliveries();
-    }, [])
+      }, [upcoming.length])
 
     const handleClick = async (BeställningId: number) => {
         try {
             const selectedOrder = await fetchSpecificOrder(BeställningId)
-            console.log(selectedOrder.BeställningId)
             navigate(`/order/${selectedOrder.BeställningId}`)
         } catch (error) {
             console.error("Error fetching this order:", error)

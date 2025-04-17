@@ -90,7 +90,6 @@ export const pushOrder = async (order: Order) => {
       method: 'POST',
       body: JSON.stringify(order),
   });
-    console.log(order)
       return response; 
   } catch (error) {
     console.error("Error creating order:", error);                                         
@@ -101,7 +100,6 @@ export const pushOrder = async (order: Order) => {
 export const fetchOrderDetails = async (orderId: number) => {
   try {
     const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/beställning/${orderId}`)
-    console.log(response)
     return response;
   } catch (error) {
     console.error("Error fetching order:", error);
