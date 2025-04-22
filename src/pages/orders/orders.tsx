@@ -27,6 +27,10 @@ type Store = {
   låst: boolean;
 };
 
+type Order = {
+  Butik: Store;
+};
+
 export default function OrdersPage() {
   const [stores, setStores] = useState<Store[]>([]);
   // const navigate = useNavigate();
@@ -49,11 +53,10 @@ export default function OrdersPage() {
         }
 
         const result = await response.json();
+        const orders: Order[] = result.Data;
 
-        const orders = result.Data;
-
-        const store = new Map();
-        orders.forEach((order: any) => {
+        const store = new Map<number, Store>();
+        orders.forEach((order: Order) => {
           const butik = order.Butik;
           if (!store.has(butik.ButikId)) {
             store.set(butik.ButikId, butik);
