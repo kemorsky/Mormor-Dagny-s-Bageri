@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import {
     WideCard as Card,
     CardDate,
@@ -11,34 +11,17 @@ import {
 } from "../../blocks/card";
 import { ButtonSecondary, ButtonTertiary } from "./../../components/ui/button";
 import Menu from "./../../elements/menu/menu";
-import { fetchUpcomingDeliveries, fetchSpecificOrder } from "../../lib/api";
-import { Order } from "../../types/types";
+import { fetchSpecificOrder } from "../../lib/api";
+import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { useNavigate } from "react-router";
 
 export default function DashBoard() {
-    const [previousOrders, setPreviousOrders] = useState<Customer[]>([]);
-    const [upcoming, setUpcoming] = useState<Order[]>([]);
-    const [loading, setLoading] = useState(true);
+    const {upcoming, previous} = useFilteredOrders();
 
     const scrollRefCurrent = useRef<HTMLDivElement>(null);
     const scrollRefPrevious = useRef<HTMLDivElement>(null);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!upcoming.length) {
-          const getUpcomingDeliveries = async () => {
-            try {
-              const upcomingDeliveries = await fetchUpcomingDeliveries();
-              setUpcoming(upcomingDeliveries ?? []);
-            } catch (error) {
-              console.error("Error fetching upcoming deliveries:", error);
-              setUpcoming([]);
-            }
-          }
-          getUpcomingDeliveries();
-        }
-      }, [upcoming.length])
 
     const handleClick = async (BeställningId: number) => {
         try {
@@ -85,7 +68,7 @@ export default function DashBoard() {
                                 className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
                             >
                                 {upcoming.map((order) => (
-                                    <div key={order.BeställningId} onClick={() => {handleClick(order.BeställningId)}} className="snap-center min-w-[320px]">
+                                    <div key={order.BeställningId} onClick={() => {handleClick(order.BeställningId ?? 0)}} className="snap-center min-w-[320px]">
                                         <Card>
                                             <div className="flex justify-between items-center w-full">
                                                 <CardClientNumber className="ml-0 text-lg font-bold">#{order.BeställningId}</CardClientNumber>
@@ -121,7 +104,6 @@ export default function DashBoard() {
                                     </div>
                                 ))}
                             </div>
-
                             <button
                                 onClick={() => scrollRight(scrollRefCurrent)}
                                 className="absolute right-0 top-1/2 transform -translate-y-1/2 p-0 w-8 h-8 bg-gray-600 rounded-full z-10"
@@ -153,37 +135,36 @@ export default function DashBoard() {
                                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                                 className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
                             >
-                                {previousOrders.map((order) => (
-                                    <div key={order.customerNumber} className="snap-center min-w-[320px]">
+                                {previous.map((order) => (
+                                    <div key={order.BeställningId} onClick={() => {handleClick(order.BeställningId ?? 0)}} className="snap-center min-w-[320px]">
                                         <Card>
                                             <div className="flex justify-between items-center w-full">
-                                                <CardClientNumber className="ml-0 text-lg font-bold">{`#${order.customerNumber}`}</CardClientNumber>
-                                                <CardDate className="ml-auto text-lg font-bold">{order.date}</CardDate>
+                                                <CardClientNumber className="ml-0 text-lg font-bold">#{order.BeställningId}</CardClientNumber>
+                                                <CardDate className="ml-auto text-lg font-bold">{order.PreliminärtLeveransdatum}</CardDate>
                                             </div>
                                             <CardHeader>
-                                                <CardStore>{order.name}</CardStore>
+                                                <CardStore>{order.Butik?.ButikNamn}</CardStore>
                                                 <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
-                                                    <span>{order.address.street}</span>
-                                                    <span>{order.address.postalCode} {order.address.city}</span>
+                                                    <span>{order.Butik?.Besöksadress}</span>
                                                 </CardAddress>
                                             </CardHeader>
                                             <CardFooter className="flex justify-between w-full items-center">
                                                 <div className="flex-1 min-w-0 flex flex-col">
                                                     <span>Butiksägare</span>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{order.contactPerson || "Ej angiven"}</span>
+                                                        <span>{order.Butik?.ButikschefNamn}</span>
                                                     </CardClientName>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{order.phoneNumber}</span>
+                                                        <span>{order.Butik?.ButikschefTelefon}</span>
                                                     </CardClientName>
                                                 </div>
                                                 <div className="flex-1 min-w-0 flex flex-col text-right">
                                                     <span>Brödansvarig</span>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{order.breadManager || "Ej angiven"}</span>
+                                                        <span>{order.Butik?.BrödansvarigNamn}</span>
                                                     </CardClientName>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{order.phoneNumber}</span>
+                                                        <span>{order.Butik?.BrödansvarigTelefon}</span>
                                                     </CardClientName>
                                                 </div>
                                             </CardFooter>

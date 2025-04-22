@@ -20,6 +20,7 @@ import UserProvider from '../components/auth/UserProvider';
 import ConfirmationPage from '../pages/confirmation-page/confirmation-page';
 import SpecificOrder from '../pages/specific-order/specific-order';
 import PlanerareDashboard from '../pages/planerare/planerare-dashboard';
+import OrderProvider from '../components/order-provider/OrderProvider';
 
 const router = createBrowserRouter([
     {
@@ -49,13 +50,15 @@ const router = createBrowserRouter([
     {
         path: '/seller-dashboard',
         element: (
-            <StoreProvider>
-                <ProtectedRoute
-                    path="/seller-dashboard"
-                    element={<SellerDashboard />}
-                    roles={[0, "Admin", 1, "Säljare"]}
-                />
-            </StoreProvider>
+            <OrderProvider>
+                <StoreProvider>
+                    <ProtectedRoute
+                        path="/seller-dashboard"
+                        element={<SellerDashboard />}
+                        roles={[0, "Admin", 1, "Säljare"]}
+                    />
+                </StoreProvider>
+            </OrderProvider>
         )
     },
     {

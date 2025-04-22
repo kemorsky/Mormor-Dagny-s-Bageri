@@ -59,6 +59,14 @@ export type Order = {
     Butik?: Store
 };
 
+export type PaginatedOrders = {
+    TotalItems: number;
+    Page: number;
+    PageSize: number;
+    TotalPages: number;
+    Data: Order[];  
+};
+
 export type OrderDetails = {
     BeställningsdetaljId?: number,
     BeställningId?: number,
