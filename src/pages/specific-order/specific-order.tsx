@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { fetchSpecificOrder } from "../../lib/api"
+import { formatDate } from "../../lib/formatDate";
 import { Order } from "../../types/types";
 import { useParams } from 'react-router';
 import { CardStore, ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice } from "../../blocks/card";
@@ -30,32 +31,34 @@ export default function SpecificOrder() {
         return acc + discounted;
       }, 0);
 
+    if (!order) {return <div>Loading...</div>}
+
     return (
         <main>
             <Menu />
-            <h1 className="text-2xl">Beställning #{order?.BeställningId}</h1>
+            <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
             <section>
                 <CardStore>
                     <CardStoreContent>
                         <CardStoreOwner>
-                            <strong>Datum:</strong>{order?.Beställningsdatum}
+                            <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
                         </CardStoreOwner>
                         <CardStoreOwner>
-                            <strong>Leveransdatum:</strong>{order?.PreliminärtLeveransdatum}
+                            <strong>Leveransdatum:</strong>{formatDate(order.PreliminärtLeveransdatum)}
                         </CardStoreOwner>
                         <CardStoreOwner>
-                            <strong>Beställare:</strong>{order?.Beställare}
+                            <strong>Beställare:</strong>{order.Beställare}
                         </CardStoreOwner>
                         <CardStoreOwner>
-                            <strong>Säljare:</strong>{order?.Säljare}
+                            <strong>Säljare:</strong>{order.Säljare}
                         </CardStoreOwner>
                     </CardStoreContent>
                 </CardStore>
                 <CardStore className="">
                     <CardStoreContent>
                         <CardStoreInformation>
-                            <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order?.Butik?.ButikNamn} 
-                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order?.Butik?.ButikNummer}</span>
+                            <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikNamn} 
+                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Butik?.ButikNummer}</span>
                             </p>
                             <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order?.Butik?.Besöksadress}</p>
                         </CardStoreInformation>
@@ -63,15 +66,15 @@ export default function SpecificOrder() {
                             <CardStoreOwner>
                                 <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
                                 <article className="w-full flex items-center justify-start gap-1.5">
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order?.Butik?.ButikschefNamn}</p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order?.Butik?.ButikschefTelefon}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikschefNamn}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikschefTelefon}</p>
                                 </article>
                             </CardStoreOwner>
                             <CardStoreBreadperson>
                                 <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
                                 <article className="w-full flex items-center justify-start gap-1.5">
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order?.Butik?.BrödansvarigNamn}</p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order?.Butik?.BrödansvarigTelefon}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.BrödansvarigNamn}</p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.BrödansvarigTelefon}</p>
                                 </article>
                             </CardStoreBreadperson>
                         </CardStoreContacts>
@@ -87,15 +90,15 @@ export default function SpecificOrder() {
                             <li key={index}>
                                 <ProductCard>
                                     <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                                    <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
                                     <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                                    <ProductCardPrice>Pris: {product.Produkt?.Baspris}</ProductCardPrice>
-                                    <ProductCardPrice>Tottaltpris: {product.Styckpris}</ProductCardPrice>
+                                    <ProductCardPrice>Tottaltpris: {product.Styckpris.toFixed(2)} kr</ProductCardPrice>
                                 </ProductCard>
                             </li>
                             ))}
                         </ul>
                     </div>
-                    <p>Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
+                    <p>Rabatt: {order.Beställningsdetaljer?.[0]?.Rabatt}%</p>
                     <p className="font-bold">Totallt pris: {finalTotal?.toFixed(2)}kr</p>
                 </section>
             ) : (

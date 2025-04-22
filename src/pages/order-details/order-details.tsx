@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import Menu from "../../elements/menu/menu"
 import { pushOrder } from "../../lib/api"
+import { formatDate } from '../../lib/formatDate'
 import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount  } from "../../blocks/card"
@@ -103,8 +104,8 @@ export default function OrderDetailsPage() {
                     </CardStore>
                     <p><strong>Beställare:</strong> {order.Beställare}</p>
                     <p><strong>Säljare:</strong> {order.Säljare}</p>
-                    <p><strong>Datum:</strong> {order.Beställningsdatum}</p>
-                    <p><strong>Leveransdatum:</strong> {order.PreliminärtLeveransdatum}</p>
+                    <p><strong>Beställningsdatum:</strong> {formatDate(order.Beställningsdatum)}</p>
+                    <p><strong>Leveransdatum:</strong> {formatDate(order.PreliminärtLeveransdatum)}</p>
                 </section>
                 <section>
                     <h2>Produkter</h2>
@@ -135,9 +136,9 @@ export default function OrderDetailsPage() {
                                     </>
                                     ) : (
                                     <>
+                                        <ProductCardPrice>{product?.Baspris} kr</ProductCardPrice>
                                         <ProductCardAmount>Antal: {details[index].Antal}</ProductCardAmount>
-                                        <ProductCardPrice>Pris: {product?.Baspris}</ProductCardPrice>
-                                        <ProductCardPrice>Tottalt: {details[index].Antal * (product?.Baspris ?? 0)}</ProductCardPrice>
+                                        <ProductCardPrice>Pris: {(details[index].Antal * (product?.Baspris ?? 0)).toFixed(2)} kr</ProductCardPrice>
                                     </>
                                     )}
                                 </ProductCard>

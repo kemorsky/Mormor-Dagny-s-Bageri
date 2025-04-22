@@ -19,6 +19,7 @@ import ProductProvider from '../components/auth/ProductProvider';
 import UserProvider from '../components/auth/UserProvider';
 import ConfirmationPage from '../pages/confirmation-page/confirmation-page';
 import SpecificOrder from '../pages/specific-order/specific-order';
+import PlanerareDashboard from '../pages/planerare/planerare-dashboard';
 
 const router = createBrowserRouter([
     {
@@ -33,11 +34,18 @@ const router = createBrowserRouter([
         path: '/forgot-password',
         element: <ForgotPassword />,
     },
-    /*     {
-            path: '/dashboard',
-            element: <Dashboard />,
-        }, */
-
+    {
+        path: '/planerare-dashboard',
+        element: (
+            // <StoreProvider>
+                <ProtectedRoute
+                    path="/planerare-dashboard"
+                    element={<PlanerareDashboard />}
+                    roles={[0, "Admin", 2, "Planerare"]}
+                />
+            // </StoreProvider>
+        )
+    },
     {
         path: '/seller-dashboard',
         element: (
