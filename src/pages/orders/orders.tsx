@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardDate,
@@ -7,27 +7,75 @@ import {
   CardAddress,
   CardClientName,
 } from "../../blocks/card";
-import data from "../../../customers.json";
 import Menu from "../../elements/menu/menu";
 import { ButtonTab } from "../../components/ui/button";
+// import { useNavigate } from "react-router-dom";
 
-type Address = {
-  street: string;
-  city: string;
+const BASE_URL = "http://localhost:5139/api";
+
+type Store = {
+  ButikId: number;
+  ButikNummer: string;
+  ButikNamn: string;
+  Telefonnummer: number;
+  Besöksadress: string;
+  Fakturaadress: string;
+  ButikschefNamn: string;
+  ButikschefTelefon: string;
+  BrödansvarigNamn: string;
+  Brödansvarigtelefon: number;
+  låst: boolean;
 };
 
-type Customer = {
-  date: string;
-  name: string;
-  address: Address;
-  contactPerson: string;
-  customerNumber: number;
-  active: boolean;
+type Order = {
+  Butik: Store;
 };
 
 export default function OrdersPage() {
-  const currentOrders: Customer[] = data.customers.filter((c) => c.active);
-  const previousOrders: Customer[] = data.previousOrders.filter((c) => !c.active);
+  const [stores, setStores] = useState<Store[]>([]);
+  // const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStoreOrders = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(`${BASE_URL}/beställningar`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          console.error("Fel vid hämtning av beställningar:", response.status);
+          return;
+        }
+
+        const result = await response.json();
+        const orders: Order[] = result.Data;
+
+        const store = new Map<number, Store>();
+        orders.forEach((order: Order) => {
+          const butik = order.Butik;
+          if (!store.has(butik.ButikId)) {
+            store.set(butik.ButikId, butik);
+          }
+        });
+
+        const storeOrder = [...store.values()];
+
+        setStores(storeOrder as Store[]);
+      } catch (error) {
+        console.error("Något gick fel", error);
+      }
+    };
+
+    fetchStoreOrders();
+  }, []);
+
+  const currentOrders = stores.filter((store) => !store.låst);
+  const previousOrders = stores.filter((store) => store.låst);
   const [activeTab, setActiveTab] = useState("ongoing");
 
   const orders = activeTab === "ongoing" ? currentOrders : previousOrders;
@@ -35,7 +83,7 @@ export default function OrdersPage() {
   return (
     <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
       <Menu />
-      <div>
+      <div className="">
         <ButtonTab
           isActive={activeTab === "ongoing"}
           onClick={() => setActiveTab("ongoing")}
@@ -51,20 +99,18 @@ export default function OrdersPage() {
           Levererade
         </ButtonTab>
       </div>
-
-      {orders.map((customer) => (
+      {orders.map((store) => (
         <Card
-          key={customer.customerNumber}
-          className=" w-[400px] h-[100px] p-4 mt-6 rounded-lg "
+          key={store.ButikId}
+          className=" w-[400px] h-[100px] p-4 mt-6 rounded-lg"
+          // onClick={() => navigate(`/order-details/${store.ButikId}`)}
         >
-          <CardDate>{customer.date}</CardDate>
+          <CardDate></CardDate>
           <CardHeader>
-            <CardStore>{customer.name}</CardStore>
-            <CardAddress>
-              {customer.address.street}, {customer.address.city}
-            </CardAddress>
+            <CardStore>{store.ButikNamn}</CardStore>
+            <CardAddress>{store.Besöksadress}</CardAddress>
             <CardClientName>
-              {customer.contactPerson} {customer.customerNumber}
+              {store.ButikschefNamn} {store.ButikschefTelefon}
             </CardClientName>
           </CardHeader>
         </Card>

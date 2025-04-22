@@ -20,6 +20,7 @@ import UserProvider from '../components/auth/UserProvider';
 import ConfirmationPage from '../pages/confirmation-page/confirmation-page';
 import SpecificOrder from '../pages/specific-order/specific-order';
 
+
 const router = createBrowserRouter([
     {
         path: "access-denied",
@@ -174,7 +175,6 @@ const router = createBrowserRouter([
         path: '/orders',
         element: <OrdersPage />,
     },
-
 ])
 
 export default router;

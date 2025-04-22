@@ -1,0 +1,105 @@
+{
+    "TotalItems": 3,
+    "Page": 1,
+    "PageSize": 10,
+    "TotalPages": 1,
+    "Data": [
+        {
+            "BeställningId": 3,
+            "ButikId": 1,
+            "Beställningsdatum": "2025-04-10T12:49:06.382368Z",
+            "Beställare": "John Doe",
+            "Säljare": "sales1",
+            "PreliminärtLeveransdatum": "2025-04-10T12:00:00Z",
+            "Beställningsdetaljer": [
+                {
+                    "BeställningsdetaljId": 2,
+                    "BeställningId": 3,
+                    "ProduktId": 1,
+                    "Antal": 10,
+                    "Styckpris": 5.0000000000000000000000000000,
+                    "Rabatt": 0.0000000000000000000000000000,
+                    "Produkt": {
+                        "ProduktId": 1,
+                        "Namn": "Surdegsbröd",
+                        "Baspris": 35.500000000000000000000000000,
+                        "IsDeleted": false
+                    }
+                }
+            ],
+            "Butik": {
+                "ButikId": 1,
+                "ButikNummer": "B001",
+                "ButikNamn": "Centralbutiken",
+                "Telefonnummer": "0701234567",
+                "Besöksadress": "Storgatan 1, 123 45 Stockholm",
+                "Fakturaadress": "Box 123, 123 45 Stockholm",
+                "ButikschefNamn": "Anna Nilsson",
+                "ButikschefTelefon": "0709876543",
+                "BrödansvarigNamn": "Erik Andersson",
+                "BrödansvarigTelefon": "0705554444",
+                "Låst": false
+            }
+        },
+        {
+            "BeställningId": 2,
+            "ButikId": 1,
+            "Beställningsdatum": "2025-04-10T08:59:44.211106Z",
+            "Beställare": "John Doe",
+            "Säljare": "sales1",
+            "PreliminärtLeveransdatum": "2025-04-10T12:00:00Z",
+            "Beställningsdetaljer": [
+                {
+                    "BeställningsdetaljId": 1,
+                    "BeställningId": 2,
+                    "ProduktId": 1,
+                    "Antal": 10,
+                    "Styckpris": 5.0000000000000000000000000000,
+                    "Rabatt": 0.0000000000000000000000000000,
+                    "Produkt": {
+                        "ProduktId": 1,
+                        "Namn": "Surdegsbröd",
+                        "Baspris": 35.500000000000000000000000000,
+                        "IsDeleted": false
+                    }
+                }
+            ],
+            "Butik": {
+                "ButikId": 1,
+                "ButikNummer": "B001",
+                "ButikNamn": "Centralbutiken",
+                "Telefonnummer": "0701234567",
+                "Besöksadress": "Storgatan 1, 123 45 Stockholm",
+                "Fakturaadress": "Box 123, 123 45 Stockholm",
+                "ButikschefNamn": "Anna Nilsson",
+                "ButikschefTelefon": "0709876543",
+                "BrödansvarigNamn": "Erik Andersson",
+                "BrödansvarigTelefon": "0705554444",
+                "Låst": false
+            }
+        },
+        {
+            "BeställningId": 1,
+            "ButikId": 1,
+            "Beställningsdatum": "2025-03-24T11:48:15.822268Z",
+            "Beställare": "Kund AB",
+            "Säljare": "lisa",
+            "PreliminärtLeveransdatum": "2025-03-26T11:48:15.822297Z",
+            "Beställningsdetaljer": [],
+            "Butik": {
+                "ButikId": 1,
+                "ButikNummer": "B001",
+                "ButikNamn": "Centralbutiken",
+                "Telefonnummer": "0701234567",
+                "Besöksadress": "Storgatan 1, 123 45 Stockholm",
+                "Fakturaadress": "Box 123, 123 45 Stockholm",
+                "ButikschefNamn": "Anna Nilsson",
+                "ButikschefTelefon": "0709876543",
+                "BrödansvarigNamn": "Erik Andersson",
+                "BrödansvarigTelefon": "0705554444",
+                "Låst": false
+            }
+        }
+    ]
+}
+  
