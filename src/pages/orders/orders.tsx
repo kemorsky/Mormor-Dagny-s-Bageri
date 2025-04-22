@@ -8,7 +8,8 @@ import {
   CardClientName,
 } from "../../blocks/card";
 import Menu from "../../elements/menu/menu";
-import { useNavigate } from "react-router-dom";
+import { ButtonTab } from "../../components/ui/button";
+// import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5139/api";
 
@@ -28,11 +29,11 @@ type Store = {
 
 export default function OrdersPage() {
   const [stores, setStores] = useState<Store[]>([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStoreOrders = async () => {
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
       try {
         const response = await fetch(`${BASE_URL}/beställningar`, {
           method: "GET",
@@ -70,13 +71,36 @@ export default function OrdersPage() {
     fetchStoreOrders();
   }, []);
 
+  const currentOrders = stores.filter((store) => !store.låst);
+  const previousOrders = stores.filter((store) => store.låst);
+  const [activeTab, setActiveTab] = useState("ongoing");
+
+  const orders = activeTab === "ongoing" ? currentOrders : previousOrders;
+
   return (
     <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
       <Menu />
-      {stores.map((store) => (
+      <div className="">
+        <ButtonTab
+          isActive={activeTab === "ongoing"}
+          onClick={() => setActiveTab("ongoing")}
+          className="rounded-l-lg"
+        >
+          Pågående
+        </ButtonTab>
+        <ButtonTab
+          isActive={activeTab === "delivered"}
+          onClick={() => setActiveTab("delivered")}
+          className="rounded-r-lg"
+        >
+          Levererade
+        </ButtonTab>
+      </div>
+      {orders.map((store) => (
         <Card
+          key={store.ButikId}
           className=" w-[400px] h-[100px] p-4 mt-6 rounded-lg"
-          onClick={() => navigate(`/order-details/${store.ButikId}`)}
+          // onClick={() => navigate(`/order-details/${store.ButikId}`)}
         >
           <CardDate></CardDate>
           <CardHeader>
