@@ -14,6 +14,7 @@ export default function AdminDashboard() {
                 <ButtonAdmin onClick={() => {navigate('/admin-remove-user')}}>Ta bort användare</ButtonAdmin>
                 <ButtonAdmin onClick={() => {navigate('/order')}}>Skapa beställning</ButtonAdmin>
                 <ButtonAdmin onClick={() => {navigate('/orders')}}>Se beställnignar</ButtonAdmin>
+                <ButtonAdmin onClick={() => {navigate('/planerare-dashboard')}}>Se statistiker (dashboard)</ButtonAdmin>
                 <ButtonAdmin onClick={() => {navigate('/admin-products')}}>Se produkter</ButtonAdmin>
                 <ButtonAdmin onClick={() => {navigate('/admin-stores')}}>Se butiker</ButtonAdmin>
             </div>            

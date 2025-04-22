@@ -62,6 +62,14 @@ export const fetchOrders = async () => {
   }
 };
 
+export const fetchDashboardStatistics = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/beställningar/dashboard-statistics`);
+  } catch (error) {
+    console.error("Error fetching statistics:", error);
+  }
+}
+
 export const fetchSpecificOrder = async (BeställningId: number) => {
   try {
     return await apiRequest(`${BASE_URL}/beställningar/order/${BeställningId}`)

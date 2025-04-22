@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import Menu from "../../elements/menu/menu"
 import { fetchOrderDetails } from "../../lib/api"
+import { formatDate } from '../../lib/formatDate'
 import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount  } from "../../blocks/card"
@@ -41,10 +42,10 @@ export default function ConfirmationPage() {
                 <CardStore>
                     <CardStoreContent>
                         <CardStoreOwner>
-                            <strong>Datum:</strong>{order.Beställningsdatum}
+                            <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
                         </CardStoreOwner>
                         <CardStoreOwner>
-                            <strong>Leveransdatum:</strong>{order.PreliminärtLeveransdatum}
+                            <strong>Leveransdatum:</strong>{formatDate(order.PreliminärtLeveransdatum)}
                         </CardStoreOwner>
                         <CardStoreOwner>
                             <strong>Beställare:</strong>{order.Beställare}
@@ -90,9 +91,9 @@ export default function ConfirmationPage() {
                             <li key={index}>
                                 <ProductCard>
                                     <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                                    <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
                                     <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                                    <ProductCardPrice>Pris: {product.Produkt?.Baspris}</ProductCardPrice>
-                                    <ProductCardPrice>Tottaltpris: {product.Styckpris}</ProductCardPrice>
+                                    <ProductCardPrice>Tottaltpris: {product.Styckpris.toFixed(2)} kr</ProductCardPrice>
                                 </ProductCard>
                             </li>
                             ))}
