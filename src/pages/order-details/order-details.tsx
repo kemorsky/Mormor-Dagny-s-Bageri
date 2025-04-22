@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react"
 import Menu from "../../elements/menu/menu"
 import { pushOrder } from "../../lib/api"
@@ -123,4 +122,3 @@ export default function OrderDetailsPage() {
         </main>
     )
 }
-
