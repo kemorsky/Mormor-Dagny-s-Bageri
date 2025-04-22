@@ -83,7 +83,8 @@
             "phoneNumber": "031-654321",
             "contactPerson": "Anna Andersson",
             "breadManager": "Lukas Andersson",
-            "customerNumber": 123456789
+            "customerNumber": 123456789,
+            "active": false
         },
         {
             "name": "ICA Maxi Bergsjön",
