@@ -28,7 +28,10 @@ export default function ConfirmationPage() {
         getOrderDetails().catch(console.error)
     }, [order?.BeställningId])
 
-    console.log(order)
+    const calculatedFinalTotal = details.reduce((acc, item) => {
+        const discountedPrice = item.Styckpris * (1 - (item.Rabatt ?? 0) / 100);
+        return acc + discountedPrice;
+      }, 0);
 
     return (
         <main>
@@ -78,29 +81,30 @@ export default function ConfirmationPage() {
                     </CardStoreContent>                                                             
                 </CardStore>
             </section>
-            <section>
-                <h2 className="text-2xl">Beställda produkter</h2>
-                {details? (
-                <div> 
-                    <ul>
-                        {details.map((product, index) => (
-                        <li key={index}>
-                            <ProductCard>
-                                <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
-                                <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                                <ProductCardPrice>Styckpris: {product.Produkt?.Baspris}</ProductCardPrice>
-                                <ProductCardPrice>Tottaltpris: {product.Styckpris}</ProductCardPrice>
-                                <ProductCardPrice>Rabatt: {product.Rabatt}</ProductCardPrice>
-                            </ProductCard>
-                        </li>
-                        ))}
-                    </ul>
-                </div>
-                ) : (
+            {details? (
+                <section>
+                    <h2 className="text-2xl">Beställda produkter</h2>
+                    <div> 
+                        <ul>
+                            {details.map((product, index) => (
+                            <li key={index}>
+                                <ProductCard>
+                                    <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                                    <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
+                                    <ProductCardPrice>Pris: {product.Produkt?.Baspris}</ProductCardPrice>
+                                    <ProductCardPrice>Tottaltpris: {product.Styckpris}</ProductCardPrice>
+                                </ProductCard>
+                            </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <p>Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
+                    <p className="font-bold">Totallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
+                    <button onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</button>
+                </section>
+            ) : (
                 <p>Laddar orderdetaljer...</p>
-                )}
-            </section>
-            <button onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</button>
+            )}
         </main>
     )
 }

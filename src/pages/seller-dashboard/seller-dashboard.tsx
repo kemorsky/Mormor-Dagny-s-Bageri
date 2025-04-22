@@ -11,84 +11,45 @@ import {
 } from "../../blocks/card";
 import { ButtonSecondary, ButtonTertiary } from "./../../components/ui/button";
 import Menu from "./../../elements/menu/menu";
-import { fetchStores } from "../../lib/api";
-
-type Address = {
-    street: string;
-    postalCode: string;
-    city: string;
-};
-
-type Customer = {
-    date: string;
-    customerNumber: number;
-    address: Address;
-    name: string;
-    storeOwner: string;
-    breadManager: string;
-    active: boolean;
-    phoneNumber: string;
-    contactPerson?: string;
-};
-
-// Omvandla data från backend till frontend-struktur
-const transformData = (stores: any[]) => {
-    return stores.map(store => ({
-        customerNumber: store.ButikNummer,
-        name: store.ButikNamn,
-        phoneNumber: store.Telefonnummer,
-        address: {
-            street: store.Besöksadress.split(",")[0], // Hämtar gatan från Besöksadress
-            postalCode: store.Besöksadress.split(",")[1]?.trim() || "", // Hämtar postnummer från Besöksadress
-            city: store.Besöksadress.split(",")[2]?.trim() || "" // Hämtar stad från Besöksadress
-        },
-        storeOwner: store.ButikschefNamn,
-        breadManager: store.BrödansvarigNamn,
-        active: !store.Låst, // Om "Låst" är true, sätt butiken som inaktiv
-        contactPerson: store.ButikschefTelefon, // Eller sätt det till butikschefens telefonnummer
-        date: new Date().toLocaleDateString(), // Sätt dagens datum för demo
-    }));
-};
+import { fetchUpcomingDeliveries, fetchSpecificOrder } from "../../lib/api";
+import { Order } from "../../types/types";
+import { useNavigate } from "react-router";
 
 export default function DashBoard() {
-    const [customers, setCustomers] = useState<Customer[]>([]);
     const [previousOrders, setPreviousOrders] = useState<Customer[]>([]);
+    const [upcoming, setUpcoming] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     const scrollRefCurrent = useRef<HTMLDivElement>(null);
     const scrollRefPrevious = useRef<HTMLDivElement>(null);
 
-    // Hämtar data när komponenten mountas
+    const navigate = useNavigate();
+
     useEffect(() => {
-        const getData = async () => {
-            setLoading(true);
-            setError(null);
+        if (!upcoming.length) {
+          const getUpcomingDeliveries = async () => {
             try {
-                const stores = await fetchStores();
-                console.log("Stores from backend:", stores);
-
-                // Omvandla data till korrekt struktur
-                const transformedStores = transformData(stores);
-
-                // Dela upp butiker i aktiva och inaktiva
-                const activeOrders = transformedStores.filter((store: Customer) => store.active);
-                const pastOrders = transformedStores.filter((store: Customer) => !store.active);
-
-                setCustomers(activeOrders);
-                setPreviousOrders(pastOrders);
-            } catch (err) {
-                console.error("Failed to fetch stores:", err);
-                setError("Kunde inte hämta kunddata.");
-            } finally {
-                setLoading(false);
+              const upcomingDeliveries = await fetchUpcomingDeliveries();
+              setUpcoming(upcomingDeliveries ?? []);
+            } catch (error) {
+              console.error("Error fetching upcoming deliveries:", error);
+              setUpcoming([]);
             }
-        };
+          }
+          getUpcomingDeliveries();
+        }
+      }, [upcoming.length])
 
-        getData();
-    }, []);
+    const handleClick = async (BeställningId: number) => {
+        try {
+            const selectedOrder = await fetchSpecificOrder(BeställningId)
+            navigate(`/order/${selectedOrder.BeställningId}`)
+        } catch (error) {
+            console.error("Error fetching this order:", error)
+        }
+    }
 
-    // Scrollfunktioner
+     // Scrollfunktioner
     const scrollLeft = (ref: React.RefObject<HTMLDivElement>) => {
         ref.current?.scrollBy({ left: -320, behavior: "smooth" });
     };
@@ -100,11 +61,6 @@ export default function DashBoard() {
     return (
         <main className="min-h-[59.75rem] w-full bg-gradient-primary inline-flex flex-col items-center justify-start pt-[3.125rem] relative">
             <Menu />
-
-            {loading && <p className="text-white mt-4">Laddar data...</p>}
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-
-            {!loading && !error && (
                 <>
                     {/* Pågående beställningar */}
                     <div className="w-full inline-flex flex-col items-center justify-center gap-3 mt-5">
@@ -128,37 +84,36 @@ export default function DashBoard() {
                                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                                 className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
                             >
-                                {customers.map((customer) => (
-                                    <div key={customer.customerNumber} className="snap-center min-w-[320px]">
+                                {upcoming.map((order) => (
+                                    <div key={order.BeställningId} onClick={() => {handleClick(order.BeställningId)}} className="snap-center min-w-[320px]">
                                         <Card>
                                             <div className="flex justify-between items-center w-full">
-                                                <CardClientNumber className="ml-0 text-lg font-bold">{`${customer.customerNumber}`}</CardClientNumber>
-                                                <CardDate className="ml-auto text-lg font-bold">{customer.date}</CardDate>
+                                                <CardClientNumber className="ml-0 text-lg font-bold">#{order.BeställningId}</CardClientNumber>
+                                                <CardDate className="ml-auto text-lg font-bold">{order.PreliminärtLeveransdatum}</CardDate>
                                             </div>
                                             <CardHeader>
-                                                <CardStore>{customer.name}</CardStore>
+                                                <CardStore>{order.Butik?.ButikNamn}</CardStore>
                                                 <CardAddress className="font-normal text-sm overflow-hidden flex flex-col">
-                                                    <span>{customer.address.street}</span>
-                                                    <span>{customer.address.postalCode} {customer.address.city}</span>
+                                                    <span>{order.Butik?.Besöksadress}</span>
                                                 </CardAddress>
                                             </CardHeader>
                                             <CardFooter className="flex justify-between w-full items-center">
                                                 <div className="flex-1 min-w-0 flex flex-col">
                                                     <span>Butiksägare</span>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{customer.storeOwner}</span>
+                                                        <span>{order.Butik?.ButikschefNamn}</span>
                                                     </CardClientName>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{customer.phoneNumber}</span>
+                                                        <span>{order.Butik?.ButikschefTelefon}</span>
                                                     </CardClientName>
                                                 </div>
                                                 <div className="flex-1 min-w-0 flex flex-col text-right">
                                                     <span>Brödansvarig</span>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{customer.breadManager}</span>
+                                                        <span>{order.Butik?.BrödansvarigNamn}</span>
                                                     </CardClientName>
                                                     <CardClientName className="text-sm text-[#9A9A9A]">
-                                                        <span>{customer.phoneNumber}</span>
+                                                        <span>{order.Butik?.BrödansvarigTelefon}</span>
                                                     </CardClientName>
                                                 </div>
                                             </CardFooter>
@@ -246,7 +201,6 @@ export default function DashBoard() {
                         </div>
                     </div>
                 </>
-            )}
         </main>
     );
 }

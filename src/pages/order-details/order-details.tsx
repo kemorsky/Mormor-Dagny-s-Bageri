@@ -9,17 +9,19 @@ import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
 
 export default function OrderDetailsPage() {
-    const [details, setDetails] = useState<OrderDetails[]>([]);
-    const [loading, setIsLoading] = useState<boolean>(false);
-
-    const navigate = useNavigate();
-
     const { state } = useLocation();
     const order = state?.order
-
     const { getStore } = useStores()
     const { getProduct } = useProducts()
     const store = getStore(order.ButikId)
+
+    const [details, setDetails] = useState<OrderDetails[]>([]);
+    const [loading, setIsLoading] = useState<boolean>(false);
+    const [edit, setEdit] = useState<boolean>(false);
+    const [orderDiscount, setOrderDiscount] = useState<number>(order?.Rabatt || 0)
+
+    const navigate = useNavigate();
+
     const products = details.map(detail => getProduct(detail.ProduktId))
 
     useEffect(() => {
@@ -36,21 +38,31 @@ export default function OrderDetailsPage() {
         getOrderDetails()
     }, [order])
 
-    console.log(order)
-
-    const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => { // TODO implementent PUT method of order details alteration
-        e.preventDefault();
-
-    }
+    const totalBeforeDiscount = details.reduce((sum, item) => {
+        const product = getProduct(item.ProduktId);
+        return sum + (product?.Baspris ?? 0) * item.Antal;
+      }, 0);
+      
+    const discountAmount = (orderDiscount / 100) * totalBeforeDiscount;
+    const finalTotal = totalBeforeDiscount - discountAmount;
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true)
         try {
-            const createdOrder = await pushOrder(order)
+            const updatedOrder = {
+                ...order,
+                Beställningsdetaljer: details.map(item => ({
+                  ...item,
+                  Rabatt: orderDiscount,
+                  Styckpris: (getProduct(item.ProduktId)?.Baspris ?? 0) * item.Antal
+                })),
+                finalTotal: finalTotal
+              };
+            const createdOrder = await pushOrder(updatedOrder)
             console.log(createdOrder)
             setIsLoading(false)
-            navigate(`/confirmation-page/${createdOrder.BeställningId}`, {state: {order: createdOrder}});
+            navigate(`/confirmation-page/${createdOrder.BeställningId}`, {state: {order: createdOrder, finalTotal: finalTotal}});
         } catch (error) {
             console.error("Error pushing order:", error);
         }
@@ -96,19 +108,40 @@ export default function OrderDetailsPage() {
                 </section>
                 <section>
                     <h2>Produkter</h2>
-                    {details ? (
-                    <div> 
+                    {details.length > 0 ? (
+                    <div>
                         <ul>
                             {products.map((product, index) => (
-                            <li key={index}>
+                                <li key={index}>
                                 <ProductCard>
                                     <ProductCardName>{product?.Namn}</ProductCardName>
-                                    <ProductCardAmount>Antal: {details[index].Antal}</ProductCardAmount>
-                                    <ProductCardPrice>Pris: {product?.Baspris}</ProductCardPrice>
-                                    <ProductCardPrice>Tottalt: {details[index].Styckpris}</ProductCardPrice>
-                                    <ProductCardPrice>Rabatt: {details[index].Rabatt}</ProductCardPrice>
+                                    {edit ? (
+                                    <>
+                                        <label className="block my-1">
+                                            Antal:
+                                            <input
+                                                type="text"
+                                                value={details[index].Antal}
+                                                onChange={(e) => {
+                                                    const updated = [...details];
+                                                    const newAntal = parseInt(e.target.value) || 0;
+                                                    updated[index].Antal = newAntal
+                                                    setDetails(updated);
+                                                }}
+                                                className="border border-gray-300 rounded p-1 ml-2 w-20"
+                                            />
+                                        </label>
+                                        <p className="text-sm text-gray-600">Styckpris: {details[index].Antal * (product?.Baspris ?? 0)} kr</p>
+                                    </>
+                                    ) : (
+                                    <>
+                                        <ProductCardAmount>Antal: {details[index].Antal}</ProductCardAmount>
+                                        <ProductCardPrice>Pris: {product?.Baspris}</ProductCardPrice>
+                                        <ProductCardPrice>Tottalt: {details[index].Antal * (product?.Baspris ?? 0)}</ProductCardPrice>
+                                    </>
+                                    )}
                                 </ProductCard>
-                            </li>
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -116,7 +149,29 @@ export default function OrderDetailsPage() {
                     <p>Laddar orderdetaljer...</p>
                     )}
                 </section>
-                <button>Ändra detaljer</button>
+                <div className="mt-4">
+                    <p>Totalt innan rabatt: {totalBeforeDiscount.toFixed(2)} kr</p>
+                    {edit ? (
+                         <label className="block my-1">
+                            Rabatt:
+                            <input
+                                type="text"
+                                value={orderDiscount}
+                                onChange={(e) => {
+                                    const updated = parseFloat(e.target.value) || 0;
+                                    setOrderDiscount(updated);
+                                }}
+                                className="border border-gray-300 rounded p-1 ml-2 w-20"
+                            />
+                        </label>
+                    ) : (
+                        <p>Rabatt ({orderDiscount}%): -{discountAmount.toFixed(2)} kr</p>
+                    )}
+                    <p className="font-bold">Att betala: {finalTotal.toFixed(2)} kr</p>
+                </div>
+                <button type="button" onClick={() => setEdit(prev => !prev)}>
+                    {edit ? "Avsluta redigering" : "Ändra detaljer"}
+                </button>
                 <button className={`${loading ? 'cursor-not-allowed' : ''}`} type='submit'>Lägg till beställningen</button>
             </form>
         </main>
