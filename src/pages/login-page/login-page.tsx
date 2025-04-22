@@ -1,46 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
+import { useAuth } from "../../components/auth/AuthContext";
+import UserTypes from "../../lib/userTypes";
 
 export default function LoginPage() {
+    const { handleLogin, currentUser } = useAuth();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
-
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const userData = {
-            "användarnamn": username,
-            "lösenord": password
-          };
-        const API_URL = 'http://localhost:5139/api/auth/login'
         try {
-            console.log(userData);
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-            console.log(response);
-            if (!response.ok) {
-                throw new Error('Något gick snett med POST-förfrågan vi gjorde :(((')
-            }
-            const data = await response.json();
-            console.log(data);
-            sessionStorage.setItem("token", data.Token);
-            sessionStorage.setItem("username", username);
-            sessionStorage.setItem("roll", data.Roll);
-            navigate('/dashboard')
+            await handleLogin(username, password);
         } catch (error) {
             console.error(error);
         }
     };
+    
+    useEffect(() => {
+        if (currentUser) {
+          const userType = UserTypes(currentUser);
+          if (userType === 'Säljare') {
+            navigate('/seller-dashboard');
+          } else if (userType === 'Admin') {
+            navigate('/admin-dashboard')
+          } else {
+            console.log("Something broke")
+          }
+        }
+      }, [currentUser, navigate]);
 
     return (
         <main className="bg-gradient-primary min-h-[59.75rem] relative">
@@ -83,7 +77,7 @@ export default function LoginPage() {
                             <section className="w-full flex flex-col items-center justify-center gap-4 mt-[1.5rem]">
                                 <ButtonPrimary type="submit">Logga In</ButtonPrimary>
                                 <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
-                                <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/recover-password')}>Skicka påmminelse</a>
+                                <a className="font-inter font-bold text-[1.125rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/forgot-password')}>Återställ lösenord</a>
                         </section>
                         </form>
                     </div>

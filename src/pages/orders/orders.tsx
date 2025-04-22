@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardDate,
@@ -7,64 +7,83 @@ import {
   CardAddress,
   CardClientName,
 } from "../../blocks/card";
-import data from "../../../customers.json";
 import Menu from "../../elements/menu/menu";
-import { ButtonTab } from "../../components/ui/button";
+import { useNavigate } from "react-router-dom";
 
-type Address = {
-  street: string;
-  city: string;
-};
+const BASE_URL = "http://localhost:5139/api";
 
-type Customer = {
-  date: string;
-  name: string;
-  address: Address;
-  contactPerson: string;
-  customerNumber: number;
-  active: boolean;
+type Store = {
+  ButikId: number;
+  ButikNummer: string;
+  ButikNamn: string;
+  Telefonnummer: number;
+  Besöksadress: string;
+  Fakturaadress: string;
+  ButikschefNamn: string;
+  ButikschefTelefon: string;
+  BrödansvarigNamn: string;
+  Brödansvarigtelefon: number;
+  låst: boolean;
 };
 
 export default function OrdersPage() {
-  const currentOrders: Customer[] = data.customers.filter((c) => c.active);
-  const previousOrders: Customer[] = data.previousOrders.filter((c) => !c.active);
-  const [activeTab, setActiveTab] = useState("ongoing");
+  const [stores, setStores] = useState<Store[]>([]);
+  const navigate = useNavigate();
 
-  const orders = activeTab === "ongoing" ? currentOrders : previousOrders;
+  useEffect(() => {
+    const fetchStoreOrders = async () => {
+      const token = sessionStorage.getItem("token");
+      try {
+        const response = await fetch(`${BASE_URL}/beställningar`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          console.error("Fel vid hämtning av beställningar:", response.status);
+          return;
+        }
+
+        const result = await response.json();
+
+        const orders = result.Data;
+
+        const store = new Map();
+        orders.forEach((order: any) => {
+          const butik = order.Butik;
+          if (!store.has(butik.ButikId)) {
+            store.set(butik.ButikId, butik);
+          }
+        });
+
+        const storeOrder = [...store.values()];
+
+        setStores(storeOrder as Store[]);
+      } catch (error) {
+        console.error("Något gick fel", error);
+      }
+    };
+
+    fetchStoreOrders();
+  }, []);
 
   return (
     <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
       <Menu />
-      <div>
-        <ButtonTab
-          isActive={activeTab === "ongoing"}
-          onClick={() => setActiveTab("ongoing")}
-          className="rounded-l-lg"
-        >
-          Pågående
-        </ButtonTab>
-        <ButtonTab
-          isActive={activeTab === "delivered"}
-          onClick={() => setActiveTab("delivered")}
-          className="rounded-r-lg"
-        >
-          Levererade
-        </ButtonTab>
-      </div>
-
-      {orders.map((customer) => (
+      {stores.map((store) => (
         <Card
-          key={customer.customerNumber}
-          className=" w-[400px] h-[100px] p-4 mt-6 rounded-lg "
+          className=" w-[400px] h-[100px] p-4 mt-6 rounded-lg"
+          onClick={() => navigate(`/order-details/${store.ButikId}`)}
         >
-          <CardDate>{customer.date}</CardDate>
+          <CardDate></CardDate>
           <CardHeader>
-            <CardStore>{customer.name}</CardStore>
-            <CardAddress>
-              {customer.address.street}, {customer.address.city}
-            </CardAddress>
+            <CardStore>{store.ButikNamn}</CardStore>
+            <CardAddress>{store.Besöksadress}</CardAddress>
             <CardClientName>
-              {customer.contactPerson} {customer.customerNumber}
+              {store.ButikschefNamn} {store.ButikschefTelefon}
             </CardClientName>
           </CardHeader>
         </Card>

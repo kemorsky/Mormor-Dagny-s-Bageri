@@ -23,3 +23,7 @@ export const InputDiscount: React.FC<InputProps> = ({className, ...props}) =>  {
 export const InputOrderDropdown: React.FC<InputProps> = ({className, ...props}) => {
     return <input className={cn("w-full inline-flex items-start justify-start self-stretch rounded bg-Branding-input font-inter text-base text-Branding-textPrimary font-semibold focus:outline-none relative", className)}{...props}/>;
 };
+
+export const AdminFormInput: React.FC<InputProps> = ({className, ...props}) => {
+    return <input className={cn("w-full h-[2.75rem] px-4 py-3 inline-flex items-start justify-start self-stretch rounded bg-Branding-input border border-Branding-textAccent font-inter text-base text-Branding-textPrimary font-semibold focus:border-white focus:outline-none", className)}{...props}/>;
+};
