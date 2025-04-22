@@ -51,11 +51,11 @@ export type Product = {
 export type Order = {
     BeställningId?: number,
     ButikId?: number,
-    Beställningsdatum: string,
-    Beställare: string,
-    PreliminärtLeveransdatum: string,
+    Beställningsdatum?: string,
+    Beställare?: string,
+    PreliminärtLeveransdatum?: string,
     Beställningsdetaljer: OrderDetails[],
-    Säljare: string,
+    Säljare?: string,
     Butik?: Store
 };
 

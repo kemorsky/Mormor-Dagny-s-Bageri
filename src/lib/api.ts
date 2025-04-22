@@ -79,13 +79,30 @@ export const fetchSpecificOrder = async (BeställningId: number) => {
   }
 };
 
-export const editOrder = async (orderDetails: OrderDetails) => {
+export const editOrderDetails = async (orderDetails: OrderDetails[]) => {
   try {
-    const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/${orderDetails.BeställningsdetaljId}`, {
-      method: 'PUT',
-      body: JSON.stringify(orderDetails),
-    });
-    return response;
+    const responses = await Promise.all(orderDetails.map((detail) => {
+      return apiRequest(`${BASE_URL}/beställningsdetaljer/${detail.BeställningsdetaljId}`, {
+        method: 'PUT',
+        body: JSON.stringify(detail),
+      });
+    }));
+    return responses;
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw error;
+  }
+}
+
+export const deleteOrderDetails = async (orderDetails: OrderDetails[]) => {
+  try {
+    const responses = await Promise.all(orderDetails.map((detail) => {
+      return apiRequest(`${BASE_URL}/beställningsdetaljer/${detail.BeställningsdetaljId}`, {
+        method: 'DELETE',
+        body: JSON.stringify(detail),
+      });
+    }));
+    return responses;
   } catch (error) {
     console.error("Error creating order:", error);
     throw error;
