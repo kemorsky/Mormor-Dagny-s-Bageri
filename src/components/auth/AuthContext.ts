@@ -7,6 +7,11 @@ type AuthContext = {
     handleLogin: (username: string, password: string) => Promise<void>;
     handleLogOut: () => Promise<void>;
     isLoading: boolean;
+    permissions: {
+        canEditOrder: boolean;
+        canDeleteOrder: boolean;
+        canEditDeliveryDate: boolean;
+    };
 };
 
 const AuthContext = createContext<AuthContext | undefined>(undefined);

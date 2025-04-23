@@ -62,7 +62,14 @@ export default function AuthProvider({children}: AuthProviderProps) {
         console.log("Successfully logged out") 
     };
 
-    return <AuthContext.Provider value={{authToken, currentUser, handleLogin, handleLogOut, isLoading}}>
+    const permissions = {
+          canEditOrder: currentUser?.Roll === "Admin" || currentUser?.Roll === "Säljare",
+          canDeleteOrder: currentUser?.Roll === "Admin" || currentUser?.Roll === "Planerare",
+          canEditDeliveryDate: currentUser?.Roll === "Planerare",
+      };
+
+
+    return <AuthContext.Provider value={{authToken, currentUser, handleLogin, handleLogOut, isLoading, permissions}}>
                 {children}
             </AuthContext.Provider>
 };

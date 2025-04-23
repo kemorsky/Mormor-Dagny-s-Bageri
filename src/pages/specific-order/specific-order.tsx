@@ -15,13 +15,10 @@ export default function SpecificOrder() {
     const [editedDate, setEditedDate] = useState(order?.PreliminärtLeveransdatum || '');
     const { id = '' } = useParams();
 
-    const { currentUser } = useAuth();
+    const { permissions } = useAuth();
+    const { canEditOrder, canDeleteOrder, canEditDeliveryDate } = permissions;
 
     const navigate = useNavigate();
-
-    const userType = currentUser?.Roll;
-    const canEditDeleteOrder = userType === "Admin" || userType === "Säljare";
-    const canEditDeliveryDate = userType === "Planerare";
 
     useEffect(() => {
         const getOrder = async () => {
@@ -174,22 +171,25 @@ export default function SpecificOrder() {
                         </CardStoreOwner>
                     </CardStoreContent>
                 </CardStore>
-                {(canEditDeleteOrder || canEditDeliveryDate) && (
+                {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
                     <div>
-                        {canEditDeleteOrder && !isEditing && (
+                        {canEditOrder && !isEditing && (
                         <>
-                            <button onClick={handleEdit}>Ändra beställningen</button>
-                            <button onClick={() => order.BeställningId !== undefined && handleDeleteOrder(order.BeställningId)}>Ta bort beställningen</button>
+                            <button onClick={handleEdit}>Ändra beställningsdetaljer</button>
                         </>
                         )}
-                        {canEditDeleteOrder && isEditing && (
+                        {canEditOrder && isEditing && (
                         <>
                             <button type="submit" onClick={handleSubmit}>Spara</button>
                             <button onClick={handleCancelEdit}>Avbryt</button>
                         </>
                         )}
+                        {canDeleteOrder && (
+                            <button onClick={() => order.BeställningId !== undefined && handleDeleteOrder(order.BeställningId)}>Ta bort beställningen</button>
+
+                        )}
                         {canEditDeliveryDate && (
-                                <button onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>Ändra beställningsdatum</button>
+                            <button onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>Ändra beställningsdatum</button>
                         )}
                     </div>
                 )}
