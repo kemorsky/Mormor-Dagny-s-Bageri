@@ -1,24 +1,14 @@
 import { useState } from "react"
 import { addUser } from "../../../lib/api"
-import { RegisterUser } from "../../../types/types"
+import { User } from "../../../types/types"
 import Menu from "../../../elements/menu/menu";
+import { defaultUser } from "../../../constants/prefab-consts";
 
 export default function AddUser() {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [role, setRole] = useState<number | string>();
-    const [email, setEmail] = useState<string>('');
+    const [newUser, setNewUser] = useState<User>(() => ({ ...defaultUser }))
     const [locked, setLocked] = useState<boolean>(false);
     
-    const user: RegisterUser = {
-        Användarnamn: username,
-        Lösenord: password,
-        Roll: role ?? '',
-        Email: email,
-        Låst: locked
-    };
-    
-    const handleAddUser = async (user: RegisterUser) => {
+    const handleAddUser = async (user: User) => {
         try {
             await addUser(user)
             console.log("added user", user)
@@ -32,20 +22,20 @@ export default function AddUser() {
             <Menu />
             <input type="text"
                 placeholder="Användarnamn"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)} />
+                value={newUser.Användarnamn}
+                onChange={(e) => {setNewUser({...newUser, Användarnamn: e.target.value})}} />
             <input type="text"
                 placeholder="Lösenord"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} />
+                value={newUser.LösenordHash}
+                onChange={(e) => {setNewUser({...newUser, LösenordHash: e.target.value})}} />
             <input type="number"
                 placeholder="Roll"
-                value={role}
-                onChange={(e) => setRole(parseInt(e.target.value))} />
+                value={newUser.Roll}
+                onChange={(e) => {setNewUser({...newUser, Roll: parseFloat(e.target.value)})}} />
             <input type="text"
                 placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} />
+                value={newUser.Email}
+                onChange={(e) => {setNewUser({...newUser, Email: e.target.value})}} />
             <label className="flex items-center gap-2 mt-2">
                 Låst: 
                 <input
@@ -55,7 +45,7 @@ export default function AddUser() {
                 />
                 {locked ? "Locked" : "Unlocked"}
             </label>         
-            <button onClick={() => {handleAddUser(user)}}>Lägg till</button>
+            <button onClick={() => {handleAddUser(newUser)}}>Lägg till</button>
         </main>
     )
 };

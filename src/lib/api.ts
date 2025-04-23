@@ -1,4 +1,4 @@
-import { OrderDetails, Order, Product, RegisterUser, User, Store } from "../types/types";
+import { OrderDetails, Order, Product, User, Store } from "../types/types";
 
 type RequestOptions = {
     method?: string,
@@ -176,7 +176,7 @@ export const fetchUsers = async () => {
   }
 }
 
-export const addUser = async (user: RegisterUser) => {
+export const addUser = async (user: User) => {
   try {
     const response = await apiRequest(`${BASE_URL}/auth/registrera`, {
       method: 'POST',
@@ -184,7 +184,7 @@ export const addUser = async (user: RegisterUser) => {
     });
     return response;
   } catch (error) {
-    console.error("Error pushing order:", error);
+    console.error("Error adding user:", error);
     throw error;
   }
 };
@@ -197,7 +197,7 @@ export const editUser = async (Låst: boolean, Användarnamn: string) => {
     });
     return response;
   } catch (error) {
-    console.error("Error pushing order:", error);
+    console.error("Error editing user:", error);
     throw error;
   }
 }
@@ -210,7 +210,7 @@ export const editUserPassword = async (user: User) => {
     });
     return response;
   } catch (error) {
-    console.error("Error pushing order:", error);
+    console.error("Error editing user password:", error);
     throw error;
   }
 }
@@ -265,7 +265,21 @@ export const editStore = async (store: Store) => {
   }
 };
 
-export const deleteStore = async (ButikId: number) => { // NOT YET USED IN PRODUCTION
+export const lockStore = async (Låst: boolean, ButikId: number) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/butiker/${ButikId}/lås`, {
+      method: 'PUT',
+      body: JSON.stringify(Låst)
+    });
+    console.log("Locked store :", ButikId, response);
+    return response;
+  } catch (error) {
+    console.error("Error locking store:", error);
+    throw error;
+  }
+}
+
+export const deleteStore = async (ButikId: number) => { 
   try {
     const response = await apiRequest(`${BASE_URL}/butiker/${ButikId}`, {
       method: 'DELETE',

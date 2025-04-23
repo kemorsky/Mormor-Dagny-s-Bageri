@@ -3,15 +3,14 @@ import { addProduct, deleteProduct, editProduct } from "../../../lib/api"
 import { Product } from "../../../types/types"
 import { CardProduct } from "../../../blocks/card-order-page"
 import { useProducts } from "../../../components/auth/ProductContext"
+import { defaultProduct } from "../../../constants/prefab-consts"
+import Menu from "../../../elements/menu/menu"
 
 export default function Products() {
     const { products, setProducts } = useProducts()
     
     const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-    const [newProduct, setNewProduct] = useState<Product | null>({
-        Namn: '',
-        Baspris: undefined,
-    })
+    const [newProduct, setNewProduct] = useState<Product>(() => ({ ...defaultProduct }))
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -71,6 +70,7 @@ export default function Products() {
 
     return (
         <main>
+            <Menu />
             <div>Products</div>
             {products ? (
                 products.map((product, index) => (
