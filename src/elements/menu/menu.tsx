@@ -66,8 +66,10 @@ export default function Menu() {
             </nav>
             <section className="inline-flex items-center justify-between gap-4">
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={handleNavigateHome}>Hem</a>
-                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/deliveries">Leverans</a>
-                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={() => navigate("/order")}>Ny Beställning</a>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={() => navigate("/orders")}>Leverans</a>
+                {userType !== "Planerare" && (
+                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={() => navigate("/order")}>Ny Beställning</a>
+                )}
             </section>
         </header> 
     )
