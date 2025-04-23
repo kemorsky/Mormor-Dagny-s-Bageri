@@ -1,272 +1,217 @@
-import { useState, useEffect } from "react";
-import { deleteOrder, deleteOrderDetails, editOrderDeliveryDate, editOrderDetails, fetchSpecificOrder } from "../../lib/api";
-import { formatDate } from "../../lib/formatDate";
-import { Order, OrderDetails } from "../../types/types";
-import { useNavigate, useParams } from 'react-router';
-import { CardStore, ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice } from "../../blocks/card";
-import { CardStoreContent, CardStoreOwner, CardStoreInformation, CardStoreContacts, CardStoreBreadperson } from "../../blocks/card-order-page";
+import { useSpecificOrderPage } from "../../hooks/useSpecificOrder"
 import Menu from "../../elements/menu/menu";
 import { useAuth } from "../../components/auth/AuthContext";
+import { ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice } from "../../blocks/card";
+import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../blocks/card-order-page";
+import { formatDate } from "../../lib/formatDate";
 
 export default function SpecificOrder() {
-    const [order, setOrder] = useState<Order>();
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedDetails, setEditedDetails] = useState<OrderDetails[]>([]);
-    const [editedDate, setEditedDate] = useState(order?.PreliminärtLeveransdatum || '');
-    const { id = '' } = useParams();
+  const {
+    order, products, isEditing, isCompletingOrder, editedDetails, editedDate,
+    newDetail, finalTotal, setIsCompletingOrder, setEditedDate, setNewDetail,
+    handleEdit, handleCancelEdit, handleSubmitDate, handleSubmit, handleAmountChange, handleDelete,
+    handleDeleteOrder, handleAddDetail,} = useSpecificOrderPage();
 
-    const { permissions } = useAuth();
-    const { canEditOrder, canDeleteOrder, canEditDeliveryDate } = permissions;
+  const { permissions } = useAuth();
+  const { canEditOrder, canDeleteOrder, canEditDeliveryDate } = permissions;
 
-    const navigate = useNavigate();
+  if (!order) {
+    return <div>Loading...</div>;
+  }
 
-    useEffect(() => {
-        const getOrder = async () => {
-            const orderId = parseInt(id);
-            try {
-                const order = await fetchSpecificOrder(orderId);
-                setOrder(order);
-                setEditedDetails(order.Beställningsdetaljer || []);
-            } catch (error) {
-                console.error("Error fetching this order:", error);
-            }
-        };
-        getOrder();
-    }, [id]);
+  return (
+    <main>
+      <Menu />
+      <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
+      <section>
+        <CardStore>
+          <CardStoreContent>
+            <CardStoreOwner>
+              <strong>Beställningsdatum:</strong> {formatDate(order.Beställningsdatum)}
+            </CardStoreOwner>
+            <CardStoreOwner>
+              <strong>Leveransdatum:</strong>
+              {editedDate ? (
+                <input
+                  type="text"
+                  value={editedDate}
+                  onChange={(e) => setEditedDate(e.target.value)}
+                />
+              ) : (
+                <span>{formatDate(order.PreliminärtLeveransdatum)}</span>
+              )}
+              {editedDate && (
+                <div>
+                  <button onClick={handleSubmitDate}>Spara</button>
+                  <button onClick={() => setEditedDate('')}>Avbryt</button>
+                </div>
+              )}
+            </CardStoreOwner>
+            <CardStoreOwner>
+              <strong>Beställare:</strong> {order.Beställare}
+            </CardStoreOwner>
+            <CardStoreOwner>
+              <strong>Säljare:</strong> {order.Säljare}
+            </CardStoreOwner>
+          </CardStoreContent>
+        </CardStore>
 
-    const finalTotal = order?.Beställningsdetaljer?.reduce((acc, item) => {
-        const base = item.Styckpris || 0;
-        const discounted = base * (1 - order?.Beställningsdetaljer?.[0]?.Rabatt / 100);
-        return acc + discounted;
-    }, 0);
-
-    const handleSubmitDate = async () => {
-        if (editedDate) {
-            const updateDTO = {
-                PreliminärtLeveransdatum: editedDate
-            }
-            const success = await editOrderDeliveryDate(order?.BeställningId ?? 0, updateDTO);
-            if (success) {
-                if (success) {
-                    setOrder((prevDate) => ({
-                        ...prevDate!,
-                        PreliminärtLeveransdatum: editedDate,
-                    }));
-                    setEditedDate('')
-                }
-            }
-        }
-    }
-
-    const handleEdit = () => {
-        setIsEditing(true);
-    };
-
-    const handleCancelEdit = () => {
-        setIsEditing(false);
-        setEditedDetails(order?.Beställningsdetaljer || []);
-    };
-
-    const handleAmountChange = (id: number, value: string) => {
-        const numericValue = value === '' ? 0 : parseInt(value);
-        setEditedDetails((prevDetails) =>
-            prevDetails.map((detail) => {
-                if (detail.BeställningsdetaljId === id) {
-                    const basePrice = detail.Produkt?.Baspris || 0;
-                    return {
-                        ...detail,
-                        Antal: value === '' ? 0 : numericValue,
-                        Styckpris: numericValue * basePrice
-                    };
-                }
-                return detail;
-            })
-        );
-    };
-
-    const handleDelete = async (BeställningsdetaljId: number) => {
-        try {
-          const orderDetailsToDelete = editedDetails.find((detail) => detail.BeställningsdetaljId === BeställningsdetaljId);
-          if (orderDetailsToDelete) {
-            await deleteOrderDetails([orderDetailsToDelete]);
-          }
-          setOrder((prev) => prev ? {
-            ...prev,
-            Beställningsdetaljer: prev.Beställningsdetaljer.filter((orderDetail) => orderDetail.BeställningsdetaljId !== BeställningsdetaljId),
-          } : prev);
-
-          setEditedDetails((prevDetails) =>
-            prevDetails.filter((detail) => detail.BeställningsdetaljId !== BeställningsdetaljId)
-        );
-        } catch (error) {
-          console.error("Error deleting order:", error);
-        }
-      }
-
-      const handleDeleteOrder = async (BeställningId: number) => {
-        const confirmDelete = window.confirm("Är du säker på att du vill ta bort hela beställningen?");
-        if (!confirmDelete) {
-            console.log("Användaren avbröt borttagningen.");
-            return;
-        }
-    
-        try {
-            await deleteOrder(BeställningId);
-            console.log("Deleted order with id:", BeställningId);
-            navigate('/');
-        } catch (error) {
-            console.error("Error deleting order:", error);
-        }
-    };
-    
-
-    const handleSubmit = async () => {
-        if (editedDetails) {
-            const success = await editOrderDetails(editedDetails);
-            if (success) {
-                setOrder((prevOrder) => ({
-                    ...prevOrder!,
-                    Beställningsdetaljer: editedDetails,
-                }));
-                setIsEditing(false);
-            }
-        }
-    };
-
-    if (!order) {
-        return <div>Loading...</div>;
-    }
-
-    return (
-        <main>
-            <Menu />
-            <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
-            <section>
-                <CardStore>
-                    <CardStoreContent>
-                        <CardStoreOwner>
-                            <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
-                        </CardStoreOwner>
-                        <CardStoreOwner>
-                            <strong>Leveransdatum:</strong>
-                            {editedDate ? (
-                                <input type="text" value={editedDate} onChange={(e) => setEditedDate(e.target.value)} />
-                            ) : (
-                                <span>{formatDate(order.PreliminärtLeveransdatum)}</span>
-                            )}
-                            {editedDate ? (
-                                <div>
-                                <button onClick={handleSubmitDate}>Spara</button>
-                                <button onClick={() => setEditedDate('')}>Avbryt</button>
-                                </div>
-                            ) : (
-                                null
-                            )}
-                        </CardStoreOwner>
-                        <CardStoreOwner>
-                            <strong>Beställare:</strong>{order.Beställare}
-                        </CardStoreOwner>
-                        <CardStoreOwner>
-                            <strong>Säljare:</strong>{order.Säljare}
-                        </CardStoreOwner>
-                    </CardStoreContent>
-                </CardStore>
-                {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
-                    <div>
-                        {canEditOrder && !isEditing && (
-                        <>
-                            <button onClick={handleEdit}>Ändra beställningsdetaljer</button>
-                        </>
-                        )}
-                        {canEditOrder && isEditing && (
-                        <>
-                            <button type="submit" onClick={handleSubmit}>Spara</button>
-                            <button onClick={handleCancelEdit}>Avbryt</button>
-                        </>
-                        )}
-                        {canDeleteOrder && (
-                            <button onClick={() => order.BeställningId !== undefined && handleDeleteOrder(order.BeställningId)}>Ta bort beställningen</button>
-
-                        )}
-                        {canEditDeliveryDate && (
-                            <button onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>Ändra beställningsdatum</button>
-                        )}
-                    </div>
-                )}
-                <CardStore className="">
-                    <CardStoreContent>
-                        <CardStoreInformation>
-                            <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikNamn}
-                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Butik?.ButikNummer}</span>
-                            </p>
-                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order?.Butik?.Besöksadress}</p>
-                        </CardStoreInformation>
-                        <CardStoreContacts>
-                            <CardStoreOwner>
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
-                                <article className="w-full flex items-center justify-start gap-1.5">
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikschefNamn}</p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikschefTelefon}</p>
-                                </article>
-                            </CardStoreOwner>
-                            <CardStoreBreadperson>
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
-                                <article className="w-full flex items-center justify-start gap-1.5">
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.BrödansvarigNamn}</p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.BrödansvarigTelefon}</p>
-                                </article>
-                            </CardStoreBreadperson>
-                        </CardStoreContacts>
-                    </CardStoreContent>
-                </CardStore>
-            </section>
-            {order?.Beställningsdetaljer ? (
-                <section>
-                    <h2 className="text-2xl">Beställda produkter</h2>
-                    <div>
-                        <ul>
-                            {order?.Beställningsdetaljer?.map((product, index) => (
-                                <li key={index}>
-                                    <ProductCard>
-                                        <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
-                                        <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
-                                        {isEditing ? (
-                                        <>
-                                            <ProductCardAmount>
-                                                <input
-                                                    type="text"
-                                                    value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
-                                                    onChange={(e) =>
-                                                        handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
-                                                    }
-                                                />
-                                            </ProductCardAmount>
-                                            <ProductCardPrice>
-                                                Totaltpris: {
-                                                    isEditing
-                                                        ? editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Styckpris?.toFixed(2)
-                                                        : product.Styckpris.toFixed(2)
-                                                } kr
-                                            </ProductCardPrice>
-                                            <button onClick={() => {handleDelete(product.BeställningsdetaljId ?? 0)}}>Ta bort</button>
-                                        </>
-                                        ) : (
-                                        <>
-                                            <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                                            <ProductCardPrice>Tottaltpris: {product.Styckpris.toFixed(2)} kr</ProductCardPrice>
-                                        </>
-                                        )}
-                                    </ProductCard>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <p>Rabatt: {order.Beställningsdetaljer?.[0]?.Rabatt}%</p>
-                    <p className="font-bold">Totallt pris: {finalTotal?.toFixed(2)}kr</p>
-                </section>
-            ) : (
-                <p>Laddar orderdetaljer...</p>
+        {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
+          <div className="my-4 flex gap-2 flex-wrap">
+            {canEditOrder && !isEditing && <button onClick={handleEdit}>Ändra beställningsdetaljer</button>}
+            {canEditOrder && isEditing && (
+              <>
+                <button onClick={handleSubmit}>Spara</button>
+                <button onClick={handleCancelEdit}>Avbryt</button>
+              </>
             )}
-        </main>
-    );
+            {canDeleteOrder && (
+              <button onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</button>
+            )}
+            {canEditDeliveryDate && (
+              <button onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
+                Ändra beställningsdatum
+              </button>
+            )}
+          </div>
+        )}
+
+        <CardStore className="">
+          <CardStoreContent>
+            <CardStoreInformation>
+              <p className="font-semibold">{order.Butik?.ButikNamn}
+                <span className="text-Branding-textPrimary"> {order.Butik?.ButikNummer}</span>
+              </p>
+              <p className="text-Branding-textSecondary">{order?.Butik?.Besöksadress}</p>
+            </CardStoreInformation>
+            <CardStoreContacts>
+              <CardStoreOwner>
+                <p>Butikägare:</p>
+                <article className="flex gap-1.5">
+                  <p>{order.Butik?.ButikschefNamn}</p>
+                  <p>{order.Butik?.ButikschefTelefon}</p>
+                </article>
+              </CardStoreOwner>
+              <CardStoreBreadperson>
+                <p>Brödansvarig:</p>
+                <article className="flex gap-1.5">
+                  <p>{order.Butik?.BrödansvarigNamn}</p>
+                  <p>{order.Butik?.BrödansvarigTelefon}</p>
+                </article>
+              </CardStoreBreadperson>
+            </CardStoreContacts>
+          </CardStoreContent>
+        </CardStore>
+      </section>
+
+      <section className="mt-6">
+        {canEditOrder ? (
+            <article>
+                <h2 className="text-2xl">Beställda produkter</h2>
+                {isCompletingOrder ? (
+                <button onClick={() => setIsCompletingOrder(false)}>Avbryt</button>
+                ) : (
+                <button onClick={() => setIsCompletingOrder(true)}>Redigera</button>
+                )}
+            </article>
+            ) : (
+            <h2 className="text-2xl">Beställda produkter</h2>
+        )}
+
+        <ul className="space-y-4 mt-4">
+          {order.Beställningsdetaljer.map((product, index) => (
+            <li key={index}>
+              <ProductCard>
+                <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
+                {isEditing ? (
+                  <>
+                    <ProductCardAmount>
+                      <input
+                        type="text"
+                        value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
+                        onChange={(e) =>
+                          handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
+                        }
+                      />
+                    </ProductCardAmount>
+                    <ProductCardPrice>
+                      Totaltpris: {
+                        editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Styckpris?.toFixed(2)
+                      } kr
+                    </ProductCardPrice>
+                    <button onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}>Ta bort</button>
+                  </>
+                ) : (
+                  <>
+                    <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
+                    <ProductCardPrice>Totaltpris: {product.Styckpris.toFixed(2)} kr</ProductCardPrice>
+                  </>
+                )}
+              </ProductCard>
+            </li>
+          ))}
+        </ul>
+
+        {isCompletingOrder && (
+            <div className="mt-6 border-t pt-4">
+                <h3 className="text-lg font-semibold">Lägg till produkt</h3>
+                <div className="flex flex-col gap-2 max-w-md">
+                    <select
+                        className="border p-2"
+                        value={newDetail.ProduktId}
+                        onChange={(e) => {
+                            const selectedId = parseInt(e.target.value);
+                            const selectedProduct = products.find(p => p.ProduktId === selectedId);
+                            const basePrice = selectedProduct?.Baspris || 0;
+
+                            setNewDetail({
+                                ...newDetail,
+                                ProduktId: selectedId,
+                                Styckpris: basePrice * newDetail.Antal,
+                            });
+                        }}
+                    >
+                        <option value={0}>Välj produkt</option>
+                        {products.map((product) => (
+                            <option key={product.ProduktId} value={product.ProduktId}>
+                                {product.Namn} – {product.Baspris} kr
+                            </option>
+                        ))}
+                    </select>
+
+                    <input
+                        type="text"
+                        className="border p-2"
+                        placeholder="Antal"
+                        value={newDetail.Antal}
+                        onChange={(e) => {
+                            const amount = parseFloat(e.target.value) || 0;
+                            const selectedProduct = products.find(p => p.ProduktId === newDetail.ProduktId);
+                            const basePrice = selectedProduct?.Baspris || 0;
+
+                            setNewDetail({
+                                ...newDetail,
+                                Antal: amount,
+                                Styckpris: basePrice * amount
+                            });
+                        }}
+                    />
+
+                    <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        onClick={handleAddDetail} // This button now directly calls your handleAddDetail
+                    >
+                        Lägg till
+                    </button>
+                </div>
+            </div>
+        )}
+
+        <p className="mt-4">Rabatt: {order.Beställningsdetaljer?.[0]?.Rabatt}%</p>
+        <p className="font-bold">Totalt pris: {finalTotal?.toFixed(2)} kr</p>
+      </section>
+    </main>
+  );
 }
+

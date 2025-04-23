@@ -1,4 +1,4 @@
-import { Product, Store, User } from "../types/types";
+import { OrderDetails, Product, Store, RegisterUser } from "../types/types";
 
 export const defaultStore: Store = {
     ButikNummer: '',
@@ -18,10 +18,17 @@ export const defaultProduct: Product = {
     Baspris: undefined,
 };
 
-export const defaultUser: User = {
+export const defaultUser: RegisterUser = {
     Användarnamn: '',
-    LösenordHash: '',
+    Lösenord: '',
     Roll: '',
     Email: '',
     Låst: false
+}
+
+export const defaultDetail: OrderDetails = {
+    ProduktId: 0,
+    Antal: 0,
+    Styckpris: 0,
+    Rabatt: 0
 }
