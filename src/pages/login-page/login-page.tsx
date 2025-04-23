@@ -31,7 +31,7 @@ export default function LoginPage() {
           } else if (userType === 'Admin') {
             navigate('/admin-dashboard')
           } else {
-            console.log("Something broke")
+            navigate('/planerare-dashboard')
           }
         }
       }, [currentUser, navigate]);

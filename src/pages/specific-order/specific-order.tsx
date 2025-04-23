@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react";
-import { deleteOrderDetails, editOrderDetails, fetchSpecificOrder } from "../../lib/api";
+import { deleteOrder, deleteOrderDetails, editOrderDeliveryDate, editOrderDetails, fetchSpecificOrder } from "../../lib/api";
 import { formatDate } from "../../lib/formatDate";
 import { Order, OrderDetails } from "../../types/types";
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { CardStore, ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice } from "../../blocks/card";
 import { CardStoreContent, CardStoreOwner, CardStoreInformation, CardStoreContacts, CardStoreBreadperson } from "../../blocks/card-order-page";
 import Menu from "../../elements/menu/menu";
+import { useAuth } from "../../components/auth/AuthContext";
 
 export default function SpecificOrder() {
     const [order, setOrder] = useState<Order>();
     const [isEditing, setIsEditing] = useState(false);
     const [editedDetails, setEditedDetails] = useState<OrderDetails[]>([]);
+    const [editedDate, setEditedDate] = useState(order?.PreliminärtLeveransdatum || '');
     const { id = '' } = useParams();
+
+    const { currentUser } = useAuth();
+
+    const navigate = useNavigate();
+
+    const userType = currentUser?.Roll;
+    const canEditDeleteOrder = userType === "Admin" || userType === "Säljare";
+    const canEditDeliveryDate = userType === "Planerare";
 
     useEffect(() => {
         const getOrder = async () => {
@@ -32,6 +42,24 @@ export default function SpecificOrder() {
         const discounted = base * (1 - order?.Beställningsdetaljer?.[0]?.Rabatt / 100);
         return acc + discounted;
     }, 0);
+
+    const handleSubmitDate = async () => {
+        if (editedDate) {
+            const updateDTO = {
+                PreliminärtLeveransdatum: editedDate
+            }
+            const success = await editOrderDeliveryDate(order?.BeställningId ?? 0, updateDTO);
+            if (success) {
+                if (success) {
+                    setOrder((prevDate) => ({
+                        ...prevDate!,
+                        PreliminärtLeveransdatum: editedDate,
+                    }));
+                    setEditedDate('')
+                }
+            }
+        }
+    }
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -78,6 +106,23 @@ export default function SpecificOrder() {
         }
       }
 
+      const handleDeleteOrder = async (BeställningId: number) => {
+        const confirmDelete = window.confirm("Är du säker på att du vill ta bort hela beställningen?");
+        if (!confirmDelete) {
+            console.log("Användaren avbröt borttagningen.");
+            return;
+        }
+    
+        try {
+            await deleteOrder(BeställningId);
+            console.log("Deleted order with id:", BeställningId);
+            navigate('/');
+        } catch (error) {
+            console.error("Error deleting order:", error);
+        }
+    };
+    
+
     const handleSubmit = async () => {
         if (editedDetails) {
             const success = await editOrderDetails(editedDetails);
@@ -106,7 +151,20 @@ export default function SpecificOrder() {
                             <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
                         </CardStoreOwner>
                         <CardStoreOwner>
-                            <strong>Leveransdatum:</strong>{formatDate(order.PreliminärtLeveransdatum)}
+                            <strong>Leveransdatum:</strong>
+                            {editedDate ? (
+                                <input type="text" value={editedDate} onChange={(e) => setEditedDate(e.target.value)} />
+                            ) : (
+                                <span>{formatDate(order.PreliminärtLeveransdatum)}</span>
+                            )}
+                            {editedDate ? (
+                                <div>
+                                <button onClick={handleSubmitDate}>Spara</button>
+                                <button onClick={() => setEditedDate('')}>Avbryt</button>
+                                </div>
+                            ) : (
+                                null
+                            )}
                         </CardStoreOwner>
                         <CardStoreOwner>
                             <strong>Beställare:</strong>{order.Beställare}
@@ -116,6 +174,25 @@ export default function SpecificOrder() {
                         </CardStoreOwner>
                     </CardStoreContent>
                 </CardStore>
+                {(canEditDeleteOrder || canEditDeliveryDate) && (
+                    <div>
+                        {canEditDeleteOrder && !isEditing && (
+                        <>
+                            <button onClick={handleEdit}>Ändra beställningen</button>
+                            <button onClick={() => order.BeställningId !== undefined && handleDeleteOrder(order.BeställningId)}>Ta bort beställningen</button>
+                        </>
+                        )}
+                        {canEditDeleteOrder && isEditing && (
+                        <>
+                            <button type="submit" onClick={handleSubmit}>Spara</button>
+                            <button onClick={handleCancelEdit}>Avbryt</button>
+                        </>
+                        )}
+                        {canEditDeliveryDate && (
+                                <button onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>Ändra beställningsdatum</button>
+                        )}
+                    </div>
+                )}
                 <CardStore className="">
                     <CardStoreContent>
                         <CardStoreInformation>
@@ -186,14 +263,6 @@ export default function SpecificOrder() {
                     </div>
                     <p>Rabatt: {order.Beställningsdetaljer?.[0]?.Rabatt}%</p>
                     <p className="font-bold">Totallt pris: {finalTotal?.toFixed(2)}kr</p>
-                    {!isEditing ? (
-                        <button onClick={handleEdit}>Edit All Products</button>
-                    ) : (
-                        <div>
-                            <button type="submit" onClick={handleSubmit}>Save Changes</button>
-                            <button onClick={handleCancelEdit}>Cancel</button>
-                        </div>
-                    )}
                 </section>
             ) : (
                 <p>Laddar orderdetaljer...</p>

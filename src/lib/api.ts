@@ -94,6 +94,33 @@ export const editOrderDetails = async (orderDetails: OrderDetails[]) => {
   }
 }
 
+export const editOrderDeliveryDate = async (BeställningId: number, updateDTO: { PreliminärtLeveransdatum: string }) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/beställningar/${BeställningId}` , {
+      method: "PUT",
+      body: JSON.stringify( updateDTO )
+    })
+    console.log(response)
+    return response;
+  } catch (error) {
+    console.error("Error fetching this order:", error)
+    throw error;
+  }
+}
+
+export const deleteOrder = async (BeställningId: number) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/beställningar/${BeställningId}` , {
+      method: "DELETE"
+    })
+    console.log(response)
+    return response;
+  } catch (error) {
+    console.error("Error fetching this order:", error)
+    throw error;
+  }
+};
+
 export const deleteOrderDetails = async (orderDetails: OrderDetails[]) => {
   try {
     const responses = await Promise.all(orderDetails.map((detail) => {
