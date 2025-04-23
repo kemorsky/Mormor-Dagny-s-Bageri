@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Menu from "../../../elements/menu/menu";
 import { InputOrderDropdown } from "../../../components/ui/input";
-import { deleteStore } from "../../../lib/api";
+import { deleteStore, lockStore } from "../../../lib/api";
 import { Store } from "../../../types/types";
+import { defaultStore } from "../../../constants/prefab-consts";
 import { CardStore } from "../../../blocks/card";
 import { CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../../blocks/card-order-page";
 import { useStores } from "../../../components/auth/StoreContext";
@@ -15,18 +16,8 @@ export default function Stores() {
     const [editingStore, setEditingStore] = useState<Store | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [newStore, setNewStore] = useState<Store>({
-        ButikNummer: '',
-        ButikNamn: '',
-        Besöksadress: '',
-        BrödansvarigNamn: '',
-        BrödansvarigTelefon: '',
-        ButikschefNamn: '',
-        ButikschefTelefon: '',
-        Fakturaadress: '',
-        Låst: false,
-        Telefonnummer: ''
-      });
+    const [newStore, setNewStore] = useState<Store>(() => ({ ...defaultStore }));
+    const [storeLocked, setStoreLocked] = useState<number | null>(null);
 
     const { stores, setStores, searchStores, allStoresRef } = useStores();
 
@@ -67,6 +58,28 @@ export default function Stores() {
     const handleEditStore = (store: Store) => {
         setEditingStore({...store});
     };
+
+    const handleLockStore = async (selected: Store) => {
+        try {
+            const storelocked = !selected.Låst
+            setStoreLocked(selected.ButikId ?? 0)
+            console.log(storelocked)
+
+            await lockStore(storelocked, selected.ButikId ?? 0)
+
+            setStores((prevStores) =>
+                prevStores.map((s) =>
+                  s.ButikId === selected.ButikId
+                    ? { ...s, Låst: !selected.Låst }
+                    : s
+                )
+              );
+            setSelected(prev => prev?.ButikId === selected.ButikId ? { ...prev, Låst: !selected.Låst } as Store : prev);
+            setStoreLocked(null);
+        } catch (error) {
+            console.error("Error locking store:", error);
+        }
+    }
 
     return (
         <main>
@@ -123,6 +136,15 @@ export default function Stores() {
                                 </CardStoreContacts>
                                 <button onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</button>
                                 <button onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Radera butiken</button>
+                                <label className="flex items-center gap-2 mt-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={selected.Låst ?? false}
+                                        disabled={storeLocked === selected.ButikId}
+                                        onChange={() => handleLockStore(selected)}
+                                    />
+                                    {selected.Låst ? "Locked" : "Unlocked"}
+                                </label>
                             
                                 {editingStore?.ButikId === selected.ButikId && (
                                     <EditStoreForm
