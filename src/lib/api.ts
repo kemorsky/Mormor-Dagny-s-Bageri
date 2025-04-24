@@ -8,32 +8,32 @@ type RequestOptions = {
 
 const BASE_URL = "http://localhost:5139/api";
 
-export const apiRequest = async (url: string, options: RequestOptions = {}) => {
-  // console.log(`Making request to ${url} with options:`, options);
+  export const apiRequest = async (url: string, options: RequestOptions = {}) => {
+    // console.log(`Making request to ${url} with options:`, options);
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found");
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          ...options,
+        });
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+        return await response.json();
+        
+      } catch (error) {
+        console.error("API Error:", error);
+        throw error;
       }
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        ...options,
-      });
-      if (!response.ok) {
-        throw new Error(`API request failed: ${response.status}`);
-      }
-      return await response.json();
-      
-    } catch (error) {
-      console.error("API Error:", error);
-      throw error;
-    }
-};
+  };
 
 export const fetchStores = async () => {
   try {
@@ -186,6 +186,40 @@ export const fetchUsers = async () => {
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;
+  }
+};
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ Email: email })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error sending forgot-password email:", error);
+    throw error;
+  }
+};
+
+
+export const resetPassword = async (user: User) => { // TO BE IMPLEMENTED AT A LATER DATE
+  try {
+    await apiRequest(`${BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      body: JSON.stringify(user.LösenordHash)
+    })
+  } catch (error) {
+    console.error("Error resetting password:", error);
   }
 }
 
