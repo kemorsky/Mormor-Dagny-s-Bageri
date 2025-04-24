@@ -14,7 +14,7 @@ export default function RemoveUser() {
         }
     }
     return (
-        <main>
+        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
             <Menu />
             {users ? (
                 users.map((user) => (
