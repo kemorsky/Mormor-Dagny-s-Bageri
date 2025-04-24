@@ -1,16 +1,16 @@
 import { useState } from "react"
 import { addUser } from "../../../lib/api"
-import { User } from "../../../types/types"
+import { RegisterUser } from "../../../types/types"
 import Menu from "../../../elements/menu/menu";
 import { defaultUser } from "../../../constants/prefab-consts";
 
 export default function AddUser() {
-    const [newUser, setNewUser] = useState<User>(() => ({ ...defaultUser }))
-    const [locked, setLocked] = useState<boolean>(false);
+    const [newUser, setNewUser] = useState<RegisterUser>(() => ({ ...defaultUser }))
     
-    const handleAddUser = async (user: User) => {
+    const handleAddUser = async (user: RegisterUser) => {
         try {
             await addUser(user)
+            setNewUser({ ...defaultUser })
             console.log("added user", user)
         } catch (error) {
             console.log("failed to add user",error)
@@ -26,8 +26,8 @@ export default function AddUser() {
                 onChange={(e) => {setNewUser({...newUser, Användarnamn: e.target.value})}} />
             <input type="text"
                 placeholder="Lösenord"
-                value={newUser.LösenordHash}
-                onChange={(e) => {setNewUser({...newUser, LösenordHash: e.target.value})}} />
+                value={newUser.Lösenord}
+                onChange={(e) => {setNewUser({...newUser, Lösenord: e.target.value})}} />
             <input type="number"
                 placeholder="Roll"
                 value={newUser.Roll}
@@ -40,11 +40,11 @@ export default function AddUser() {
                 Låst: 
                 <input
                     type="checkbox"
-                    checked={locked ?? false}
-                    onChange={(e) => setLocked(e.target.checked)}
+                    checked={newUser.Låst}
+                    onChange={(e) => setNewUser({...newUser, Låst: e.target.checked})}
                 />
-                {locked ? "Locked" : "Unlocked"}
-            </label>         
+                {newUser.Låst ? "Locked" : "Unlocked"}
+            </label>        
             <button onClick={() => {handleAddUser(newUser)}}>Lägg till</button>
         </main>
     )

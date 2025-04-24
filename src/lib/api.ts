@@ -1,4 +1,4 @@
-import { OrderDetails, Order, Product, User, Store } from "../types/types";
+import { OrderDetails, Order, Product, User, Store, RegisterUser } from "../types/types";
 
 type RequestOptions = {
     method?: string,
@@ -126,13 +126,26 @@ export const deleteOrderDetails = async (orderDetails: OrderDetails[]) => {
     const responses = await Promise.all(orderDetails.map((detail) => {
       return apiRequest(`${BASE_URL}/beställningsdetaljer/${detail.BeställningsdetaljId}`, {
         method: 'DELETE',
-        body: JSON.stringify(detail),
       });
     }));
     return responses;
   } catch (error) {
     console.error("Error creating order:", error);
     throw error;
+  }
+}
+
+export const addOrderDetail = async (BeställningId: number, detalj: OrderDetails) => {
+  try {
+    const response = await apiRequest(`${BASE_URL}/beställningsdetaljer/${BeställningId}` , {
+      method: "POST",
+      body: JSON.stringify(detalj)
+    })
+    console.log(detalj)
+    console.log(response)
+    return response;
+  } catch (error) {
+    console.error("Error adding detail to order", error)
   }
 }
 
@@ -176,12 +189,13 @@ export const fetchUsers = async () => {
   }
 }
 
-export const addUser = async (user: User) => {
+export const addUser = async (user: RegisterUser) => {
   try {
     const response = await apiRequest(`${BASE_URL}/auth/registrera`, {
       method: 'POST',
       body: JSON.stringify(user)
     });
+    console.log(response)
     return response;
   } catch (error) {
     console.error("Error adding user:", error);
@@ -297,6 +311,7 @@ export const addProduct = async (newProduct: Product) => {
       method: 'POST',
       body: JSON.stringify(newProduct)
     })
+    console.log(response)
     return response;
   } catch (error) {
     console.log("Error adding product", error)
