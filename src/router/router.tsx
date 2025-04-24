@@ -175,11 +175,13 @@ const router = createBrowserRouter([
     {
         path: '/order/:id',
         element: (
+            <ProductProvider>
                 <ProtectedRoute
                     path="/order/:id"
                     element={<SpecificOrder/>}
                     roles={[0, "Admin", 1, "Säljare", 2, "Planerare"]}
                 />  
+            </ProductProvider>
         )
     },
     {
