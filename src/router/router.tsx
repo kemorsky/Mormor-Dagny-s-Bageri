@@ -3,7 +3,6 @@ import { ProtectedRoute } from './ProtectedRoute';
 import AccessDenied from '../pages/access-denied/access-denied';
 import LoginPage from '../pages/login-page/login-page';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
-/* import Dashboard from '../pages/dashboard/dashboard'; */
 import AdminDashboard from '../pages/admin-dashboard/admin-dashboard';
 import AddUser from '../pages/admin/add-user/add-user';
 import EditUser from '../pages/admin/edit-user/edit-user';
@@ -21,7 +20,7 @@ import ConfirmationPage from '../pages/confirmation-page/confirmation-page';
 import SpecificOrder from '../pages/specific-order/specific-order';
 import PlanerareDashboard from '../pages/planerare/planerare-dashboard';
 import OrderProvider from '../components/order-provider/OrderProvider';
-
+import ResetPassword from '../pages/reset-password';
 
 const router = createBrowserRouter([
     {
@@ -35,6 +34,10 @@ const router = createBrowserRouter([
     {
         path: '/forgot-password',
         element: <ForgotPassword />,
+    },
+    {
+        path: '/reset-password',
+        element: <ResetPassword />
     },
     {
         path: '/planerare-dashboard',

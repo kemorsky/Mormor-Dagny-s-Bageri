@@ -44,7 +44,7 @@ export default function AuthProvider({children}: AuthProviderProps) {
           console.log(data);
           const authToken = data.Token;
           const currentUser = { Användarnamn: userData.användarnamn, Roll: data.Roll } as User;
-          localStorage.setItem("token", authToken); // change to localStorage??
+          localStorage.setItem("token", authToken);
           localStorage.setItem("currentUser", JSON.stringify(currentUser));
           setAuthToken(authToken);
           setCurrentUser(currentUser);

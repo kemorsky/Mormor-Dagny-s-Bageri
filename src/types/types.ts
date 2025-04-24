@@ -7,6 +7,15 @@ export type User = {
     Låst?: boolean;
 }
 
+export type ForgotPassword = {
+    Id?: number,
+    Username: string,
+    NewPassword: string,
+    Token: string,
+    Expiration?: string,
+    CreatedAt?: string,
+};
+
 export type RegisterUser = {
     Användarnamn: string;
     Lösenord: string;
@@ -25,7 +34,7 @@ export type UserLogin = {
     Användarnamn: string;
     LösenordHash: string;
     Roll: string;
-}
+};
 
 export type Store = {
     ButikId?: number;
