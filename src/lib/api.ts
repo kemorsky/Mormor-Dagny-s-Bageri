@@ -198,11 +198,9 @@ export const forgotPassword = async (email: string) => {
       },
       body: JSON.stringify({ Email: email })
     });
-
     if (!response.ok) {
       throw new Error(`Request failed with status: ${response.status}`);
     }
-
     const result = await response.json();
     return result;
   } catch (error) {
