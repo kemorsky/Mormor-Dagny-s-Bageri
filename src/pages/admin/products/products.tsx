@@ -25,7 +25,7 @@ export default function Products() {
                 setNewProduct(newProduct);
                 setNewProduct({
                     Namn: '',
-                    Baspris: 0 // TODO fix value not resetting upoin successful submit
+                    Baspris: 0 // TODO fix value not resetting upon successful submit
                 });
             } else {
                 console.error("newProduct is null, cannot add product")

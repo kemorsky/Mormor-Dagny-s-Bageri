@@ -10,6 +10,7 @@ export type User = {
 export type ForgotPassword = {
     Id?: number,
     Username: string,
+    NewPassword: string,
     Token: string,
     Expiration?: string,
     CreatedAt?: string,

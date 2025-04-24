@@ -210,12 +210,20 @@ export const forgotPassword = async (email: string) => {
 };
 
 
-export const resetPassword = async (user: User) => { // TO BE IMPLEMENTED AT A LATER DATE
+export const resetPassword = async (username: string, password: string, token: string) => { // TO BE IMPLEMENTED AT A LATER DATE
   try {
-    await apiRequest(`${BASE_URL}/auth/reset-password`, {
+    const response = await fetch(`${BASE_URL}/auth/reset-password`, {
       method: 'POST',
-      body: JSON.stringify(user.LösenordHash)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        Username: username,
+        NewPassword: password,
+        Token: token
+      })
     })
+    return response;
   } catch (error) {
     console.error("Error resetting password:", error);
   }
