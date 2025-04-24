@@ -25,9 +25,9 @@ export default function Menu() {
     };
 
     return (
-        <header className="w-full inline-flex items-start justify-between">
-            <nav onClick={handleClick} className="inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
-                <div className="inline-flex items-center justify-start gap-2">
+        <header className="max-w-[60rem] w-full inline-flex items-start justify-between">
+            <nav onClick={handleClick} className=" inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
+                <div className="w-full inline-flex items-center justify-start gap-2">
                     <section className="h-10 w-10 bg-blue-200 rounded-full inline-flex items-center justify-center overflow-hidden">
                         <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
                     </section>
@@ -64,7 +64,7 @@ export default function Menu() {
                     </ul>
                     : null}
             </nav>
-            <section className="inline-flex items-center justify-between gap-4">
+            <section className="inline-flex items-center justify-center gap-4">
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={handleNavigateHome}>Hem</a>
                 <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={() => navigate("/orders")}>Leverans</a>
                 {userType !== "Planerare" && (
