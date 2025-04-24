@@ -1,4 +1,4 @@
-import { OrderDetails, Product, Store, RegisterUser } from "../types/types";
+import { OrderDetails, Product, Store, RegisterUser, User } from "../types/types";
 
 export const defaultStore: Store = {
     ButikNummer: '',
