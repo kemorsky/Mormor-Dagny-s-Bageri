@@ -1,12 +1,13 @@
 import Menu from "../../../elements/menu/menu";
 import { User } from '../../../types/types'
-import { editUser, editUserPassword } from "../../../lib/api";
+import { deleteUser, editUser, editUserPassword } from "../../../lib/api";
 import { useUser } from "../../../components/auth/UserContext";
 import { useState } from "react";
 
 export default function EditUser() {
     const {users, setUsers} = useUser();
 
+    const [selectedUser, setSelectedUser] = useState<User | null>();
     const [lockedUser, setLockedUser] = useState<string | null>();
     const [editingPassword, setEditingPassword] = useState<User | null>();
     
@@ -14,9 +15,7 @@ export default function EditUser() {
         try {
             const userLocked = !user.Låst
             setLockedUser(user.Användarnamn)
-            
             await editUser(userLocked, user.Användarnamn ?? '');
-
             setUsers((prevUsers) =>
                 prevUsers.map((u) =>
                   u.Användarnamn === user.Användarnamn
@@ -25,13 +24,13 @@ export default function EditUser() {
                 )
               );
             setLockedUser(null);
+            setSelectedUser({...user, Låst: userLocked})
         } catch (error) {
             console.log("Failed to update user:", error);
         } 
     };
 
     const handleEdit = (user: User) => {
-            console.log(user)
             setEditingPassword({...user})
         }
 
@@ -52,25 +51,46 @@ export default function EditUser() {
         } 
     }
 
+    const handleDeleteUser = async (Användarnamn: string) => {
+            try {
+                await deleteUser(Användarnamn);
+                console.log("Deleted user:", Användarnamn);
+                setUsers((prev) => prev?.filter(user => user.Användarnamn !== Användarnamn));
+                setSelectedUser(null)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
     return (
-        <main className="flex flex-col items-center justify-center gap-4">
-            <Menu />
-            {users ? (
-                users.map((user) => (
-                    <div key={user.AnvändareId}>
-                        <p>{user.Användarnamn}</p>
-                        <p>{user.Email}</p>
-                        <p>{user.Roll}</p>
-                        <label className="flex items-center gap-2 mt-2">
-                            <input
-                                type="checkbox"
-                                checked={user.Låst ?? false}
-                                disabled={lockedUser === user.Användarnamn}
-                                onChange={() => handleCheckboxChange(user)}
-                            />
-                            {user.Låst ? "Locked" : "Unlocked"}
-                        </label>
-                        {editingPassword?.Användarnamn === user.Användarnamn ? (
+        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <select name="" id="">
+                    <option value="">Välj användare</option>
+                    {users?.map((user) => (
+                        <option key={user.AnvändareId} value={user.Användarnamn} onClick={() => {setSelectedUser(user)}}>
+                            {user.Användarnamn}
+                        </option>
+                    ))}
+                </select>
+                {selectedUser ? (
+                    <div key={selectedUser.AnvändareId} className="flex flex-col gap-4">
+                        <div>
+                            <p>Användarnamn: {selectedUser.Användarnamn}</p>
+                            <p>Email: {selectedUser.Email}</p>
+                            <p>Roll: {selectedUser.Roll}</p>
+                            <label className="flex items-center gap-2 mt-2">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedUser.Låst ?? false}
+                                    disabled={lockedUser === selectedUser.Användarnamn}
+                                    onChange={() => handleCheckboxChange(selectedUser)}
+                                />
+                                {selectedUser.Låst ? "Låst" : "Olåst"}
+                            </label>
+                        </div>
+                        {editingPassword?.Användarnamn === selectedUser.Användarnamn ? (
                             <form className="flex flex-col gap-3" onSubmit={handlePasswordChange}>
                                 <input
                                     type="password"
@@ -84,13 +104,16 @@ export default function EditUser() {
                                 
                             </form> 
                             ) : (
-                                <button onClick={() => handleEdit(user)}>Redigera lösenord</button>
+                                <div>
+                                    <button onClick={() => handleEdit(selectedUser)}>Redigera lösenord</button>
+                                    <button onClick={() => {handleDeleteUser(selectedUser.Användarnamn ?? '')}}>Ta bort användare</button>
+                                </div>
                             )}
                     </div>
-                ))
-            ) : (
-                <div>Error fetching users</div>
-            )}
+                ) : (
+                    <p>Välj en användare</p>
+                )}
+            </div>
         </main>
     )
 };

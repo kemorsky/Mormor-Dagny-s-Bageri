@@ -6,7 +6,6 @@ import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import AdminDashboard from '../pages/admin-dashboard/admin-dashboard';
 import AddUser from '../pages/admin/add-user/add-user';
 import EditUser from '../pages/admin/edit-user/edit-user';
-import RemoveUser from '../pages/admin/remove-user/remove-user';
 import SellerDashboard from '../pages/seller-dashboard/seller-dashboard';
 import OrderPage from '../pages/order-page/order-page';
 import OrderDetailsPage from '../pages/order-details/order-details';
@@ -92,18 +91,6 @@ const router = createBrowserRouter([
                 <ProtectedRoute
                     path='/admin-edit-user'
                     element={<EditUser />}
-                    roles={[0, 'Admin']}
-                />
-            </UserProvider>
-        )
-    },
-    {
-        path: '/admin-remove-user',
-        element: (
-            <UserProvider>
-                <ProtectedRoute
-                    path='/admin-remove-user'
-                    element={<RemoveUser />}
                     roles={[0, 'Admin']}
                 />
             </UserProvider>

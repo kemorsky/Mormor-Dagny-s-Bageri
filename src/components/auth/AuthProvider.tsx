@@ -54,12 +54,11 @@ export default function AuthProvider({children}: AuthProviderProps) {
         }
       }
 
-    const handleLogOut = async () => { // TODO: Fixa så att det redigerar till inloggningssidan. Nu kastar användaren ut till access-denied
+    const handleLogOut = async () => {
         localStorage.removeItem("token");
         localStorage.removeItem("currentUser");
         setAuthToken(null)
         setCurrentUser(null)
-        console.log("Successfully logged out") 
     };
 
     const permissions = {
