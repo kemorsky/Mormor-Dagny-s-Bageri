@@ -82,3 +82,16 @@ export const ButtonAdmin: React.FC<ButtonProps> = ({className, ...props}) => {
        
     )
 }
+
+export const ButtonAdminManageUser: React.FC<ButtonProps> = ({className, ...props}) => {
+    return (
+        <button
+            className={cn(
+                "font-lato font-bold w-[11rem] px-3 py-2 bg-Branding-primaryButton hover:bg-Branding-primaryButton/80 transition-colors rounded-xl border border-Branding-textAccent inline-flex justify-center items-center text-Branding-textAccent text-base",
+                className
+            )}
+            { ...props } />
+
+       
+    )
+}
