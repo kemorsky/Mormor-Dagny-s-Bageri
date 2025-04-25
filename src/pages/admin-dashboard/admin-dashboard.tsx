@@ -16,7 +16,6 @@ export default function AdminDashboard() {
                         </h2>
                         <ButtonAdmin onClick={() => {navigate('/admin-add-user')}}>Registrera användare</ButtonAdmin>
                         <ButtonAdmin onClick={() => {navigate('/admin-edit-user')}}>Redigera användare</ButtonAdmin>
-                        <ButtonAdmin onClick={() => {navigate('/admin-remove-user')}}>Ta bort användare</ButtonAdmin>
                     </article>
                     <article className="inline-flex flex-col gap-4">
                         <h2 className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">Beställning hantering</h2>
