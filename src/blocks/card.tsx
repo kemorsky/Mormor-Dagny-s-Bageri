@@ -54,7 +54,7 @@ const CardStore = React.forwardRef<
   <h2
     ref={ref}
     className={cn(
-      "font-semibold text-[1rem] leading-19px]",
+      "font-semibold text-[1rem] leading-[19px]",
       className
     )}
     {...props}
@@ -212,7 +212,7 @@ const WideCard = React.forwardRef<
 ));
 WideCard.displayName = "WideCard";
 
-export { Card, WideCard, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount }
+export {Card, WideCard, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount }
 
 
 // export default function Card() {
