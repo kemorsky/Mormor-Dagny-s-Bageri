@@ -216,7 +216,7 @@ export default function OrderPage() {
                                         onChange={handleDiscountChange}
                                         />
                                     <p>Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
-                                    <ButtonOrder />
+                                    <ButtonOrder> Gå vidare</ButtonOrder>
                                 </section>
                             </CardStoreContent>
                         </CardStore>               

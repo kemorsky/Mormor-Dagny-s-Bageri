@@ -23,31 +23,32 @@ export default function PlanerareDashboard() {
     if (!stats) { return <div>Loading...</div>}
 
     return (
-        <main>
-            <Menu />
-            <p>Total Orders: {stats.TotalOrders}</p>
-            <p>Total Revenue: {stats.TotalRevenue.toFixed(2)} kr</p>
-            <div className="inline-flex flex-col gap-10">
-                <section>
-                    {stats?.MostOrderedProducts.map((product, index) => (
-                        <ProductCard key={index}>
-                            <ProductCardName>{product.ProduktNamn}</ProductCardName>
-                            <ProductCardAmount>Beställda: {product.TotalAntal}</ProductCardAmount>
-                        </ProductCard>
-                        ))
-                    }
-                </section>
-                <section>
-                    {stats.OrdersByStore.map((store, index) => (
-                        <ProductCard key={index}>
-                            <ProductCardName>{store.ButikNamn}</ProductCardName>
-                            <ProductCardAmount>Beställningar: {store.TotalOrders}</ProductCardAmount>
-                        </ProductCard>
-                        ))
-                    }
-                </section>
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <p>Total Orders: {stats.TotalOrders}</p>
+                <p>Total Revenue: {stats.TotalRevenue.toFixed(2)} kr</p>
+                <div className="inline-flex flex-col gap-10">
+                    <section>
+                        {stats?.MostOrderedProducts.map((product, index) => (
+                            <ProductCard key={index}>
+                                <ProductCardName>{product.ProduktNamn}</ProductCardName>
+                                <ProductCardAmount>Beställda: {product.TotalAntal}</ProductCardAmount>
+                            </ProductCard>
+                            ))
+                        }
+                    </section>
+                    <section>
+                        {stats.OrdersByStore.map((store, index) => (
+                            <ProductCard key={index}>
+                                <ProductCardName>{store.ButikNamn}</ProductCardName>
+                                <ProductCardAmount>Beställningar: {store.TotalOrders}</ProductCardAmount>
+                            </ProductCard>
+                            ))
+                        }
+                    </section>
+                </div>
             </div>
-           
         </main>
     )
 }

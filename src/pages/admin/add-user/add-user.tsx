@@ -4,7 +4,7 @@ import { RegisterUser } from "../../../types/types"
 import Menu from "../../../elements/menu/menu";
 import { defaultUser } from "../../../constants/prefab-consts";
 import { InputPrimary } from "../../../components/ui/input";
-import { ButtonOrder } from "../../../components/ui/button";
+import { ButtonAdminManage } from "../../../components/ui/button";
 
 export default function AddUser() {
     const [newUser, setNewUser] = useState<RegisterUser>(() => ({ ...defaultUser }))
@@ -23,12 +23,12 @@ export default function AddUser() {
     };
 
     return (
-        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
             <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
-                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5">
+                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-[#2C2F33] shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg p-4">
                     <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
+                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarnamn</span>
                         <InputPrimary type="text"
                             placeholder="Användarnamn"
                             value={newUser.Användarnamn}
@@ -66,7 +66,7 @@ export default function AddUser() {
                             onChange={(e) => setNewUser({...newUser, Låst: e.target.checked})}
                         />
                     </label>        
-                    <ButtonOrder type="submit">Lägg till</ButtonOrder>
+                    <ButtonAdminManage type="submit">Lägg till</ButtonAdminManage>
                 </form>
             </div>
         </main>

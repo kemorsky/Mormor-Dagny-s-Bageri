@@ -5,7 +5,7 @@ import { useUser } from "../../../components/auth/UserContext";
 import { useState } from "react";
 import { AdminUserCard, AdminUserCardContent} from "../../../blocks/admin-cards";
 import { InputPrimary } from "../../../components/ui/input";
-import { ButtonAdminManageUser } from "../../../components/ui/button";
+import { ButtonAdminDelete, ButtonAdminManage } from "../../../components/ui/button";
 
 export default function EditUser() {
     const {users, setUsers} = useUser();
@@ -66,7 +66,7 @@ export default function EditUser() {
         }
 
     return (
-        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
             <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
                 <select id="users" className="max-w-[25.5rem] w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter text-[0.875rem] rounded-lg focus:border-white focus:outline-none block p-3 ">
@@ -79,18 +79,19 @@ export default function EditUser() {
                 </select>
                 {selectedUser ? (
                     <AdminUserCard key={selectedUser.AnvändareId}>
-                        <AdminUserCardContent>
-                            <article className="w-full flex items-center justify-start gap-1.5">
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Användarnamn:</p>
-                                <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selectedUser.Användarnamn}</p>
-                            </article>
-                            <article className="w-full flex items-center justify-start gap-1.5">
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Email:</p>
-                                <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selectedUser.Email}</p>
-                            </article>
-                            <article className="w-full flex items-center justify-start gap-1.5">
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Roll:</p>
-                                <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selectedUser.Roll}</p>
+                    <AdminUserCardContent className="">
+                        <article className="self-stretch inline-flex flex-col justify-start items-start gap-1">
+                            <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Användarnamn</p>
+                            <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{selectedUser.Användarnamn}</p>
+                        </article>
+                        <article className="self-stretch inline-flex flex-col justify-start items-start gap-1">
+                            <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Email</p>
+                            <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{selectedUser.Email}</p>
+                        </article>
+                        <div className="self-stretch flex justify-between">
+                            <article className="self-stretch inline-flex flex-col justify-start items-start gap-1">
+                                <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Roll</p>
+                                <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{selectedUser.Roll}</p>
                             </article>
                             <label className="min-h-[40px] w-[4rem] flex items-center justify-between cursor-pointer">
                                 <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">
@@ -104,7 +105,8 @@ export default function EditUser() {
                                     onChange={() => handleCheckboxChange(selectedUser)}
                                 />
                             </label>
-                        </AdminUserCardContent>
+                        </div>
+                    </AdminUserCardContent>
                         {editingPassword?.Användarnamn === selectedUser.Användarnamn ? (
                             <form className="flex flex-col gap-3 self-center" onSubmit={handlePasswordChange}>
                                 <InputPrimary
@@ -113,18 +115,18 @@ export default function EditUser() {
                                     onChange={(e) => setEditingPassword({ ...editingPassword, LösenordHash: e.target.value })}
                                 />
                                 <div className="inline-flex items-center justify-center gap-3">
-                                    <button className="bg-green-600 hover:bg-green-700 transition-colors px-3 py-2 rounded-lg font-lato" type="submit">Spara</button>
-                                    <button className="bg-red-600 hover:bg-red-700 transition-colors px-3 py-2 rounded-lg font-lato" onClick={() => {setEditingPassword(null)}}>Avbryt</button>
+                                    <ButtonAdminManage type="submit">Spara</ButtonAdminManage>
+                                    <ButtonAdminDelete onClick={() => {setEditingPassword(null)}}>Avbryt</ButtonAdminDelete>
                                 </div>
                                 
                             </form> 
                             ) : (
                                 <div className="self-center flex items-center justify-center gap-3">
-                                    <ButtonAdminManageUser onClick={() => handleEdit(selectedUser)}>Redigera lösenord</ButtonAdminManageUser>
-                                    <ButtonAdminManageUser onClick={() => {handleDeleteUser(selectedUser.Användarnamn ?? '')}}>Ta bort användare</ButtonAdminManageUser>
+                                    <ButtonAdminManage onClick={() => handleEdit(selectedUser)}>Redigera lösenord</ButtonAdminManage>
+                                    <ButtonAdminDelete onClick={() => {handleDeleteUser(selectedUser.Användarnamn ?? '')}}>Ta bort användare</ButtonAdminDelete>
                                 </div>
                             )}
-                    </AdminUserCard>
+                </AdminUserCard>
                 ) : (
                     <p>Välj en användare</p>
                 )}

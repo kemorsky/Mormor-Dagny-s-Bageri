@@ -129,7 +129,7 @@ const ProductListCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl inline-flex flex-col items-start justify-center gap-3",
+      "w-full px-3 py-3 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl inline-flex flex-col items-start justify-center gap-3",
       className
     )}
     {...props}
@@ -144,7 +144,7 @@ const ProductCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full py-1 inline-flex items-center justify-between text-[1rem] leading-[1.1875rem]",
+      "bg-Branding-cardPrimary w-full py-1 inline-flex items-center justify-between text-[1rem] leading-[1.1875rem]",
       className
     )}
     {...props}
