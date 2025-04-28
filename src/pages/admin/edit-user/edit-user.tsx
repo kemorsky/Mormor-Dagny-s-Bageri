@@ -1,12 +1,16 @@
 import Menu from "../../../elements/menu/menu";
 import { User } from '../../../types/types'
-import { editUser, editUserPassword } from "../../../lib/api";
+import { deleteUser, editUser, editUserPassword } from "../../../lib/api";
 import { useUser } from "../../../components/auth/UserContext";
 import { useState } from "react";
+import { AdminUserCard, AdminUserCardContent} from "../../../blocks/admin-cards";
+import { InputPrimary } from "../../../components/ui/input";
+import { ButtonAdminDelete, ButtonAdminManage } from "../../../components/ui/button";
 
 export default function EditUser() {
     const {users, setUsers} = useUser();
 
+    const [selectedUser, setSelectedUser] = useState<User | null>();
     const [lockedUser, setLockedUser] = useState<string | null>();
     const [editingPassword, setEditingPassword] = useState<User | null>();
     
@@ -14,9 +18,7 @@ export default function EditUser() {
         try {
             const userLocked = !user.Låst
             setLockedUser(user.Användarnamn)
-            
             await editUser(userLocked, user.Användarnamn ?? '');
-
             setUsers((prevUsers) =>
                 prevUsers.map((u) =>
                   u.Användarnamn === user.Användarnamn
@@ -25,13 +27,13 @@ export default function EditUser() {
                 )
               );
             setLockedUser(null);
+            setSelectedUser({...user, Låst: userLocked})
         } catch (error) {
             console.log("Failed to update user:", error);
         } 
     };
 
     const handleEdit = (user: User) => {
-            console.log(user)
             setEditingPassword({...user})
         }
 
@@ -52,45 +54,83 @@ export default function EditUser() {
         } 
     }
 
+    const handleDeleteUser = async (Användarnamn: string) => {
+            try {
+                await deleteUser(Användarnamn);
+                console.log("Deleted user:", Användarnamn);
+                setUsers((prev) => prev?.filter(user => user.Användarnamn !== Användarnamn));
+                setSelectedUser(null)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
     return (
-        <main className="flex flex-col items-center justify-center gap-4">
-            <Menu />
-            {users ? (
-                users.map((user) => (
-                    <div key={user.AnvändareId}>
-                        <p>{user.Användarnamn}</p>
-                        <p>{user.Email}</p>
-                        <p>{user.Roll}</p>
-                        <label className="flex items-center gap-2 mt-2">
-                            <input
-                                type="checkbox"
-                                checked={user.Låst ?? false}
-                                disabled={lockedUser === user.Användarnamn}
-                                onChange={() => handleCheckboxChange(user)}
-                            />
-                            {user.Låst ? "Locked" : "Unlocked"}
-                        </label>
-                        {editingPassword?.Användarnamn === user.Användarnamn ? (
-                            <form className="flex flex-col gap-3" onSubmit={handlePasswordChange}>
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <select id="users" className="max-w-[25.5rem] w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter text-[0.875rem] rounded-lg focus:border-white focus:outline-none block p-3 ">
+                    <option value="">Välj användare</option>
+                    {users?.map((user) => (
+                        <option key={user.AnvändareId} value={user.Användarnamn} onClick={() => {setSelectedUser(user)}}>
+                            {user.Användarnamn}, {user.Roll}
+                        </option>
+                    ))}
+                </select>
+                {selectedUser ? (
+                    <AdminUserCard key={selectedUser.AnvändareId}>
+                    <AdminUserCardContent className="">
+                        <article className="self-stretch inline-flex flex-col justify-start items-start gap-1">
+                            <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Användarnamn</p>
+                            <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{selectedUser.Användarnamn}</p>
+                        </article>
+                        <article className="self-stretch inline-flex flex-col justify-start items-start gap-1">
+                            <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Email</p>
+                            <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{selectedUser.Email}</p>
+                        </article>
+                        <div className="self-stretch flex justify-between">
+                            <article className="self-stretch inline-flex flex-col justify-start items-start gap-1">
+                                <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Roll</p>
+                                <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{selectedUser.Roll}</p>
+                            </article>
+                            <label className="min-h-[40px] w-[4rem] flex items-center justify-between cursor-pointer">
+                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">
+                                    {selectedUser.Låst ? "Låst" : "Olåst"}
+                                </span> 
                                 <input
-                                    type="password"
+                                    className="w-5 h-5 text-blue bg-gray-300 accent-blue-600 cursor-pointer"
+                                    type="checkbox"
+                                    checked={selectedUser.Låst ?? false}
+                                    disabled={lockedUser === selectedUser.Användarnamn}
+                                    onChange={() => handleCheckboxChange(selectedUser)}
+                                />
+                            </label>
+                        </div>
+                    </AdminUserCardContent>
+                        {editingPassword?.Användarnamn === selectedUser.Användarnamn ? (
+                            <form className="flex flex-col gap-3 self-center" onSubmit={handlePasswordChange}>
+                                <InputPrimary
+                                    type="text"
                                     value={editingPassword?.LösenordHash ?? ''}
                                     onChange={(e) => setEditingPassword({ ...editingPassword, LösenordHash: e.target.value })}
                                 />
                                 <div className="inline-flex items-center justify-center gap-3">
-                                    <button type="submit">Spara</button>
-                                    <button onClick={() => {setEditingPassword(null)}}>Avbryt</button>
+                                    <ButtonAdminManage type="submit">Spara</ButtonAdminManage>
+                                    <ButtonAdminDelete onClick={() => {setEditingPassword(null)}}>Avbryt</ButtonAdminDelete>
                                 </div>
                                 
                             </form> 
                             ) : (
-                                <button onClick={() => handleEdit(user)}>Redigera lösenord</button>
+                                <div className="self-center flex items-center justify-center gap-3">
+                                    <ButtonAdminManage onClick={() => handleEdit(selectedUser)}>Redigera lösenord</ButtonAdminManage>
+                                    <ButtonAdminDelete onClick={() => {handleDeleteUser(selectedUser.Användarnamn ?? '')}}>Ta bort användare</ButtonAdminDelete>
+                                </div>
                             )}
-                    </div>
-                ))
-            ) : (
-                <div>Error fetching users</div>
-            )}
+                </AdminUserCard>
+                ) : (
+                    <p>Välj en användare</p>
+                )}
+            </div>
         </main>
     )
 };

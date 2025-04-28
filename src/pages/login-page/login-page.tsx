@@ -37,7 +37,7 @@ export default function LoginPage() {
       }, [currentUser, navigate]);
 
     return (
-        <main className="bg-gradient-primary min-h-[59.75rem] relative">
+        <main className="bg-Branding-backgroundPrimary min-h-[59.75rem] relative">
             <div className="absolute inset-0 top-[8.125rem] flex flex-col items-start justify-start gap-6">
                 <div className="px-[1.375rem]">
                     <article className="flex flex-col gap-3">
@@ -49,7 +49,7 @@ export default function LoginPage() {
                     <div className="w-[24.5rem] flex flex-col items-center justify-center gap-6">
                         <form onSubmit={handleSubmit} className="w-full py-2.5 flex flex-col items-center justify-center gap-2.5" action="submit">
                             <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarenamn</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarnamn</span>
                                 <InputPrimary type="text"
                                             name="username"
                                             value={username}

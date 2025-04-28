@@ -3,49 +3,72 @@ import { addUser } from "../../../lib/api"
 import { RegisterUser } from "../../../types/types"
 import Menu from "../../../elements/menu/menu";
 import { defaultUser } from "../../../constants/prefab-consts";
+import { InputPrimary } from "../../../components/ui/input";
+import { ButtonAdminManage } from "../../../components/ui/button";
 
 export default function AddUser() {
     const [newUser, setNewUser] = useState<RegisterUser>(() => ({ ...defaultUser }))
     
-    const handleAddUser = async (user: RegisterUser) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
-            await addUser(user)
-            setNewUser({ ...defaultUser })
-            console.log("added user", user)
+            const response = await addUser(newUser)
+            if (response) {
+                setNewUser({ ...defaultUser })
+                console.log("added user", newUser)
+            }
         } catch (error) {
             console.log("failed to add user",error)
         }
     };
 
     return (
-        <main className="flex flex-col items-center justify-center gap-4">
-            <Menu />
-            <input type="text"
-                placeholder="Användarnamn"
-                value={newUser.Användarnamn}
-                onChange={(e) => {setNewUser({...newUser, Användarnamn: e.target.value})}} />
-            <input type="text"
-                placeholder="Lösenord"
-                value={newUser.Lösenord}
-                onChange={(e) => {setNewUser({...newUser, Lösenord: e.target.value})}} />
-            <input type="number"
-                placeholder="Roll"
-                value={newUser.Roll}
-                onChange={(e) => {setNewUser({...newUser, Roll: parseFloat(e.target.value)})}} />
-            <input type="text"
-                placeholder="Email"
-                value={newUser.Email}
-                onChange={(e) => {setNewUser({...newUser, Email: e.target.value})}} />
-            <label className="flex items-center gap-2 mt-2">
-                Låst: 
-                <input
-                    type="checkbox"
-                    checked={newUser.Låst}
-                    onChange={(e) => setNewUser({...newUser, Låst: e.target.checked})}
-                />
-                {newUser.Låst ? "Locked" : "Unlocked"}
-            </label>        
-            <button onClick={() => {handleAddUser(newUser)}}>Lägg till</button>
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-[#2C2F33] shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg p-4">
+                    <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
+                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarnamn</span>
+                        <InputPrimary type="text"
+                            placeholder="Användarnamn"
+                            value={newUser.Användarnamn}
+                            onChange={(e) => {setNewUser({...newUser, Användarnamn: e.target.value})}} />
+                    </label>
+                    <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
+                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Lösenord</span>
+                        <InputPrimary type="text" // Dev note: only admin can create accounts, making this section okay to leave as text
+                            placeholder="Lösenord"
+                            value={newUser.Lösenord}
+                            onChange={(e) => {setNewUser({...newUser, Lösenord: e.target.value})}} />
+                    </label>
+                    <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
+                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Roll</span>
+                        <InputPrimary type="number"
+                            placeholder="Roll"
+                            value={newUser.Roll}
+                            onChange={(e) => {setNewUser({...newUser, Roll: parseFloat(e.target.value)})}} />
+                    </label>
+                    <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
+                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Email</span>
+                        <InputPrimary type="text"
+                            placeholder="Email"
+                            value={newUser.Email}
+                            onChange={(e) => {setNewUser({...newUser, Email: e.target.value})}} />
+                    </label>
+                    <label className="min-h-[40px] w-[4rem] flex items-center justify-between cursor-pointer">
+                        <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">
+                            {newUser.Låst ? "Låst" : "Olåst"}
+                        </span> 
+                        <input
+                            className="w-5 h-5 text-blue bg-gray-300 accent-blue-600 cursor-pointer"
+                            type="checkbox"
+                            checked={newUser.Låst}
+                            onChange={(e) => setNewUser({...newUser, Låst: e.target.checked})}
+                        />
+                    </label>        
+                    <ButtonAdminManage type="submit">Lägg till</ButtonAdminManage>
+                </form>
+            </div>
         </main>
     )
 };

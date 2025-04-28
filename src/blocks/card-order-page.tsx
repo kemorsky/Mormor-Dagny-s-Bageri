@@ -9,7 +9,7 @@ const CardStore = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full min-h-[8.5rem] flex flex-col items-start justify-start p-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl",
+      "w-full min-h-[8.5rem] flex flex-col items-start justify-start p-3 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl",
       className
     )}
     {...props}
@@ -39,7 +39,7 @@ const CardStoreInformation = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "self-stretch inline-flex flex-col justify-start items-start gap-1.5",
+      "w-full inline-flex flex-col justify-start items-start gap-1.5",
       className
     )}
     {...props}
@@ -54,7 +54,7 @@ const CardStoreContacts = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "inline-flex flex-col justify-start items-start gap-1.5",
+      "w-full inline-flex flex-col justify-start items-start gap-1.5",
       className
     )}
     {...props}

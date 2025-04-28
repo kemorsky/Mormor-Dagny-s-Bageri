@@ -4,7 +4,7 @@ import { InputOrderDropdown } from "../../../components/ui/input";
 import { deleteStore, lockStore } from "../../../lib/api";
 import { Store } from "../../../types/types";
 import { defaultStore } from "../../../constants/prefab-consts";
-import { CardStore } from "../../../blocks/card";
+import { CardStore } from "../../../blocks/card-order-page";
 import { CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../../blocks/card-order-page";
 import { useStores } from "../../../components/auth/StoreContext";
 import AddStoreForm from "../../../elements/admin-store-form/admin-store-form";
@@ -82,104 +82,114 @@ export default function Stores() {
     }
 
     return (
-        <main>
-            <Menu />
-            <div className="space-y-8">
-            <section className="w-full inline-flex flex-col items-start justify-center gap-3 relative">
-                    <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
-                        <InputOrderDropdown
-                            value={query} 
-                            onChange={handleQueryChange} 
-                            />
-                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer">Avbryt</p>
-                    </form>
-                    {isActive && stores && stores.length > 0 && (
-                        <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
-                            {stores.map((store) => (
-                                <li
-                                key={store.ButikId}
-                                onClick={() => handleSelectedStore(store)}
-                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
-                                >
-                                    {store.ButikNamn}, {store.Besöksadress}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </section>
-                {selected ? (
-                    <section className="w-full inline-flex flex-col items-center justify-center gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
-                        <CardStore className="">
-                            <CardStoreContent>
-                                <CardStoreInformation>
-                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{selected.ButikNamn} 
-                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {selected.ButikNummer}</span>
-                                    </p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.Besöksadress}</p>
-                                </CardStoreInformation>
-                                <CardStoreContacts>
-                                    <CardStoreOwner>
-                                        <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
-                                        <article className="w-full flex items-center justify-start gap-1.5">
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.ButikschefNamn}</p>
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.ButikschefTelefon}</p>
-                                        </article>
-                                    </CardStoreOwner>
-                                    <CardStoreBreadperson>
-                                        <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
-                                        <article className="w-full flex items-center justify-start gap-1.5">
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.BrödansvarigNamn}</p>
-                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.BrödansvarigTelefon}</p>
-                                        </article>
-                                    </CardStoreBreadperson>
-                                </CardStoreContacts>
-                                <button onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</button>
-                                <button onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Radera butiken</button>
-                                <label className="flex items-center gap-2 mt-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={selected.Låst ?? false}
-                                        disabled={storeLocked === selected.ButikId}
-                                        onChange={() => handleLockStore(selected)}
-                                    />
-                                    {selected.Låst ? "Locked" : "Unlocked"}
-                                </label>
-                            
-                                {editingStore?.ButikId === selected.ButikId && (
-                                    <EditStoreForm
-                                        isLoading={isLoading}
-                                        selected={selected}
-                                        setSelected={setSelected}
-                                        editingStore={editingStore}
-                                        setEditingStore={setEditingStore}
-                                         />
-                                )}
-                            
-                            </CardStoreContent>                                                             
-                        </CardStore>
+        <main className="w-full h-full inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
+                        <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
+                            <InputOrderDropdown
+                                value={query} 
+                                onChange={handleQueryChange} 
+                                />
+                            <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer">Avbryt</p>
+                        </form>
+                        {isActive && stores && stores.length > 0 && (
+                            <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
+                                {stores.map((store) => (
+                                    <li
+                                    key={store.ButikId}
+                                    onClick={() => handleSelectedStore(store)}
+                                    className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
+                                    >
+                                        {store.ButikNamn}, {store.Besöksadress}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </section>
-                ) : (
-                    <div className="w-full inline-flex flex-col items-start justify-center gap-3">
-                        <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
-                        <CardStore className="w-full h-full">
-                            <CardStoreContent>
-                                <CardStoreInformation>
-                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Ingen kund valt än</p>
-                                </CardStoreInformation>
-                            </CardStoreContent>
-                        </CardStore>
-                    </div>
-                )}
-            </div>
-            <div className="flex flex-col items-center justify-center">
-                <h2>Lägg till en butik</h2>
-                <AddStoreForm
-                    newStore={newStore}
-                    setNewStore={setNewStore}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                 />
+                    {selected ? (
+                        <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
+                            <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
+                            {editingStore?.ButikId === selected.ButikId ? (
+                                <EditStoreForm
+                                    isLoading={isLoading}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                    editingStore={editingStore}
+                                    setEditingStore={setEditingStore}
+                                />
+                            ) : (
+                                <CardStore className="min-h-[15.5rem]">
+                                    <CardStoreContent className="gap-4">
+                                        <CardStoreInformation>
+                                            <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{selected.ButikNamn} 
+                                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {selected.ButikNummer}</span>
+                                            </p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.Besöksadress}</p>
+                                        </CardStoreInformation>
+                                        <CardStoreContacts>
+                                            <CardStoreOwner>
+                                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
+                                                <article className="w-full flex items-center justify-start gap-1.5">
+                                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.ButikschefNamn}</p>
+                                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.ButikschefTelefon}</p>
+                                                </article>
+                                            </CardStoreOwner>
+                                            <CardStoreBreadperson>
+                                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
+                                                <article className="w-full flex items-center justify-start gap-1.5">
+                                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.BrödansvarigNamn}</p>
+                                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.BrödansvarigTelefon}</p>
+                                                </article>
+                                            </CardStoreBreadperson>
+                                        </CardStoreContacts>
+                                        <CardStoreBreadperson>
+                                            <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Fakturaadress: </p>
+                                            <article className="w-full flex items-center justify-start gap-1.5">
+                                                <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.Fakturaadress}</p>
+                                            </article>
+                                        </CardStoreBreadperson>
+                                        <label className="min-h-[40px] w-[4rem] flex items-center justify-between cursor-pointer">
+                                            <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">
+                                                {selected.Låst ? "Låst" : "Olåst"}
+                                            </span> 
+                                                <input
+                                                    className="w-5 h-5 text-blue bg-gray-300 accent-blue-600 cursor-pointer"
+                                                    type="checkbox"
+                                                    checked={selected.Låst ?? false}
+                                                    disabled={storeLocked === selected.ButikId}
+                                                    onChange={() => handleLockStore(selected)}
+                                                />
+                                        </label>
+                                        <section className="flex gap-3 self-end">
+                                            <button className="bg-orange-500 rounded-lg px-4 py-2" onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Ändra butiken</button>
+                                            <button className="bg-blue-500 rounded-lg px-4 py-2" onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</button>
+                                        </section>
+                                    </CardStoreContent>                                                             
+                                </CardStore>
+                            )}   
+                        </section>
+                    ) : (
+                        <div className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
+                            <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold self-start">Kund information</h2>
+                            <CardStore className="min-h-[17.6875rem]">
+                                <CardStoreContent>
+                                    <CardStoreInformation>
+                                        <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Ingen kund valt än</p>
+                                    </CardStoreInformation>
+                                </CardStoreContent>
+                            </CardStore>
+                        </div>
+                    )}
+                </div>
+                    <div className="w-full max-w-[33.792rem] flex flex-col items-center justify-center gap-3">
+                        <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold self-start">Lägg till en butik</h2>
+                        <AddStoreForm
+                            newStore={newStore}
+                            setNewStore={setNewStore}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading}
+                    />
             </div>
         </main>
     )
