@@ -14,6 +14,7 @@ import Menu from "./../../elements/menu/menu";
 import { fetchSpecificOrder } from "../../lib/api";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { useNavigate } from "react-router";
+import { formatDate } from "../../lib/formatDate";
 
 export default function DashBoard() {
     const { upcoming, previous } = useFilteredOrders();
@@ -40,6 +41,12 @@ export default function DashBoard() {
     const scrollRight = (ref: React.RefObject<HTMLDivElement>) => {
         ref.current?.scrollBy({ left: 320, behavior: "smooth" });
     };
+
+    function formatPhoneNumber(phone: string) {
+        if (!phone) return '';
+        const onlyDigits = phone.replace(/\D/g, ''); // Remove all non-digit characters
+        return onlyDigits.replace(/^(\d{4})(\d{3})(\d{0,3})$/, "$1 $2 $3").trim();
+    }
 
     return (
         <main className="min-h-[59.75rem] w-full bg-gradient-primary inline-flex flex-col items-center justify-start pt-[3.125rem] relative">
@@ -71,8 +78,10 @@ export default function DashBoard() {
                                 <div key={order.BeställningId} onClick={() => { handleClick(order.BeställningId ?? 0) }} className="snap-center min-w-[320px]">
                                     <Card>
                                         <div className="flex justify-between items-center w-full">
-                                            <CardClientNumber className="ml-0 text-lg font-bold">#{order.BeställningId}</CardClientNumber>
-                                            <CardDate className="ml-auto text-lg font-bold">{order.PreliminärtLeveransdatum}</CardDate>
+                                            <CardClientNumber>#{order.BeställningId}</CardClientNumber>
+                                            <CardDate>
+                                                {formatDate(order.PreliminärtLeveransdatum)}
+                                            </CardDate>
                                         </div>
                                         <CardHeader>
                                             <CardStore>{order.Butik?.ButikNamn}</CardStore>
@@ -82,21 +91,21 @@ export default function DashBoard() {
                                         </CardHeader>
                                         <CardFooter className="flex justify-between w-full items-center">
                                             <div className="flex-1 min-w-0 flex flex-col">
-                                                <span>Butiksägare</span>
+                                                <span className="text-sm">Butiksägare</span>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
                                                     <span>{order.Butik?.ButikschefNamn}</span>
                                                 </CardClientName>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
-                                                    <span>{order.Butik?.ButikschefTelefon}</span>
+                                                    <span>{formatPhoneNumber(order.Butik?.ButikschefTelefon ?? '')}</span>
                                                 </CardClientName>
                                             </div>
                                             <div className="flex-1 min-w-0 flex flex-col text-right">
-                                                <span>Brödansvarig</span>
+                                                <span className="text-sm">Brödansvarig</span>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
                                                     <span>{order.Butik?.BrödansvarigNamn}</span>
                                                 </CardClientName>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
-                                                    <span>{order.Butik?.BrödansvarigTelefon}</span>
+                                                    <span>{formatPhoneNumber(order.Butik?.BrödansvarigTelefon ?? '')}</span>
                                                 </CardClientName>
                                             </div>
                                         </CardFooter>

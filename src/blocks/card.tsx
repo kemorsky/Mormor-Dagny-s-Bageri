@@ -24,7 +24,7 @@ const CardDate = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "self-stretch text-right text-[0.8125rem] leading-[0.8125rem] text-white/80",
+      "text-right text-[1rem] leading-[1rem] text-white",
       className
     )}
     {...props}
@@ -114,7 +114,7 @@ const CardClientNumber = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "text-Branding-textSecondary text-[0.8125rem] leading-[1rem]",
+      "text-left text-[1rem] leading-[1rem] font-semibold text-Branding-textSecondary text-white",
       className
     )}
     {...props}
