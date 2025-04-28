@@ -27,7 +27,7 @@ export default function Menu() {
     return (
         <header className="max-w-[60rem] w-full inline-flex items-start justify-between">
             <nav onClick={handleClick} className=" inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
-                <div className="w-full inline-flex items-center justify-start gap-2">
+                <div className="w-full inline-flex items-center justify-start gap-2 hover:bg-Branding-cardPrimary rounded-xl sm:px-2 sm:py-1">
                     <section className="h-10 w-10 bg-blue-200 rounded-full inline-flex items-center justify-center overflow-hidden">
                         <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
                     </section>
@@ -41,33 +41,29 @@ export default function Menu() {
                     </article>
                 </div>
                 {isOpen ? 
-                    <ul className="z-50 absolute top-[2.875rem] bg-black rounded-[0.375rem] divide-y-2 divide-gray-500 divide-solid">
-                        <li className="flex items-center w-[11.875rem] px-1 h-[1.875rem]">
-                            <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Profil</a>
+                    <ul className="h-[4rem] w-full z-50 absolute top-[3.175rem] bg-Branding-cardPrimary rounded-[0.375rem] divide-y-2 divide-gray-500 divide-solid">
+                        <li className="flex items-center px-2 py-1 h-[1.875rem]">
+                            <a href="/me" className="text-[1rem] w-full leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary hover:text-Branding-textAccent">Profil</a>
                         </li>
-                        <li className="flex items-center bg-black w-[11.875rem] px-1 h-[1.875rem]">
-                            <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Byta lösenord</a>
-                        </li>
-                        <li className="flex items-center bg-black w-[11.875rem] px-1 h-[1.875rem]">
-                            <a href="" className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">Inställningar</a>
-                        </li>
-                        <li className="flex items-center bg-black w-[11.875rem] px-1 h-[1.875rem]">
-                            <button onClick={async () => {
-                                             await handleLogOut();
-                                             navigate('/')}}
-                                    className="text-[1rem] leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary">
-                                Logga ut
-                            </button>
+                        <li className="flex items-center bg-[#2C2F33] px-2 py-1 h-[1.875rem]">
+                            <a className="w-full text-Branding-textPrimary hover:text-Branding-textAccent">
+                                <button onClick={async () => {
+                                                await handleLogOut();
+                                                navigate('/')}}
+                                        className="text-[1rem] leading-[1.1875rem] font-inter font-semibold ">
+                                    Logga ut
+                                </button>
+                            </a>
                         </li>
                         
                     </ul>
                     : null}
             </nav>
-            <section className="inline-flex items-center justify-center gap-4">
-                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="" onClick={handleNavigateHome}>Hem</a>
-                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/orders" >Leverans</a>
+            <section className="inline-flex items-center justify-center gap-3">
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg font-inter font-semibold hover:bg-Branding-cardPrimary hover:text-Branding-textAccent cursor-pointer" onClick={handleNavigateHome}>Hem</a>
+                <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg font-inter font-semibold hover:bg-Branding-cardPrimary hover:text-Branding-textAccent" href="/orders" >Leverans</a>
                 {userType !== "Planerare" && (
-                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] font-inter font-semibold" href="/order">Ny Beställning</a>
+                    <a className="text-Branding-textPrimary text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg  font-inter font-semibold hover:bg-Branding-cardPrimary hover:text-Branding-textAccent" href="/order">Ny Beställning</a>
                 )}
             </section>
         </header> 

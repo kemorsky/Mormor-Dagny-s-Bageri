@@ -8,7 +8,7 @@ const AdminUserCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "max-w-[25.5rem] w-full min-h-[8.5rem] flex flex-col items-start justify-start gap-3 p-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl",
+      "max-w-[25.5rem] w-full min-h-[8.5rem] flex flex-col items-start justify-start gap-3 p-3 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl",
       className
     )}
     {...props}

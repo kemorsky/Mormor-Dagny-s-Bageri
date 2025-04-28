@@ -6,7 +6,7 @@ export default function AdminDashboard() {
     const navigate = useNavigate();
 
     return (
-        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4"> 
             <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
                 <div className="inline-flex flex-col items-center justify-start md:grid md:grid-cols-2 md:place-items-start lg:gap-12 gap-6 py-4">

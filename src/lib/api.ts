@@ -180,6 +180,15 @@ export const fetchUpcomingDeliveries = async () => {
   }
 };
 
+export const getUser = async () => {
+  try {
+    return await apiRequest(`${BASE_URL}/auth/me`);
+  } catch (error) {
+    console.log("Error fetching user data:", error);
+    throw error;
+  }
+}
+
 export const fetchUsers = async () => {
   try {
     return await apiRequest(`${BASE_URL}/auth/users`);

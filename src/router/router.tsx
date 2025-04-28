@@ -19,7 +19,8 @@ import ConfirmationPage from '../pages/confirmation-page/confirmation-page';
 import SpecificOrder from '../pages/specific-order/specific-order';
 import PlanerareDashboard from '../pages/planerare/planerare-dashboard';
 import OrderProvider from '../components/order-provider/OrderProvider';
-import ResetPassword from '../pages/reset-password';
+import ResetPassword from '../pages/reset-password/reset-password';
+import Profile from '../pages/profile/profile';
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
         path: '/reset-password',
         element: <ResetPassword />
+    },
+    {
+        path: '/me',
+        element: <Profile />
     },
     {
         path: '/planerare-dashboard',

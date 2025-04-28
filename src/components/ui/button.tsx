@@ -47,12 +47,12 @@ export const ButtonOrder: React.FC<ButtonProps> = ({ className, ...props }) => {
         <button
             type="submit"
             className={cn(
-                "font-lato font-semibold w-auto px-4 py-3 bg-gray-700 hover:bg-gray-500 text-[rgb(232,185,35)] border border-[rgb(232,185,35)] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1.125rem] leading-[1.5rem]",
+                "font-lato font-semibold w-auto px-4 py-3 bg-[#D4AF37] hover:bg-[#F0C93D] text-[#1E2124] border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
                 className
             )}
             {...props}
         >
-            Lägga beställningen
+            
         </button>
     );
 };
@@ -78,20 +78,35 @@ export const ButtonAdmin: React.FC<ButtonProps> = ({className, ...props}) => {
                 className
             )}
             { ...props } />
-
-       
     )
 }
 
-export const ButtonAdminManageUser: React.FC<ButtonProps> = ({className, ...props}) => {
+export const ButtonAdminManage: React.FC<ButtonProps> = ({ className, ...props }) => {
     return (
         <button
+            type="submit"
             className={cn(
-                "font-lato font-bold w-[11rem] px-3 py-2 bg-Branding-primaryButton hover:bg-Branding-primaryButton/80 transition-colors rounded-xl border border-Branding-textAccent inline-flex justify-center items-center text-Branding-textAccent text-base",
+                "font-lato font-semibold w-auto px-3 py-2 bg-[#228B22] hover:bg-[#2E8B57] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
                 className
             )}
-            { ...props } />
+            {...props}
+        >
+            
+        </button>
+    );
+};
 
-       
-    )
-}
+export const ButtonAdminDelete: React.FC<ButtonProps> = ({ className, ...props }) => {
+    return (
+        <button
+            type="submit"
+            className={cn(
+                "font-lato font-semibold w-auto px-3 py-2 bg-[#B22222] hover:bg-[#CC3333] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
+                className
+            )}
+            {...props}
+        >
+            
+        </button>
+    );
+};
