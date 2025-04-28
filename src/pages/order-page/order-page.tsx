@@ -88,8 +88,7 @@ export default function OrderPage() {
             ProduktId: product.ProduktId || 0,
             Antal: productQuantities[product.ProduktId ?? 0] || 0,
             Styckpris: (product.Baspris ?? 0) * productQuantities[product.ProduktId ?? 0],
-            Rabatt: discount,                // TODO: fix bug where the discount exceeds the price of the item
-                                            //  (for example if a 50% discount is applied but product 4 costs 48kr)
+            Rabatt: discount,
         })).filter(item => item.Antal > 0);
 
         const sentOrder = {

@@ -26,7 +26,7 @@ export default function Menu() {
 
     return (
         <header className="max-w-[60rem] w-full inline-flex items-start justify-between">
-            <nav onClick={handleClick} className=" inline-flex flex-col items-start justify-center relative transition-all cursor-pointer">
+            <nav onClick={handleClick} className=" inline-flex flex-col items-start justify-center relative transition-all cursor-pointer ">
                 <div className="w-full inline-flex items-center justify-start gap-2 hover:bg-Branding-cardPrimary rounded-xl sm:px-2 sm:py-1">
                     <section className="h-10 w-10 bg-blue-200 rounded-full inline-flex items-center justify-center overflow-hidden">
                         <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
@@ -41,11 +41,11 @@ export default function Menu() {
                     </article>
                 </div>
                 {isOpen ? 
-                    <ul className="h-[4rem] w-full z-50 absolute top-[3.175rem] bg-Branding-cardPrimary rounded-[0.375rem] divide-y-2 divide-gray-500 divide-solid">
-                        <li className="flex items-center px-2 py-1 h-[1.875rem]">
-                            <a href="/me" className="text-[1rem] w-full leading-[1.1875rem] font-inter font-semibold text-Branding-textPrimary hover:text-Branding-textAccent">Profil</a>
+                    <ul className="w-full z-50 absolute top-[3.175rem] bg-Branding-cardPrimary rounded-lg divide-y-2 divide-gray-500 divide-solid">
+                        <li className="h-[2.625rem] flex items-center p-2">
+                            <a href="/me" className="text-[1rem] w-full leading-[1.1875rem] rounded-lg  font-inter font-semibold text-Branding-textPrimary hover:text-Branding-textAccent">Profil</a>
                         </li>
-                        <li className="flex items-center bg-[#2C2F33] px-2 py-1 h-[1.875rem]">
+                        <li className="flex items-center bg-[#2C2F33] p-2 rounded-b-lg ">
                             <a className="w-full text-Branding-textPrimary hover:text-Branding-textAccent">
                                 <button onClick={async () => {
                                                 await handleLogOut();
@@ -55,7 +55,6 @@ export default function Menu() {
                                 </button>
                             </a>
                         </li>
-                        
                     </ul>
                     : null}
             </nav>

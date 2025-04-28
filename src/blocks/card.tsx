@@ -114,7 +114,7 @@ const CardClientNumber = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "text-left text-[1rem] leading-[1rem] font-semibold text-Branding-textSecondary text-white",
+      "text-left text-[1rem] leading-[1rem] font-semibold text-Branding-textSecondary",
       className
     )}
     {...props}
@@ -159,7 +159,7 @@ const ProductCardName = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "max-w-[11rem] w-full text-Branding-textPrimary font-inter font-semibold",
+      "max-w-[9.25rem] sm:max-w-[11rem] w-full text-Branding-textPrimary font-inter font-semibold",
       className
     )}
     {...props}
@@ -174,7 +174,7 @@ const ProductCardPrice = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "max-w-[3.5rem] w-full text-Branding-textSecondary font-inter font-medium",
+      "max-w-[3.25rem] sm:max-w-[3.55rem] w-full text-Branding-textSecondary font-inter font-medium",
       className
     )}
     {...props}

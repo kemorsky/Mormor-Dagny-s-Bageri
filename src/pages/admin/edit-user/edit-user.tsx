@@ -69,7 +69,7 @@ export default function EditUser() {
         <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
             <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
-                <select id="users" className="max-w-[25.5rem] w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter text-[0.875rem] rounded-lg focus:border-white focus:outline-none block p-3 ">
+                <select id="users" className="max-w-[25.5rem] w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter text-[0.875rem] rounded-lg focus:border-white focus:outline-none block p-3">
                     <option value="">Välj användare</option>
                     {users?.map((user) => (
                         <option key={user.AnvändareId} value={user.Användarnamn} onClick={() => {setSelectedUser(user)}}>
