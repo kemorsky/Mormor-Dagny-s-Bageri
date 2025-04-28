@@ -47,7 +47,22 @@ export const ButtonOrder: React.FC<ButtonProps> = ({ className, ...props }) => {
         <button
             type="submit"
             className={cn(
-                "font-DMSans font-semibold w-auto px-4 py-3 bg-[#D4AF37] hover:bg-[#F0C93D] text-[#1E2124] border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
+                "font-DMSans font-semibold px-4 py-3 bg-[#D4AF37] hover:bg-[#F0C93D] text-[#1E2124] border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
+                className
+            )}
+            {...props}
+        >
+            
+        </button>
+    );
+};
+
+export const ButtonEditOrder: React.FC<ButtonProps> = ({ className, ...props }) => {
+    return (
+        <button
+            type="submit"
+            className={cn(
+                "font-DMSans font-semibold px-4 py-3 bg-red-400 hover:bg-red-500 text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
                 className
             )}
             {...props}

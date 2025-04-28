@@ -114,10 +114,10 @@ export default function OrderPage() {
     }
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
-            <div className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-start gap-6 py-4">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
-                <section className="w-full inline-flex flex-col items-start justify-center gap-3 relative">
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
                     <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
                         <InputOrderDropdown
                             value={query} 
@@ -140,7 +140,7 @@ export default function OrderPage() {
                     )}
                 </section>
                 {selected ? (
-                    <section className="w-full inline-flex flex-col items-center justify-center gap-3">
+                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
                         <CardStore className="">
                             <CardStoreContent>
@@ -176,7 +176,7 @@ export default function OrderPage() {
                         </CardStore>
                     </section>
                 ) : (
-                    <div className="w-full inline-flex flex-col items-start justify-center gap-3">
+                    <div className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
                         <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
                         <CardStore className="w-full h-full">
                             <CardStoreContent>
@@ -187,10 +187,10 @@ export default function OrderPage() {
                         </CardStore>
                     </div>
                 )}
-                <section className="w-full inline-flex flex-col items-center justify-center">
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center">
                     <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>                
                 </section>
-                <form className="w-full" onSubmit={handleSubmit}> 
+                <form className="w-full max-w-[33.792rem]" onSubmit={handleSubmit}> 
                     <section className="w-full inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         <CardStore className="p-2">
