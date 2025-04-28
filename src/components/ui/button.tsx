@@ -62,7 +62,8 @@ export const ButtonTab: React.FC<ButtonProps & { isActive: boolean }> = ({ class
         <button
             className={cn(
                 "w-40 px-4 py-2 font-lato text-lg transition-colors border-none",
-                isActive ? "bg-black text-white font-semibold" : "bg-gray-400 text-white hover:text-black",
+                isActive ? "bg-black text-white font-semibold" 
+                : "bg-[#898989] text-white hover:text-black",
                 className
             )}
             {...props}
