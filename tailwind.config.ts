@@ -22,7 +22,8 @@ export default {
           fontFamily: {
             "open-sans": ["Open Sans", "sans-serif"],
             lato: ["Lato", "sans-serif"],
-            inter: ["Inter", "sans-serif"]
+            inter: ["Inter", "sans-serif"],
+            DMSans: ["DM Sans", "sans-serif"],
           },
           fontWeight: {
             normal: "400",

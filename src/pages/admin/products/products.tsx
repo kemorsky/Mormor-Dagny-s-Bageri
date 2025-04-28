@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { addProduct, deleteProduct, editProduct } from "../../../lib/api"
 import { Product } from "../../../types/types"
-import { CardProduct } from "../../../blocks/card-order-page"
+import { CardProduct, CardStore, CardStoreContent } from "../../../blocks/card-order-page"
 import { useProducts } from "../../../components/auth/ProductContext"
 import { defaultProduct } from "../../../constants/prefab-consts"
 import Menu from "../../../elements/menu/menu"
@@ -98,49 +98,51 @@ export default function Products() {
                         <ButtonOrder type="submit">Lägg till produkt</ButtonOrder>
                     </form>
                 </div>
-                <div className="w-full inline-flex flex-col items-center justify-start gap-4 py-4">
-                    {products ? (
-                        products.map((product, index) => (
-                            editingProduct?.ProduktId === product.ProduktId ? (
-                            <form key={index} className="bg-Branding-cardPrimary w-full max-w-[30rem]" onSubmit={handleSaveEdit}>
-                                <CardProduct className="max-w-[30rem] flex items-center justify-between bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,1een00,0.15)] rounded-lg px-3">
-                                    <input
-                                        type="text"
-                                        placeholder="Edit Namn"
-                                        value={editingProduct?.Namn}
-                                        onChange={(e) => setEditingProduct({ ...editingProduct, Namn: e.target.value })}
-                                        className="max-w-[12rem] p-2 rounded-lg border border-white/65 font-semibold font-inter text-[1rem] leading-[1.1875rem] bg-Branding-input"/>
-                                    <input
-                                        type="text"
-                                        placeholder="Edit Baspris"
-                                        value={editingProduct?.Baspris}
-                                        onChange={(e) => setEditingProduct({ ...editingProduct, Baspris: parseFloat(e.target.value) })}
-                                        className="p-2 max-w-[4rem] rounded-lg border border-white/65 font-semibold font-inter text-[1rem] leading-[1.1875rem] bg-Branding-input"/>
-                                    <div className="flex gap-2">
-                                        <ButtonAdminManage type="submit" className="min-w-[5.625rem]">Spara</ButtonAdminManage>
-                                        <ButtonAdminDelete
-                                            type="button"
-                                            onClick={() => setEditingProduct(null)}>
-                                                Avbryt
-                                        </ButtonAdminDelete>
+                <CardStore>
+                    <CardStoreContent>
+                        {products ? (
+                            products.map((product, index) => (
+                                editingProduct?.ProduktId === product.ProduktId ? (
+                                <form key={index} className="bg-Branding-cardPrimary w-full max-w-[30rem]" onSubmit={handleSaveEdit}>
+                                    <CardProduct className="max-w-[30rem] flex items-center justify-between bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,1een00,0.15)] rounded-lg px-3">
+                                        <input
+                                            type="text"
+                                            placeholder="Edit Namn"
+                                            value={editingProduct?.Namn}
+                                            onChange={(e) => setEditingProduct({ ...editingProduct, Namn: e.target.value })}
+                                            className="max-w-[12rem] p-2 rounded-lg border border-white/65 font-semibold font-inter text-[1rem] leading-[1.1875rem] bg-Branding-input"/>
+                                        <input
+                                            type="text"
+                                            placeholder="Edit Baspris"
+                                            value={editingProduct?.Baspris}
+                                            onChange={(e) => setEditingProduct({ ...editingProduct, Baspris: parseFloat(e.target.value) })}
+                                            className="p-2 max-w-[4rem] rounded-lg border border-white/65 font-semibold font-inter text-[1rem] leading-[1.1875rem] bg-Branding-input"/>
+                                        <div className="flex gap-2">
+                                            <ButtonAdminManage type="submit" className="min-w-[5.625rem]">Spara</ButtonAdminManage>
+                                            <ButtonAdminDelete
+                                                type="button"
+                                                onClick={() => setEditingProduct(null)}>
+                                                    Avbryt
+                                            </ButtonAdminDelete>
+                                        </div>
+                                    </CardProduct>
+                                </form>
+                                ) : (
+                                <CardProduct key={index} className="max-w-[30rem] flex items-center justify-between bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg px-3">
+                                    <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.Namn}</p>
+                                    <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.Baspris} kr</p>
+                                    <div className="flex gap-2 ">
+                                        <ButtonAdminManage onClick={() => product.ProduktId !== undefined && handleEdit(product)}>Redigera</ButtonAdminManage>
+                                        <ButtonAdminDelete onClick={() => product.ProduktId !== undefined && handleDelete(product.ProduktId)}>Ta bort</ButtonAdminDelete>
                                     </div>
                                 </CardProduct>
-                            </form>
-                            ) : (
-                            <CardProduct key={index} className="max-w-[30rem] flex items-center justify-between bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg px-3">
-                                <p className="w-[10rem] font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">{product.Namn}</p>
-                                <p className="w-[4rem] font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{product.Baspris} kr</p>
-                                <div className="flex gap-2 ">
-                                    <ButtonAdminManage onClick={() => product.ProduktId !== undefined && handleEdit(product)}>Redigera</ButtonAdminManage>
-                                    <ButtonAdminDelete onClick={() => product.ProduktId !== undefined && handleDelete(product.ProduktId)}>Ta bort</ButtonAdminDelete>
-                                </div>
-                            </CardProduct>
-                            )
-                        ))
-                    ) : (
-                    <p>Error loading products</p>
-                    )}
-                </div>
+                                )
+                            ))
+                        ) : (
+                        <p>Error loading products</p>
+                        )}
+                    </CardStoreContent>
+                </CardStore>
             </div>
         </main>
     )
