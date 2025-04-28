@@ -114,10 +114,10 @@ export default function OrderPage() {
     }
 
     return (
-        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
-            <div className="w-full inline-flex flex-col items-center justify-start gap-6 py-3 mt-[3.125rem]">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
-                <section className="w-full inline-flex flex-col items-start justify-center gap-3 relative">
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
                     <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
                         <InputOrderDropdown
                             value={query} 
@@ -140,7 +140,7 @@ export default function OrderPage() {
                     )}
                 </section>
                 {selected ? (
-                    <section className="w-full inline-flex flex-col items-center justify-center gap-3">
+                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
                         <CardStore className="">
                             <CardStoreContent>
@@ -166,11 +166,17 @@ export default function OrderPage() {
                                         </article>
                                     </CardStoreBreadperson>
                                 </CardStoreContacts>
+                                <CardStoreBreadperson>
+                                    <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Fakturaadress: </p>
+                                    <article className="w-full flex items-center justify-start gap-1.5">
+                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.Fakturaadress}</p>
+                                    </article>
+                                </CardStoreBreadperson>
                             </CardStoreContent>                                                             
                         </CardStore>
                     </section>
                 ) : (
-                    <div className="w-full inline-flex flex-col items-start justify-center gap-3">
+                    <div className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
                         <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
                         <CardStore className="w-full h-full">
                             <CardStoreContent>
@@ -181,10 +187,10 @@ export default function OrderPage() {
                         </CardStore>
                     </div>
                 )}
-                <section className="w-full inline-flex flex-col items-center justify-center">
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center">
                     <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>                
                 </section>
-                <form className="w-full" onSubmit={handleSubmit}> 
+                <form className="w-full max-w-[33.792rem]" onSubmit={handleSubmit}> 
                     <section className="w-full inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         <CardStore className="p-2">
@@ -210,12 +216,12 @@ export default function OrderPage() {
                                 )} 
                                 <hr className="bg-white h-[1px] w-full"/>
                                 <section className="self-end flex flex-col items-end gap-2">
-                                    <p>Totallt: {totalPrice.toFixed(2)} kr</p>
+                                    <p className="font-inter text-Branding-textPrimary">Totallt: {totalPrice.toFixed(2)} kr</p>
                                     <InputDiscount 
                                         value={discount || 0}
                                         onChange={handleDiscountChange}
                                         />
-                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
+                                    <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
                                     <ButtonOrder> Gå vidare</ButtonOrder>
                                 </section>
                             </CardStoreContent>

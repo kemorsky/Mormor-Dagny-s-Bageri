@@ -24,7 +24,7 @@ const CardDate = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "self-stretch text-right text-[0.8125rem] leading-[0.8125rem] text-white/80",
+      "text-right text-[1rem] leading-[1rem] text-white",
       className
     )}
     {...props}
@@ -114,7 +114,7 @@ const CardClientNumber = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "text-Branding-textSecondary text-[0.8125rem] leading-[1rem]",
+      "text-left text-[1rem] leading-[1rem] font-semibold text-Branding-textSecondary text-white",
       className
     )}
     {...props}
@@ -144,7 +144,7 @@ const ProductCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "bg-Branding-cardPrimary w-full py-1 inline-flex items-center justify-between text-[1rem] leading-[1.1875rem]",
+      "w-full bg-Branding-cardPrimary inline-flex items-start justify-between text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.1875rem]",
       className
     )}
     {...props}
@@ -159,7 +159,7 @@ const ProductCardName = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-Branding-textPrimary font-inter font-semibold",
+      "max-w-[11rem] w-full text-Branding-textPrimary font-inter font-semibold",
       className
     )}
     {...props}
@@ -174,13 +174,28 @@ const ProductCardPrice = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-Branding-textSecondary font-inter font-medium",
+      "max-w-[3.5rem] w-full text-Branding-textSecondary font-inter font-medium",
       className
     )}
     {...props}
   />
 ))
 ProductCardPrice.displayName = "ProductCardPrice"
+
+const ProductCardTotalPrice = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "min-w-[4rem] sm:min-w-[4.75rem] max-w-[5.5rem] flex flex-col text-Branding-textPrimary font-inter font-medium",
+      className
+    )}
+    {...props}
+  />
+))
+ProductCardTotalPrice.displayName = "ProductCardTotalPrice"
 
 const ProductCardAmount = React.forwardRef<
   HTMLDivElement,
@@ -189,7 +204,7 @@ const ProductCardAmount = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-Branding-textSecondary font-inter font-medium",
+      "max-w-[5rem] w-full text-Branding-textSecondary font-inter font-medium",
       className
     )}
     {...props}
@@ -212,7 +227,7 @@ const WideCard = React.forwardRef<
 ));
 WideCard.displayName = "WideCard";
 
-export {Card, WideCard, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount }
+export {Card, WideCard, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardTotalPrice, ProductCardAmount }
 
 
 // export default function Card() {
