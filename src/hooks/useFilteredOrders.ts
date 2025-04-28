@@ -8,14 +8,16 @@ export const useFilteredOrders = () => {
   const maxOrders = 5;
 
   const upcoming = orders?.filter(order => {
-    const deliveryDate = new Date(order.PreliminärtLeveransdatum);
-    return deliveryDate >= now;
+    const deliveryDate = order.PreliminärtLeveransdatum
+    const timestamp = deliveryDate ? Date.parse(deliveryDate) : NaN;
+    return !isNaN(timestamp) && new Date(timestamp) >= now;
   })
   .slice(0, maxOrders) ?? [];
 
   const previous = orders?.filter(order => {
-    const deliveryDate = new Date(order.PreliminärtLeveransdatum);
-    return deliveryDate < now;
+    const deliveryDate = order.PreliminärtLeveransdatum;
+    const timestamp = deliveryDate ? Date.parse(deliveryDate) : NaN;
+    return !isNaN(timestamp) && new Date(timestamp) < now;
   })
   .slice(0, maxOrders) ?? [];
 
