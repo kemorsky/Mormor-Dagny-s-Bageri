@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { resetPassword } from "../lib/api";
+import { resetPassword } from "../../lib/api";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { ButtonPrimary } from "../components/ui/button";
-import { InputPrimary } from "../components/ui/input";
+import { ButtonPrimary } from "../../components/ui/button";
+import { InputPrimary } from "../../components/ui/input";
 
 export default function ResetPassword() {
     const [searchParams] = useSearchParams();

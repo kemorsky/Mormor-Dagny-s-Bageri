@@ -5,6 +5,7 @@ import  AuthProvider from './components/auth/AuthProvider.tsx';
 import './index.css'
 import router from './router/router.tsx'
 import "@fontsource/lato/index.css";
+import "@fontsource/lato/400.css";
 import "@fontsource/lato/700.css";
 import "@fontsource/open-sans/index.css";
 import "@fontsource/open-sans/400.css";

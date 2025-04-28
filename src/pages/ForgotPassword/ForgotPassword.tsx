@@ -24,7 +24,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main className="bg-gradient-primary min-h-screen flex flex-col items-center justify-center px-6">
+    <main className="bg-Branding-backgroundPrimary min-h-screen flex flex-col items-center justify-center px-6">
       <div className="flex flex-col items-center gap-6 max-w-md w-full">
         <h1 className="text-2xl font-bold text-Branding-textAccent text-center">
           Glömde ditt lösenord?
