@@ -15,6 +15,7 @@ import { fetchSpecificOrder } from "../../lib/api";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { useNavigate } from "react-router";
 import { formatDate } from "../../lib/formatDate";
+import { formatPhoneNumber } from "../../lib/formatPhoneNumber";
 
 export default function DashBoard() {
     const { upcoming, previous } = useFilteredOrders();
@@ -42,16 +43,11 @@ export default function DashBoard() {
         ref.current?.scrollBy({ left: 320, behavior: "smooth" });
     };
 
-    function formatPhoneNumber(phone: string) {
-        if (!phone) return '';
-        const onlyDigits = phone.replace(/\D/g, ''); // Remove all non-digit characters
-        return onlyDigits.replace(/^(\d{4})(\d{3})(\d{0,3})$/, "$1 $2 $3").trim();
-    }
-
     return (
-        <main className="min-h-[59.75rem] w-full bg-gradient-primary inline-flex flex-col items-center justify-start pt-[3.125rem] relative">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+
             <Menu />
-            <>
                 {/* Pågående beställningar */}
                 <div className="w-full inline-flex flex-col items-center justify-center gap-3 mt-5">
                     <article className="w-[380px] flex items-center justify-between">
@@ -198,7 +194,8 @@ export default function DashBoard() {
                         </button>
                     </div>
                 </div>
-            </>
+            
+            </div>
         </main>
     );
 }
