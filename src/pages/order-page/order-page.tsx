@@ -114,8 +114,8 @@ export default function OrderPage() {
     }
 
     return (
-        <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
-            <div className="w-full inline-flex flex-col items-center justify-start gap-6 py-3 mt-[3.125rem]">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-gradient-primary px-4">
+            <div className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
                 <section className="w-full inline-flex flex-col items-start justify-center gap-3 relative">
                     <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
@@ -166,6 +166,12 @@ export default function OrderPage() {
                                         </article>
                                     </CardStoreBreadperson>
                                 </CardStoreContacts>
+                                <CardStoreBreadperson>
+                                    <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Fakturaadress: </p>
+                                    <article className="w-full flex items-center justify-start gap-1.5">
+                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{selected.Fakturaadress}</p>
+                                    </article>
+                                </CardStoreBreadperson>
                             </CardStoreContent>                                                             
                         </CardStore>
                     </section>
@@ -210,12 +216,12 @@ export default function OrderPage() {
                                 )} 
                                 <hr className="bg-white h-[1px] w-full"/>
                                 <section className="self-end flex flex-col items-end gap-2">
-                                    <p>Totallt: {totalPrice.toFixed(2)} kr</p>
+                                    <p className="font-inter text-Branding-textPrimary">Totallt: {totalPrice.toFixed(2)} kr</p>
                                     <InputDiscount 
                                         value={discount || 0}
                                         onChange={handleDiscountChange}
                                         />
-                                    <p>Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
+                                    <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
                                     <ButtonOrder> Gå vidare</ButtonOrder>
                                 </section>
                             </CardStoreContent>
