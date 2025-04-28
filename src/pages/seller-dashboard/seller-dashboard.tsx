@@ -47,10 +47,10 @@ export default function DashBoard() {
         <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
             <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
 
-            <Menu />
+                <Menu />
                 {/* Pågående beställningar */}
-                <div className="w-full inline-flex flex-col items-center justify-center gap-3 mt-5">
-                    <article className="w-[380px] flex items-center justify-between">
+                <div className="w-full inline-flex flex-col items-center justify-center gap-3">
+                    <article className="w-full flex items-center gap-4 px-4">
                         <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
                             Dina pågående beställningar
                         </p>
@@ -120,7 +120,7 @@ export default function DashBoard() {
 
                 {/* Tidigare beställningar */}
                 <div className="w-full inline-flex flex-col items-center justify-start gap-3 mt-10">
-                    <article className="min-w-[380px] flex items-center justify-between">
+                    <article className="w-full flex items-center gap-4 px-4">
                         <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
                             Dina tidigare beställningar
                         </p>
@@ -194,7 +194,7 @@ export default function DashBoard() {
                         </button>
                     </div>
                 </div>
-            
+
             </div>
         </main>
     );
