@@ -37,8 +37,10 @@ export default function AuthProvider({children}: AuthProviderProps) {
             },
             body: JSON.stringify(userData)
           });
+          
           if (!response.ok) {
-            throw new Error('Något gick snett med POST-förfrågan vi gjorde :(((')
+            const errorData = await response.json();
+            throw new Error(errorData.error);
           }
           const data = await response.json();
           console.log(data);
@@ -51,6 +53,7 @@ export default function AuthProvider({children}: AuthProviderProps) {
           console.log("login successful:", authToken, currentUser);
         } catch (error) {
           console.error(error);
+          throw error;
         }
       }
 
