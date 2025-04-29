@@ -4,10 +4,11 @@ import { pushOrder } from "../../lib/api"
 import { formatDate } from '../../lib/formatDate'
 import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
-import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount  } from "../../blocks/card"
+import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
 import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
+import { ButtonOrder, ButtonEditOrder } from "../../components/ui/button"
 
 export default function OrderDetailsPage() {
     const { state } = useLocation();
@@ -70,111 +71,140 @@ export default function OrderDetailsPage() {
     }
 
     return (
-        <main>
-            <Menu />
-            <h1>Bekräfta beställning</h1>
-            <form action="" onSubmit={handleSubmit}>
-                <section>
-                    <h2>Orderinformation</h2>
-                    <CardStore className="">
-                        <CardStoreContent>
-                            <CardStoreInformation>
-                                <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{store?.ButikNamn}
-                                    <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {store?.ButikNummer}</span>
-                                </p>
-                                <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.Besöksadress}</p>
-                            </CardStoreInformation>
-                            <CardStoreContacts>
-                                <CardStoreOwner>
-                                    <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
-                                    <article className="w-full flex items-center justify-start gap-1.5">
-                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.ButikschefNamn}</p>
-                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.ButikschefTelefon}</p>
-                                    </article>
-                                </CardStoreOwner>
-                                <CardStoreBreadperson>
-                                    <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
-                                    <article className="w-full flex items-center justify-start gap-1.5">
-                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.BrödansvarigNamn}</p>
-                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.BrödansvarigTelefon}</p>
-                                    </article>
-                                </CardStoreBreadperson>
-                            </CardStoreContacts>
-                        </CardStoreContent>                                                             
-                    </CardStore>
-                    <p><strong>Beställare:</strong> {order.Beställare}</p>
-                    <p><strong>Säljare:</strong> {order.Säljare}</p>
-                    <p><strong>Beställningsdatum:</strong> {formatDate(order.Beställningsdatum)}</p>
-                    <p><strong>Leveransdatum:</strong> {formatDate(order.PreliminärtLeveransdatum)}</p>
-                </section>
-                <section>
-                    <h2>Produkter</h2>
-                    {details.length > 0 ? (
-                    <div>
-                        <ul>
-                            {products.map((product, index) => (
-                                <li key={index}>
-                                <ProductCard>
-                                    <ProductCardName>{product?.Namn}</ProductCardName>
-                                    {edit ? (
-                                    <>
-                                        <label className="block my-1">
-                                            Antal:
-                                            <input
-                                                type="text"
-                                                value={details[index].Antal}
-                                                onChange={(e) => {
-                                                    const updated = [...details];
-                                                    const newAntal = parseInt(e.target.value) || 0;
-                                                    updated[index].Antal = newAntal
-                                                    setDetails(updated);
-                                                }}
-                                                className="border border-gray-300 rounded p-1 ml-2 w-20"
-                                            />
-                                        </label>
-                                        <p className="text-sm text-gray-600">Styckpris: {details[index].Antal * (product?.Baspris ?? 0)} kr</p>
-                                    </>
-                                    ) : (
-                                    <>
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <form className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative" action="" onSubmit={handleSubmit}>
+                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
+                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställning Information</h2>
+                        <CardStore>
+                            <CardStoreContent>
+                                <CardStoreInformation>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställare:
+                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Beställare}</span>
+                                    </p>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Säljare:
+                                        <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {order.Säljare}</span>
+                                    </p>
+                                </CardStoreInformation>
+                                <CardStoreInformation>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställningsdatum:
+                                        <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.Beställningsdatum)}</span>
+                                    </p>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Leveransdatum:
+                                        <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.PreliminärtLeveransdatum)}</span>
+                                    </p>
+                                </CardStoreInformation>
+                            </CardStoreContent>
+                        </CardStore>
+                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
+                        <CardStore>
+                            <CardStoreContent>
+                                <CardStoreInformation>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{store?.ButikNamn}
+                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {store?.ButikNummer}</span>
+                                    </p>
+                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.Besöksadress}</p>
+                                </CardStoreInformation>
+                                <CardStoreContacts>
+                                    <CardStoreOwner>
+                                        <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
+                                        <article className="w-full flex items-center justify-start gap-1.5">
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.ButikschefNamn}</p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.ButikschefTelefon}</p>
+                                        </article>
+                                    </CardStoreOwner>
+                                    <CardStoreBreadperson>
+                                        <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
+                                        <article className="w-full flex items-center justify-start gap-1.5">
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.BrödansvarigNamn}</p>
+                                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{store?.BrödansvarigTelefon}</p>
+                                        </article>
+                                    </CardStoreBreadperson>
+                                </CardStoreContacts>
+                            </CardStoreContent>                                                             
+                        </CardStore>
+                    </section>
+                    <section className="w-full flex flex-col gap-3">
+                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
+                        {details.length > 0 ? (
+                        <div className="bg-Branding-cardPrimary flex flex-col gap-3 p-3 rounded-xl">
+                            <ul className="w-full space-y-3">
+                                {products.map((product, index) => (
+                                    <li key={index} className="w-full">
+                                    <ProductCard>
+                                        <ProductCardName>{product?.Namn}</ProductCardName>
                                         <ProductCardPrice>{product?.Baspris} kr</ProductCardPrice>
-                                        <ProductCardAmount>Antal: {details[index].Antal}</ProductCardAmount>
-                                        <ProductCardPrice>Pris: {(details[index].Antal * (product?.Baspris ?? 0)).toFixed(2)} kr</ProductCardPrice>
-                                    </>
-                                    )}
-                                </ProductCard>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    ) : (
-                    <p>Laddar orderdetaljer...</p>
-                    )}
-                </section>
-                <div className="mt-4">
-                    <p>Totalt innan rabatt: {totalBeforeDiscount.toFixed(2)} kr</p>
-                    {edit ? (
-                         <label className="block my-1">
-                            Rabatt:
-                            <input
-                                type="text"
-                                value={orderDiscount}
-                                onChange={(e) => {
-                                    const updated = parseFloat(e.target.value) || 0;
-                                    setOrderDiscount(updated);
-                                }}
-                                className="border border-gray-300 rounded p-1 ml-2 w-20"
-                            />
-                        </label>
-                    ) : (
-                        <p>Rabatt ({orderDiscount}%): -{discountAmount.toFixed(2)} kr</p>
-                    )}
-                    <p className="font-bold">Att betala: {finalTotal.toFixed(2)} kr</p>
-                </div>
-                <button type="button" onClick={() => setEdit(prev => !prev)}>
-                    {edit ? "Avsluta redigering" : "Ändra detaljer"}
-                </button>
-                <button className={`${loading ? 'cursor-not-allowed' : ''}`} type='submit'>Lägg till beställningen</button>
-            </form>
+                                        {edit ? (
+                                        <>
+                                            <label className="font-inter text-Branding-textSecondary block">
+                                                Antal:
+                                                <input
+                                                    type="text"
+                                                    value={details[index].Antal}
+                                                    onChange={(e) => {
+                                                        const updated = [...details];
+                                                        const newAntal = parseInt(e.target.value) || 0;
+                                                        updated[index].Antal = newAntal
+                                                        setDetails(updated);
+                                                    }}
+                                                    className="border border-gray-300 rounded p-1 ml-1 max-w-12"
+                                                />
+                                            </label>
+                                            <ProductCardTotalPrice>
+                                                <span className="text-Branding-textSecondary">Pris: </span>
+                                                {(details[index].Antal * (product?.Baspris ?? 0)).toFixed(2)} kr
+                                            </ProductCardTotalPrice>
+                                        </>
+                                        ) : (
+                                        <>
+                                            <ProductCardAmount>Antal: {details[index].Antal}</ProductCardAmount>
+                                            <ProductCardTotalPrice>
+                                                <span className="text-Branding-textSecondary">Pris: </span>
+                                                {(details[index].Antal * (product?.Baspris ?? 0)).toFixed(2)} kr
+                                            </ProductCardTotalPrice>
+                                        </>
+                                        )}
+                                    </ProductCard>
+                                    </li>
+                                ))}
+                            </ul>
+                            <hr className="bg-white h-[1px] w-full"/>  
+                            <section className="self-end flex flex-col items-end gap-2">       
+                                <p className="font-inter text-Branding-textPrimary">Totallt: {totalBeforeDiscount.toFixed(2)} kr</p>
+                                {edit ? (
+                                    <label className="block">
+                                        Rabatt:
+                                        <input
+                                            type="text"
+                                            value={orderDiscount}
+                                            onChange={(e) => {
+                                                const updated = parseFloat(e.target.value) || 0;
+                                                setOrderDiscount(updated);
+                                            }}
+                                            className="border border-gray-300 rounded p-1 ml-2 w-20"
+                                        />
+                                    </label>
+                                ) : (
+                                    <p className="font-inter text-Branding-textPrimary">Rabatt ({orderDiscount}%): -{discountAmount.toFixed(2)} kr</p>
+                                )}
+                                <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalTotal.toFixed(2)} kr</p>
+                            </section>
+                            <div className="self-end space-x-3 gap-3">
+                                <ButtonEditOrder type="button" onClick={() => setEdit(prev => !prev)}>
+                                    {edit ? "Bekräfta" : "Ändra detaljer"}
+                                </ButtonEditOrder>
+                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 text-gray-800' : ''}`} type='submit'>
+                                    {loading ? "Skickar beställningen" : "Lägg beställningen"}
+                                </ButtonOrder>
+                            </div>
+                        </div>
+                        ) : (
+                        <p>Laddar orderdetaljer...</p>
+                        )}
+                    </section>
+                </form>
+            </div>
         </main>
     )
 }

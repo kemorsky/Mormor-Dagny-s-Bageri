@@ -4,7 +4,7 @@ import { fetchOrderDetails } from "../../lib/api"
 import { formatDate } from '../../lib/formatDate'
 import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
-import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount  } from "../../blocks/card"
+import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
 
 export default function ConfirmationPage() {
@@ -35,77 +35,86 @@ export default function ConfirmationPage() {
       }, 0);
 
     return (
-        <main>
-            <Menu />
-            <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
-            <section>
-                <CardStore>
-                    <CardStoreContent>
-                        <CardStoreOwner>
-                            <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
-                        </CardStoreOwner>
-                        <CardStoreOwner>
-                            <strong>Leveransdatum:</strong>{formatDate(order.PreliminärtLeveransdatum)}
-                        </CardStoreOwner>
-                        <CardStoreOwner>
-                            <strong>Beställare:</strong>{order.Beställare}
-                        </CardStoreOwner>
-                        <CardStoreOwner>
-                            <strong>Säljare:</strong>{order.Säljare}
-                        </CardStoreOwner>
-                    </CardStoreContent>
-                </CardStore>
-                <CardStore className="">
-                    <CardStoreContent>
-                        <CardStoreInformation>
-                            <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik.ButikNamn} 
-                                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Butik.ButikNummer}</span>
-                            </p>
-                            <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.Besöksadress}</p>
-                        </CardStoreInformation>
-                        <CardStoreContacts>
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
+                <Menu />
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
+                    <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
+                    <CardStore>
+                        <CardStoreContent>
                             <CardStoreOwner>
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
-                                <article className="w-full flex items-center justify-start gap-1.5">
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.ButikschefNamn}</p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.ButikschefTelefon}</p>
-                                </article>
+                                <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
                             </CardStoreOwner>
-                            <CardStoreBreadperson>
-                                <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
-                                <article className="w-full flex items-center justify-start gap-1.5">
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.BrödansvarigNamn}</p>
-                                    <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.BrödansvarigTelefon}</p>
-                                </article>
-                            </CardStoreBreadperson>
-                        </CardStoreContacts>
-                    </CardStoreContent>                                                             
-                </CardStore>
-            </section>
-            {details? (
-                <section>
-                    <h2 className="text-2xl">Beställda produkter</h2>
-                    <div> 
-                        <ul>
-                            {details.map((product, index) => (
-                            <li key={index}>
-                                <ProductCard>
-                                    <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
-                                    <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
-                                    <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                                    <ProductCardPrice>Tottaltpris: {product.Styckpris.toFixed(2)} kr</ProductCardPrice>
-                                </ProductCard>
-                            </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <p>Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
-                    <p className="font-bold">Totallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
-                    <button onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</button>
+                            <CardStoreOwner>
+                                <strong>Leveransdatum:</strong>{formatDate(order.PreliminärtLeveransdatum)}
+                            </CardStoreOwner>
+                            <CardStoreOwner>
+                                <strong>Beställare:</strong>{order.Beställare}
+                            </CardStoreOwner>
+                            <CardStoreOwner>
+                                <strong>Säljare:</strong>{order.Säljare}
+                            </CardStoreOwner>
+                        </CardStoreContent>
+                    </CardStore>
+                    <CardStore className="">
+                        <CardStoreContent>
+                            <CardStoreInformation>
+                                <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik.ButikNamn} 
+                                    <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Butik.ButikNummer}</span>
+                                </p>
+                                <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.Besöksadress}</p>
+                            </CardStoreInformation>
+                            <CardStoreContacts>
+                                <CardStoreOwner>
+                                    <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
+                                    <article className="w-full flex items-center justify-start gap-1.5">
+                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.ButikschefNamn}</p>
+                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.ButikschefTelefon}</p>
+                                    </article>
+                                </CardStoreOwner>
+                                <CardStoreBreadperson>
+                                    <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
+                                    <article className="w-full flex items-center justify-start gap-1.5">
+                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.BrödansvarigNamn}</p>
+                                        <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik.BrödansvarigTelefon}</p>
+                                    </article>
+                                </CardStoreBreadperson>
+                            </CardStoreContacts>
+                        </CardStoreContent>                                                             
+                    </CardStore>
                 </section>
-            ) : (
-                <p>Laddar orderdetaljer...</p>
-            )}
+                {details? (
+                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
+                        <h2 className="text-2xl">Beställda produkter</h2>
+                        <div className="w-full bg-Branding-cardPrimary flex flex-col gap-3 p-3 rounded-xl"> 
+                            <ul className="w-full space-y-3">
+                                {details.map((product, index) => (
+                                <li key={index}>
+                                    <ProductCard>
+                                        <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                                        <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
+                                        <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
+                                        <ProductCardTotalPrice>
+                                            <span className="text-Branding-textSecondary">Pris: </span> 
+                                            {product.Styckpris.toFixed(2)} kr
+                                        </ProductCardTotalPrice>
+                                    </ProductCard>
+                                </li>
+                                ))}
+                            </ul>
+                            <hr className="bg-white h-[1px] w-full"/>  
+                            <section className="self-end flex flex-col items-end gap-2">
+                                <p className="font-inter text-Branding-textPrimary">Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
+                                <p className="font-inter text-Branding-textPrimary">Finallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
+                                <button onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</button>
+                            </section>
+                        </div>
+                        
+                    </section>
+                ) : (
+                    <p>Laddar orderdetaljer...</p>
+                )}
+            </div>
         </main>
     )
 }

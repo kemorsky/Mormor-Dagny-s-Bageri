@@ -99,7 +99,7 @@ const CardProduct = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full inline-flex justify-between items-center py-1",
+      "w-full inline-flex justify-between items-center",
       className
     )}
     {...props}

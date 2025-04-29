@@ -14,6 +14,8 @@ import Menu from "./../../elements/menu/menu";
 import { fetchSpecificOrder } from "../../lib/api";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { useNavigate } from "react-router";
+import { formatDate } from "../../lib/formatDate";
+import { formatPhoneNumber } from "../../lib/formatPhoneNumber";
 
 export default function DashBoard() {
     const { upcoming, previous } = useFilteredOrders();
@@ -42,9 +44,10 @@ export default function DashBoard() {
     };
 
     return (
-        <main className="min-h-[59.75rem] w-full bg-gradient-primary inline-flex flex-col items-center justify-start pt-[3.125rem] relative">
+        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+
             <Menu />
-            <>
                 {/* Pågående beställningar */}
                 <div className="w-full inline-flex flex-col items-center justify-center gap-3 mt-5">
                     <article className="w-[380px] flex items-center justify-between">
@@ -71,8 +74,10 @@ export default function DashBoard() {
                                 <div key={order.BeställningId} onClick={() => { handleClick(order.BeställningId ?? 0) }} className="snap-center min-w-[320px]">
                                     <Card>
                                         <div className="flex justify-between items-center w-full">
-                                            <CardClientNumber className="ml-0 text-lg font-bold">#{order.BeställningId}</CardClientNumber>
-                                            <CardDate className="ml-auto text-lg font-bold">{order.PreliminärtLeveransdatum}</CardDate>
+                                            <CardClientNumber>#{order.BeställningId}</CardClientNumber>
+                                            <CardDate>
+                                                {formatDate(order.PreliminärtLeveransdatum)}
+                                            </CardDate>
                                         </div>
                                         <CardHeader>
                                             <CardStore>{order.Butik?.ButikNamn}</CardStore>
@@ -82,21 +87,21 @@ export default function DashBoard() {
                                         </CardHeader>
                                         <CardFooter className="flex justify-between w-full items-center">
                                             <div className="flex-1 min-w-0 flex flex-col">
-                                                <span>Butiksägare</span>
+                                                <span className="text-sm">Butiksägare</span>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
                                                     <span>{order.Butik?.ButikschefNamn}</span>
                                                 </CardClientName>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
-                                                    <span>{order.Butik?.ButikschefTelefon}</span>
+                                                    <span>{formatPhoneNumber(order.Butik?.ButikschefTelefon ?? '')}</span>
                                                 </CardClientName>
                                             </div>
                                             <div className="flex-1 min-w-0 flex flex-col text-right">
-                                                <span>Brödansvarig</span>
+                                                <span className="text-sm">Brödansvarig</span>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
                                                     <span>{order.Butik?.BrödansvarigNamn}</span>
                                                 </CardClientName>
                                                 <CardClientName className="text-sm text-[#9A9A9A]">
-                                                    <span>{order.Butik?.BrödansvarigTelefon}</span>
+                                                    <span>{formatPhoneNumber(order.Butik?.BrödansvarigTelefon ?? '')}</span>
                                                 </CardClientName>
                                             </div>
                                         </CardFooter>
@@ -189,7 +194,8 @@ export default function DashBoard() {
                         </button>
                     </div>
                 </div>
-            </>
+            
+            </div>
         </main>
     );
 }
