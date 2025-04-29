@@ -6,6 +6,7 @@ import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
+import { ButtonOrder } from "../../components/ui/button"
 
 export default function ConfirmationPage() {
     const [details, setDetails] = useState<OrderDetails[]>([]);
@@ -36,27 +37,32 @@ export default function ConfirmationPage() {
 
     return (
         <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
+            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-3 py-4">
                 <Menu />
-                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
-                    <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
+                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
+                    <h1 className="self-start text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
                     <CardStore>
                         <CardStoreContent>
-                            <CardStoreOwner>
-                                <strong>Beställningsdatum:</strong>{formatDate(order.Beställningsdatum)}
-                            </CardStoreOwner>
-                            <CardStoreOwner>
-                                <strong>Leveransdatum:</strong>{formatDate(order.PreliminärtLeveransdatum)}
-                            </CardStoreOwner>
-                            <CardStoreOwner>
-                                <strong>Beställare:</strong>{order.Beställare}
-                            </CardStoreOwner>
-                            <CardStoreOwner>
-                                <strong>Säljare:</strong>{order.Säljare}
-                            </CardStoreOwner>
+                            <CardStoreInformation>
+                                <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställningsdatum:
+                                    <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.Beställningsdatum)}</span>
+                                </p>
+                                <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Leveransdatum:
+                                    <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.PreliminärtLeveransdatum)}</span>
+                                </p>
+                            </CardStoreInformation>
+                            <CardStoreInformation>
+                                <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställare:
+                                    <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Beställare}</span>
+                                </p>
+                                <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Säljare:
+                                    <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {order.Säljare}</span>
+                                </p>
+                            </CardStoreInformation>
                         </CardStoreContent>
                     </CardStore>
-                    <CardStore className="">
+                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
+                    <CardStore>
                         <CardStoreContent>
                             <CardStoreInformation>
                                 <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik.ButikNamn} 
@@ -84,9 +90,9 @@ export default function ConfirmationPage() {
                     </CardStore>
                 </section>
                 {details? (
-                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
-                        <h2 className="text-2xl">Beställda produkter</h2>
-                        <div className="w-full bg-Branding-cardPrimary flex flex-col gap-3 p-3 rounded-xl"> 
+                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
+                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
+                        <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl"> 
                             <ul className="w-full space-y-3">
                                 {details.map((product, index) => (
                                 <li key={index}>
@@ -106,7 +112,7 @@ export default function ConfirmationPage() {
                             <section className="self-end flex flex-col items-end gap-2">
                                 <p className="font-inter text-Branding-textPrimary">Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
                                 <p className="font-inter text-Branding-textPrimary">Finallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
-                                <button onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</button>
+                                <ButtonOrder onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</ButtonOrder>
                             </section>
                         </div>
                         

@@ -9,6 +9,7 @@ import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, C
 import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
 import { ButtonOrder, ButtonEditOrder } from "../../components/ui/button"
+import { ButtonSpinner } from "../../components/ui/button-spinner"
 
 export default function OrderDetailsPage() {
     const { state } = useLocation();
@@ -74,25 +75,25 @@ export default function OrderDetailsPage() {
         <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
             <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
                 <Menu />
-                <form className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative" action="" onSubmit={handleSubmit}>
-                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
+                <form className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3" action="" onSubmit={handleSubmit}>
+                    <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställning Information</h2>
                         <CardStore>
                             <CardStoreContent>
-                                <CardStoreInformation>
-                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställare:
-                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Beställare}</span>
-                                    </p>
-                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Säljare:
-                                        <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {order.Säljare}</span>
-                                    </p>
-                                </CardStoreInformation>
                                 <CardStoreInformation>
                                     <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställningsdatum:
                                         <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.Beställningsdatum)}</span>
                                     </p>
                                     <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Leveransdatum:
                                         <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.PreliminärtLeveransdatum)}</span>
+                                    </p>
+                                </CardStoreInformation>
+                                <CardStoreInformation>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställare:
+                                        <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Beställare}</span>
+                                    </p>
+                                    <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Säljare:
+                                        <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {order.Säljare}</span>
                                     </p>
                                 </CardStoreInformation>
                             </CardStoreContent>
@@ -128,7 +129,7 @@ export default function OrderDetailsPage() {
                     <section className="w-full flex flex-col gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         {details.length > 0 ? (
-                        <div className="bg-Branding-cardPrimary flex flex-col gap-3 p-3 rounded-xl">
+                        <div className="bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
                             <ul className="w-full space-y-3">
                                 {products.map((product, index) => (
                                     <li key={index} className="w-full">
@@ -137,20 +138,17 @@ export default function OrderDetailsPage() {
                                         <ProductCardPrice>{product?.Baspris} kr</ProductCardPrice>
                                         {edit ? (
                                         <>
-                                            <label className="font-inter text-Branding-textSecondary block">
-                                                Antal:
-                                                <input
-                                                    type="text"
-                                                    value={details[index].Antal}
-                                                    onChange={(e) => {
-                                                        const updated = [...details];
-                                                        const newAntal = parseInt(e.target.value) || 0;
-                                                        updated[index].Antal = newAntal
-                                                        setDetails(updated);
-                                                    }}
-                                                    className="border border-gray-300 rounded p-1 ml-1 max-w-12"
-                                                />
-                                            </label>
+                                            <input
+                                                type="text"
+                                                value={details[index].Antal}
+                                                onChange={(e) => {
+                                                    const updated = [...details];
+                                                    const newAntal = parseInt(e.target.value) || 0;
+                                                    updated[index].Antal = newAntal
+                                                    setDetails(updated);
+                                                }}
+                                                className="border border-gray-300 rounded p-1 ml-1 max-w-12"
+                                            />                                        
                                             <ProductCardTotalPrice>
                                                 <span className="text-Branding-textSecondary">Pris: </span>
                                                 {(details[index].Antal * (product?.Baspris ?? 0)).toFixed(2)} kr
@@ -190,12 +188,12 @@ export default function OrderDetailsPage() {
                                 )}
                                 <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalTotal.toFixed(2)} kr</p>
                             </section>
-                            <div className="self-end space-x-3 gap-3">
-                                <ButtonEditOrder type="button" onClick={() => setEdit(prev => !prev)}>
+                            <div className="self-end flex items-center justify-center gap-3">
+                                <ButtonEditOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
                                     {edit ? "Bekräfta" : "Ändra detaljer"}
                                 </ButtonEditOrder>
-                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 text-gray-800' : ''}`} type='submit'>
-                                    {loading ? "Skickar beställningen" : "Lägg beställningen"}
+                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type='submit'>
+                                    {loading ? <span className="flex items-center justify-center gap-2"><ButtonSpinner/>Skickar beställningen</span> : "Lägg beställningen"}
                                 </ButtonOrder>
                             </div>
                         </div>

@@ -102,7 +102,7 @@ export const ButtonAdminManage: React.FC<ButtonProps> = ({ className, ...props }
         <button
             type="submit"
             className={cn(
-                "font-DMSans font-semibold w-auto px-3 py-2 bg-[#228B22] hover:bg-[#2E8B57] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
+                "font-DMSans font-semibold px-3 py-1.5 bg-[#228B22] hover:bg-[#2E8B57] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.25rem]",
                 className
             )}
             {...props}
@@ -117,7 +117,7 @@ export const ButtonAdminDelete: React.FC<ButtonProps> = ({ className, ...props }
         <button
             type="submit"
             className={cn(
-                "font-DMSans font-semibold w-auto px-3 py-2 bg-[#B22222] hover:bg-[#CC3333] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
+                "font-DMSans font-semibold px-3 py-1.5 bg-[#B22222] hover:bg-[#CC3333] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.25rem]",
                 className
             )}
             {...props}

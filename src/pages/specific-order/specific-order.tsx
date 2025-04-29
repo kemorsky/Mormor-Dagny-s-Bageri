@@ -1,9 +1,11 @@
 import { useSpecificOrderPage } from "../../hooks/useSpecificOrder"
 import Menu from "../../elements/menu/menu";
 import { useAuth } from "../../components/auth/AuthContext";
-import { ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice } from "../../blocks/card";
+import { ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice, ProductCardTotalPrice } from "../../blocks/card";
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../blocks/card-order-page";
 import { formatDate } from "../../lib/formatDate";
+import { ButtonAdminManage, ButtonAdminDelete, ButtonOrder } from "../../components/ui/button";
+import { ImCross } from "react-icons/im";
 
 export default function SpecificOrder() {
   const {
@@ -20,197 +22,206 @@ export default function SpecificOrder() {
   }
 
   return (
-    <main>
-      <Menu />
-      <h1 className="text-2xl">Beställning #{order.BeställningId}</h1>
-      <section>
-        <CardStore>
-          <CardStoreContent>
-            <CardStoreOwner>
-              <strong>Beställningsdatum:</strong> {formatDate(order.Beställningsdatum)}
-            </CardStoreOwner>
-            <CardStoreOwner>
-              <strong>Leveransdatum:</strong>
-              {editedDate ? (
-                <input
-                  type="text"
-                  value={editedDate}
-                  onChange={(e) => setEditedDate(e.target.value)}
-                />
-              ) : (
-                <span>{formatDate(order.PreliminärtLeveransdatum)}</span>
-              )}
-              {editedDate && (
-                <div>
-                  <button onClick={handleSubmitDate}>Spara</button>
-                  <button onClick={() => setEditedDate('')}>Avbryt</button>
-                </div>
-              )}
-            </CardStoreOwner>
-            <CardStoreOwner>
-              <strong>Beställare:</strong> {order.Beställare}
-            </CardStoreOwner>
-            <CardStoreOwner>
-              <strong>Säljare:</strong> {order.Säljare}
-            </CardStoreOwner>
-          </CardStoreContent>
-        </CardStore>
-
-        {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
-          <div className="my-4 flex gap-2 flex-wrap">
-            {canEditOrder && !isEditing && <button onClick={handleEdit}>Ändra beställningsdetaljer</button>}
-            {canEditOrder && isEditing && (
-              <>
-                <button onClick={handleSubmit}>Spara</button>
-                <button onClick={handleCancelEdit}>Avbryt</button>
-              </>
-            )}
-            {canDeleteOrder && (
-              <button onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</button>
-            )}
-            {canEditDeliveryDate && (
-              <button onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
-                Ändra beställningsdatum
-              </button>
-            )}
-          </div>
-        )}
-
-        <CardStore className="">
-          <CardStoreContent>
-            <CardStoreInformation>
-              <p className="font-semibold">{order.Butik?.ButikNamn}
-                <span className="text-Branding-textPrimary"> {order.Butik?.ButikNummer}</span>
-              </p>
-              <p className="text-Branding-textSecondary">{order?.Butik?.Besöksadress}</p>
-            </CardStoreInformation>
-            <CardStoreContacts>
-              <CardStoreOwner>
-                <p>Butikägare:</p>
-                <article className="flex gap-1.5">
-                  <p>{order.Butik?.ButikschefNamn}</p>
-                  <p>{order.Butik?.ButikschefTelefon}</p>
-                </article>
-              </CardStoreOwner>
-              <CardStoreBreadperson>
-                <p>Brödansvarig:</p>
-                <article className="flex gap-1.5">
-                  <p>{order.Butik?.BrödansvarigNamn}</p>
-                  <p>{order.Butik?.BrödansvarigTelefon}</p>
-                </article>
-              </CardStoreBreadperson>
-            </CardStoreContacts>
-          </CardStoreContent>
-        </CardStore>
-      </section>
-
-      <section className="mt-6">
-        {canEditOrder ? (
-            <article>
-                <h2 className="text-2xl">Beställda produkter</h2>
-                {isCompletingOrder ? (
-                <button onClick={() => setIsCompletingOrder(false)}>Avbryt</button>
-                ) : (
-                <button onClick={() => setIsCompletingOrder(true)}>Redigera</button>
-                )}
-            </article>
-            ) : (
-            <h2 className="text-2xl">Beställda produkter</h2>
-        )}
-
-        <ul className="space-y-4 mt-4">
-          {order.Beställningsdetaljer.map((product, index) => (
-            <li key={index}>
-              <ProductCard>
-                <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
-                <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
-                {isEditing ? (
+    <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
+      <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-3 py-4">
+        <Menu />
+        <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
+          <h1 className="self-start text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
+          <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
+            <CardStore>
+              <CardStoreContent>
+                  <CardStoreInformation>
+                      <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställningsdatum:
+                          <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.Beställningsdatum)}</span>
+                      </p>
+                      {editedDate ? (
+                        <>
+                        <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem] flex items-center justify-center">Leveransdatum:
+                          <input
+                              className="ml-1 border border-gray-300 rounded p-1 font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"
+                              type="text"
+                              value={formatDate(editedDate)}
+                              onChange={(e) => setEditedDate(e.target.value)}
+                            />
+                        </p>
+                        <div className="space-x-2.5 self-center mt-1">
+                          <ButtonAdminManage onClick={handleSubmitDate}>Spara</ButtonAdminManage>
+                          <ButtonAdminDelete onClick={() => setEditedDate('')}>Avbryt</ButtonAdminDelete>
+                        </div>
+                        </>
+                      ) : (
+                        <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Leveransdatum:
+                          <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {formatDate(order.PreliminärtLeveransdatum)}</span>
+                        </p>
+                      )}
+                  </CardStoreInformation>
+                  <CardStoreInformation>
+                      <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Beställare:
+                          <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Beställare}</span>
+                      </p>
+                      <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">Säljare:
+                          <span className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"> {order.Säljare}</span>
+                      </p>
+                  </CardStoreInformation>
+              </CardStoreContent>
+            </CardStore>
+            {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
+              <div className="self-center flex gap-2 flex-wrap">
+                {canEditOrder && !isEditing && <ButtonAdminManage onClick={handleEdit}>Ändra beställningsdetaljer</ButtonAdminManage>}
+                {canEditOrder && isEditing && (
                   <>
-                    <ProductCardAmount>
-                      <input
-                        type="text"
-                        value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
-                        onChange={(e) =>
-                          handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
-                        }
-                      />
-                    </ProductCardAmount>
-                    <ProductCardPrice>
-                      Totaltpris: {
-                        editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Styckpris?.toFixed(2)
-                      } kr
-                    </ProductCardPrice>
-                    <button onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}>Ta bort</button>
-                  </>
-                ) : (
-                  <>
-                    <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
-                    <ProductCardPrice>Totaltpris: {product.Styckpris.toFixed(2)} kr</ProductCardPrice>
+                    <ButtonAdminManage onClick={handleSubmit}>Spara</ButtonAdminManage>
+                    <ButtonAdminDelete onClick={handleCancelEdit}>Avbryt</ButtonAdminDelete>
                   </>
                 )}
-              </ProductCard>
-            </li>
-          ))}
-        </ul>
+                {canEditDeliveryDate && (
+                  <ButtonAdminManage onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
+                    Ändra beställningsdatum
+                  </ButtonAdminManage>
+                )}
+                {canDeleteOrder && !isEditing && (
+                  <ButtonAdminDelete onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</ButtonAdminDelete>
+                )}
+              </div>
+            )}
+            <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
+            <CardStore>
+              <CardStoreContent>
+                  <CardStoreInformation>
+                      <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikNamn} 
+                          <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]"> {order.Butik?.ButikNummer}</span>
+                      </p>
+                      <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.Besöksadress}</p>
+                  </CardStoreInformation>
+                  <CardStoreContacts>
+                      <CardStoreOwner>
+                          <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Butikägare: </p>
+                          <article className="w-full flex items-center justify-start gap-1.5">
+                              <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikschefNamn}</p>
+                              <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.ButikschefTelefon}</p>
+                          </article>
+                      </CardStoreOwner>
+                      <CardStoreBreadperson>
+                          <p className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">Brödansvarig: </p>
+                          <article className="w-full flex items-center justify-start gap-1.5">
+                              <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.BrödansvarigNamn}</p>
+                              <p className="font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]">{order.Butik?.BrödansvarigTelefon}</p>
+                          </article>
+                      </CardStoreBreadperson>
+                  </CardStoreContacts>
+              </CardStoreContent>                                                             
+          </CardStore>
+          </section>
 
-        {isCompletingOrder && (
-            <div className="mt-6 border-t pt-4">
-                <h3 className="text-lg font-semibold">Lägg till produkt</h3>
-                <div className="flex flex-col gap-2 max-w-md">
-                    <select
-                        className="border p-2"
-                        value={newDetail.ProduktId}
-                        onChange={(e) => {
-                            const selectedId = parseInt(e.target.value);
-                            const selectedProduct = products.find(p => p.ProduktId === selectedId);
-                            const basePrice = selectedProduct?.Baspris || 0;
+          <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
+            {canEditOrder ? (
+                <article className="flex items-center justify-center gap-3">
+                  <h2 className="self-center text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
+                  {isCompletingOrder ? (
+                    <ButtonAdminDelete onClick={() => setIsCompletingOrder(false)}>Avbryt</ButtonAdminDelete >
+                    ) : (
+                    <ButtonAdminManage onClick={() => setIsCompletingOrder(true)}>Komplettera</ButtonAdminManage>
+                    )}
+                </article>
+                ) : (
+                <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
+            )}
+            <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
+              <ul className="w-full space-y-3">
+                {order.Beställningsdetaljer.map((product, index) => (
+                  <li key={index}>
+                    <ProductCard>
+                      <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
+                      <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
+                      {isEditing ? (
+                        <>
+                          <ProductCardAmount>
+                              <input
+                                type="text"
+                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded p-1 ml-1 max-w-12"
+                                value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
+                                onChange={(e) =>
+                                  handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
+                                }
+                              />                         
+                          </ProductCardAmount>
+                          <ProductCardTotalPrice>
+                              <span className="text-Branding-textSecondary">Pris: </span> 
+                              {product.Styckpris.toFixed(2)} kr
+                          </ProductCardTotalPrice>
+                          <button className="bg-red-600 hover:bg-red-500 transition-colors p-2 rounded-md" onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross/></button>
+                        </>
+                      ) : (
+                        <>
+                          <ProductCardAmount>Antal: {product.Antal}</ProductCardAmount>
+                          <ProductCardTotalPrice>
+                              <span className="text-Branding-textSecondary">Pris: </span> 
+                              {product.Styckpris.toFixed(2)} kr
+                          </ProductCardTotalPrice>
+                        </>
+                      )}
+                    </ProductCard>
+                  </li>
+                ))}
+              </ul>
+              {isCompletingOrder && (
+                  <div className="flex flex-col border-t py-3 gap-3">
+                      <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Lägg till en produkt</h2>
+                      <div className="flex flex-col gap-3">
+                          <select
+                              className="w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
+                              value={newDetail.ProduktId}
+                              onChange={(e) => {
+                                  const selectedId = parseInt(e.target.value);
+                                  const selectedProduct = products.find(p => p.ProduktId === selectedId);
+                                  const basePrice = selectedProduct?.Baspris || 0;
 
-                            setNewDetail({
-                                ...newDetail,
-                                ProduktId: selectedId,
-                                Styckpris: basePrice * newDetail.Antal,
-                            });
-                        }}
-                    >
-                        <option value={0}>Välj produkt</option>
-                        {products.map((product) => (
-                            <option key={product.ProduktId} value={product.ProduktId}>
-                                {product.Namn} – {product.Baspris} kr
-                            </option>
-                        ))}
-                    </select>
-
-                    <input
-                        type="text"
-                        className="border p-2"
-                        placeholder="Antal"
-                        value={newDetail.Antal}
-                        onChange={(e) => {
-                            const amount = parseFloat(e.target.value) || 0;
-                            const selectedProduct = products.find(p => p.ProduktId === newDetail.ProduktId);
-                            const basePrice = selectedProduct?.Baspris || 0;
-
-                            setNewDetail({
-                                ...newDetail,
-                                Antal: amount,
-                                Styckpris: basePrice * amount
-                            });
-                        }}
-                    />
-
-                    <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        onClick={handleAddDetail}
-                    >
-                        Lägg till
-                    </button>
-                </div>
+                                  setNewDetail({
+                                      ...newDetail,
+                                      ProduktId: selectedId,
+                                      Styckpris: basePrice * newDetail.Antal,
+                                  });
+                              }}
+                          >
+                              <option>Välj produkt</option>
+                              {products.map((product) => (
+                                  <option key={product.ProduktId} className="" value={product.ProduktId}>
+                                    {product.Namn} – {product.Baspris} kr
+                                  </option>
+                              ))}
+                          </select>
+                          <div className="flex gap-3 items-center">
+                            <input
+                                type="text"
+                                className="w-[5rem] bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
+                                placeholder="Antal"
+                                value={newDetail.Antal}
+                                onChange={(e) => {
+                                    const amount = parseFloat(e.target.value) || 0;
+                                    const selectedProduct = products.find(p => p.ProduktId === newDetail.ProduktId);
+                                    const basePrice = selectedProduct?.Baspris || 0;
+                                    setNewDetail({
+                                        ...newDetail,
+                                        Antal: amount,
+                                        Styckpris: basePrice * amount
+                                    });
+                                }}
+                            />
+                            <p className="font-inter text-Branding-textPrimary">Pris: {newDetail.Styckpris.toFixed(2)} kr</p>
+                          </div>
+                          <ButtonOrder className="w-[12rem]" onClick={handleAddDetail}>Lägg till</ButtonOrder>
+                      </div>
+                  </div>
+              )}
+              <hr className="bg-white h-[1px] w-full"/> 
+              <section className="self-end flex flex-col items-end gap-2">
+                <p className="font-inter text-Branding-textPrimary">Rabatt: {order.Beställningsdetaljer?.[0]?.Rabatt}%</p>
+                <p className="font-inter text-Branding-textPrimary">Finallt pris: {finalTotal?.toFixed(2)} kr</p>
+              </section>
             </div>
-        )}
-
-        <p className="mt-4">Rabatt: {order.Beställningsdetaljer?.[0]?.Rabatt}%</p>
-        <p className="font-bold">Totalt pris: {finalTotal?.toFixed(2)} kr</p>
-      </section>
+          </section>
+        </section>
+      </div>
     </main>
   );
 }
