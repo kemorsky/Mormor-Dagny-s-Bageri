@@ -11,6 +11,7 @@ import Menu from "../../elements/menu/menu";
 import { ButtonTab } from "../../components/ui/button";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../lib/formatDate";
 
 export default function OrdersPage() {
   const { upcoming, previous } = useFilteredOrders();
@@ -47,8 +48,8 @@ export default function OrdersPage() {
             onClick={() => navigate(`/order/${order.BeställningId}`)}
           >
             <CardDate className="absolute right-4 top-2 text-sm text-white">
-              {order.Beställningsdatum &&
-                new Date(order.Beställningsdatum).toLocaleDateString()}
+            {order.PreliminärtLeveransdatum &&
+    formatDate(order.PreliminärtLeveransdatum)}
             </CardDate>
             <CardHeader>
               <CardStore className="text-lg font-normal">
