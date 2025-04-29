@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AdminUserCard, AdminUserCardContent} from "../../../blocks/admin-cards";
 import { InputPrimary } from "../../../components/ui/input";
 import { ButtonAdminDelete, ButtonAdminManage } from "../../../components/ui/button";
+import { Main, Wrapper } from "../../../blocks/wrappers";
 
 export default function EditUser() {
     const {users, setUsers} = useUser();
@@ -66,8 +67,8 @@ export default function EditUser() {
         }
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <select id="users" className="max-w-[25.5rem] w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter text-[0.875rem] rounded-lg focus:border-white focus:outline-none block p-3">
                     <option value="">Välj användare</option>
@@ -130,7 +131,7 @@ export default function EditUser() {
                 ) : (
                     <p>Välj en användare</p>
                 )}
-            </div>
-        </main>
+            </Wrapper>
+       </Main>
     )
 };

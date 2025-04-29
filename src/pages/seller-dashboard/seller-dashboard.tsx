@@ -16,6 +16,8 @@ import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { useNavigate } from "react-router";
 import { formatDate } from "../../lib/formatDate";
 import { formatPhoneNumber } from "../../lib/formatPhoneNumber";
+import { Main, Wrapper } from "../../blocks/wrappers";
+import { PreviousOrderCard, PreviousOrderCardHeader, PreviousOrderCardHeaderId, PreviousOrderCardHeaderDate, PreviousOrderCardContact, PreviousOrderCardContactStore, PreviousOrderCardData } from "../../blocks/card-order-page";
 
 export default function DashBoard() {
     const { upcoming, previous } = useFilteredOrders();
@@ -44,19 +46,12 @@ export default function DashBoard() {
     };
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
-
+        <Main>
+            <Wrapper>
                 <Menu />
                 {/* Pågående beställningar */}
-                <div className="w-full inline-flex flex-col items-center justify-center gap-3">
-                    <article className="w-full flex items-center gap-4 px-4">
-                        <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
-                            Dina pågående beställningar
-                        </p>
-                        <ButtonSecondary>Se alla</ButtonSecondary>
-                    </article>
-
+                <div className="w-full max-w-[50rem] inline-flex flex-col items-start justify-center gap-3">
+                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina pågående beställningar</h2>
                     <div className="relative w-full">
                         <button
                             onClick={() => scrollLeft(scrollRefCurrent)}
@@ -68,10 +63,10 @@ export default function DashBoard() {
                         <div
                             ref={scrollRefCurrent}
                             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                            className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
+                            className="w-full overflow-x-auto no-scrollbar inline-flex gap-3 snap-x snap-mandatory scroll-smooth"
                         >
                             {upcoming.map((order) => (
-                                <div key={order.BeställningId} onClick={() => { handleClick(order.BeställningId ?? 0) }} className="snap-center min-w-[320px]">
+                                <div key={order.BeställningId} onClick={() => { handleClick(order.BeställningId ?? 0) }} className="snap-center min-w-[320px] cursor-pointer">
                                     <Card>
                                         <div className="flex justify-between items-center w-full">
                                             <CardClientNumber>#{order.BeställningId}</CardClientNumber>
@@ -119,15 +114,9 @@ export default function DashBoard() {
                 </div>
 
                 {/* Tidigare beställningar */}
-                <div className="w-full inline-flex flex-col items-center justify-start gap-3 mt-10">
-                    <article className="w-full flex items-center gap-4 px-4">
-                        <p className="font-open-sans font-semibold text-[1.125rem] leading-[1.375rem] text-Branding-textPrimary">
-                            Dina tidigare beställningar
-                        </p>
-                        <ButtonTertiary>Se alla</ButtonTertiary>
-                    </article>
-
-                    <div className="relative w-full">
+                <div className="w-full max-w-[50rem] inline-flex flex-col items-center justify-start gap-3 mt-10">
+                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina tidigare beställningar</h2>
+                    <div className="relative w-full ">
                         {/* Scroll Left Button */}
                         <button
                             onClick={() => scrollLeft(scrollRefPrevious)}
@@ -140,47 +129,36 @@ export default function DashBoard() {
                         <div
                             ref={scrollRefPrevious}
                             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                            className="w-full overflow-x-auto scrollbar-hide inline-flex flex-row gap-3 snap-x snap-mandatory scroll-smooth"
+                            className="w-full overflow-x-auto no-scrollbar inline-flex gap-3 snap-x snap-mandatory scroll-smooth"
                         >
                             {previous.map((order) => (
-                                <div
-                                    key={order.BeställningId}
-                                    onClick={() => handleClick(order.BeställningId ?? 0)}
-                                    className="snap-center"
-                                >
-                                    <div className="w-44 h-36 p-3 bg-gradient-to-br from-neutral-800 to-zinc-900 rounded-3xl shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] inline-flex flex-col justify-start items-start gap-3 overflow-hidden cursor-pointer">
-                                        {/* Order ID and Date */}
-                                        <div className="w-full flex justify-between items-center">
-                                            <span className="text-white text-sm font-semibold font-['Inter']">
-                                                #{order.BeställningId}
+                                <div>
+                                <PreviousOrderCard key={order.BeställningId}
+                                onClick={() => handleClick(order.BeställningId ?? 0)}
+                                className="snap-center">
+                                    <PreviousOrderCardHeader>
+                                        <PreviousOrderCardHeaderId>#{order.BeställningId}</PreviousOrderCardHeaderId>
+                                        <PreviousOrderCardHeaderDate>
+                                            {(() => {
+                                                const d = new Date(order.PreliminärtLeveransdatum);
+                                                const day = String(d.getDate()).padStart(2, "0");
+                                                const month = String(d.getMonth() + 1).padStart(2, "0");
+                                                const year = d.getFullYear();
+                                                return `${day}.${month}.${year}`;
+                                            })()}
+                                        </PreviousOrderCardHeaderDate>
+                                    </PreviousOrderCardHeader>
+                                    <PreviousOrderCardContact>
+                                        <PreviousOrderCardContactStore>{order.Butik?.ButikNamn}</PreviousOrderCardContactStore>
+                                        <PreviousOrderCardData>
+                                            <p className="text-Branding-textPrimary">Brödansvarig:</p>
+                                            <span className="text-Branding-textSecondary">
+                                                <p>{order.Butik?.BrödansvarigNamn}</p>
+                                                <p>{order.Butik?.ButikschefTelefon?.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{0,3})/, "$1 $2 $3").trim()}</p>
                                             </span>
-                                            <span className="text-Customs-Text-Secondary text-sm font-normal font-['Inter']">
-                                                {(() => {
-                                                    const d = new Date(order.PreliminärtLeveransdatum);
-                                                    const day = String(d.getDate()).padStart(2, "0");
-                                                    const month = String(d.getMonth() + 1).padStart(2, "0");
-                                                    const year = d.getFullYear();
-                                                    return `${day}.${month}.${year}`;
-                                                })()}
-                                            </span>
-                                        </div>
-
-                                        {/* Store & Contact Info */}
-                                        <div className="h-20 flex flex-col justify-center items-start gap-1.5 mt-2">
-                                            <div className="w-32 text-white text-base font-semibold font-['Inter']">
-                                                {order.Butik?.ButikNamn}
-                                            </div>
-                                            <div className="text-white text-sm font-normal font-['Inter']">
-                                                Butikägare
-                                            </div>
-                                            <div className="text-[#9A9A9A] text-sm font-normal font-['Inter']">
-                                                {order.Butik?.ButikschefNamn}
-                                            </div>
-                                            <div className="text-[#9A9A9A] text-sm font-normal font-['Inter']">
-                                                {order.Butik?.ButikschefTelefon?.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{0,3})/, "$1 $2 $3").trim()}
-                                            </div>
-                                        </div>
-                                    </div>
+                                        </PreviousOrderCardData>
+                                    </PreviousOrderCardContact>
+                                </PreviousOrderCard>
                                 </div>
                             ))}
                         </div>
@@ -194,8 +172,7 @@ export default function DashBoard() {
                         </button>
                     </div>
                 </div>
-
-            </div>
-        </main>
+            </Wrapper>
+        </Main>
     );
 }

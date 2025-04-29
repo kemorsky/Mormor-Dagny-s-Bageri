@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
 import { ButtonOrder } from "../../components/ui/button"
+import { Main, Wrapper } from "../../blocks/wrappers";
 
 export default function ConfirmationPage() {
     const [details, setDetails] = useState<OrderDetails[]>([]);
@@ -36,8 +37,8 @@ export default function ConfirmationPage() {
       }, 0);
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-3 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
                     <h1 className="self-start text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
@@ -120,7 +121,7 @@ export default function ConfirmationPage() {
                 ) : (
                     <p>Laddar orderdetaljer...</p>
                 )}
-            </div>
-        </main>
+            </Wrapper>
+        </Main>
     )
 }

@@ -3,27 +3,29 @@ import { Store, OrderDetails, Order } from '../../types/types';
 import Menu from "../../elements/menu/menu"
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
 import { ButtonOrder } from "../../components/ui/button"
-import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct } from "../../blocks/card-order-page";
+import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct, 
+        PreviousOrderCard, PreviousOrderCardHeader, PreviousOrderCardHeaderId, PreviousOrderCardHeaderDate, PreviousOrderCardContact,
+        PreviousOrderCardContactStore, PreviousOrderCardData
+ } from "../../blocks/card-order-page";
 import { useStores } from "../../components/auth/StoreContext";
 import { useProducts } from "../../components/auth/ProductContext";
 import { useNavigate } from "react-router-dom";
-
+import { Main, Wrapper } from "../../blocks/wrappers";
 import { useAuth } from "../../components/auth/AuthContext";
+import { fetchOrdersByStore } from "../../lib/api";
 
 export default function OrderPage() {
+    const { currentUser } = useAuth()
+    const { products } = useProducts()
+    const { stores, setStores, searchStores } = useStores()
+
     const [selected, setSelected] = useState<Store | undefined>(undefined);
+    const [selectedOrders, setSelectedOrder] = useState<Order[]>([])
     const [query, setQuery] = useState<string>("");
     const [loading, isLoading] = useState<string | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [productQuantities, setProductQuantities] = useState<{ [key: number]: number }>({});
     const [discount, setDiscount] = useState<number>(0);
-
-    const { currentUser } = useAuth()
-    const { products } = useProducts()
-    const { stores, setStores, searchStores } = useStores()
-
-    const navigate = useNavigate();
-
     const [newOrder, setNewOrder] = useState<Order>({
         Beställningsdatum: '',
         Beställare: '',
@@ -31,6 +33,8 @@ export default function OrderPage() {
         Säljare: currentUser?.Användarnamn || '',
         Beställningsdetaljer: [],
     });
+
+    const navigate = useNavigate();
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
@@ -45,17 +49,45 @@ export default function OrderPage() {
         }
     };
 
-    const handleSelectedStore = (store: Store) => {
+    const handleSelectedStore = async (store: Store) => {
         setSelected(store);
-        setQuery('');
+        setQuery(store.ButikNamn);
         setIsActive(false)
+        try {
+            const orders = await fetchOrdersByStore(store.ButikId ?? 0);
+            setSelectedOrder(orders)
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     const handleClearInput = () => {
         setSelected(undefined);
         setQuery('');
+        setSelectedOrder([])
+        setProductQuantities({});
+        setDiscount(0);
         setIsActive(false);
     };
+
+    const handleOrderClick = (order: Order) => {
+        if (!order.Beställningsdetaljer) return;
+    
+        const newQuantities: { [key: number]: number } = {};
+        order.Beställningsdetaljer.forEach(detail => {
+            newQuantities[detail.ProduktId] = detail.Antal;
+        });
+        setProductQuantities(newQuantities);
+        setDiscount(order.Beställningsdetaljer[0]?.Rabatt || 0);
+        setNewOrder({
+            ...newOrder,
+            Beställare: order.Beställare,
+            Beställningsdatum: order.Beställningsdatum,
+            PreliminärtLeveransdatum: order.PreliminärtLeveransdatum,
+            Beställningsdetaljer: order.Beställningsdetaljer,
+        });
+    };
+    
 
     const totalPrice = products ? products.reduce((acc, product) => {
         const quantity = productQuantities[product.ProduktId ?? 0] || 0;
@@ -83,7 +115,6 @@ export default function OrderPage() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         isLoading("Laddar...");
-
         const orderDetails: OrderDetails[] = products?.map((product) => ({
             ProduktId: product.ProduktId || 0,
             Antal: productQuantities[product.ProduktId ?? 0] || 0,
@@ -113,8 +144,8 @@ export default function OrderPage() {
     }
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
                     <form className="w-full border border-Branding-textAccent rounded bg-Branding-input inline-flex items-center justify-between px-4 py-3">
@@ -186,14 +217,49 @@ export default function OrderPage() {
                         </CardStore>
                     </div>
                 )}
-                <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center">
-                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>                
+                <section className="w-full max-w-[33.792rem] max-h-[13.25rem] inline-flex flex-col items-center justify-center gap-3">
+                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>
+                    <div className="w-full flex justify-start sm:justify-center items-center gap-3 overflow-x-auto no-scrollbar sm:overflow-visible scroll-snap-type-x">
+                        {selectedOrders ? (
+                            [...selectedOrders]
+                            .sort((a, b) => new Date(b.PreliminärtLeveransdatum).getTime() - new Date(a.PreliminärtLeveransdatum).getTime())
+                            .slice(0, 3)
+                            .map((order) => (
+                                <div> {/* Div wrapper för att annars overflow-x-scroll inte fungerar */}
+                                    <PreviousOrderCard key={order.BeställningId} className="cursor-pointer" onClick={() => {handleOrderClick(order)}}>
+                                        <PreviousOrderCardHeader>
+                                            <PreviousOrderCardHeaderId>#{order.BeställningId}</PreviousOrderCardHeaderId>
+                                            <PreviousOrderCardHeaderDate>
+                                                {(() => {
+                                                    const d = new Date(order.PreliminärtLeveransdatum);
+                                                    const day = String(d.getDate()).padStart(2, "0");
+                                                    const month = String(d.getMonth() + 1).padStart(2, "0");
+                                                    const year = d.getFullYear();
+                                                    return `${day}.${month}.${year}`;
+                                                })()}
+                                            </PreviousOrderCardHeaderDate>
+                                        </PreviousOrderCardHeader>
+                                        <PreviousOrderCardContact>
+                                            <PreviousOrderCardContactStore>{order.Butik?.ButikNamn}</PreviousOrderCardContactStore>
+                                            <PreviousOrderCardData>
+                                                <p className="text-Branding-textPrimary">Brödansvarig:</p>
+                                                <span className="text-Branding-textSecondary">
+                                                    <p>{order.Butik?.BrödansvarigNamn}</p>
+                                                    <p>{order.Butik?.ButikschefTelefon?.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{0,3})/, "$1 $2 $3").trim()}</p>
+                                                </span>
+                                            </PreviousOrderCardData>
+                                        </PreviousOrderCardContact>
+                                    </PreviousOrderCard>
+                                </div>
+                            ))
+                        ) : (null)}
+                    </div>       
                 </section>
                 <form className="w-full max-w-[33.792rem]" onSubmit={handleSubmit}> 
                     <section className="w-full inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
-                        <CardStore className="p-2">
-                            <CardStoreContent className="gap-3">
+                        <CardStore>
+                            <CardStoreContent className="gap-4">
                                 {products ? (
                                     products.map((product) => (
                                         <CardProduct key={product.ProduktId}>
@@ -206,8 +272,7 @@ export default function OrderPage() {
                                                         ...prevQuantities,
                                                         [product.ProduktId ?? 0]: parseInt(e.target.value)
                                                     }))
-                                            }}
-                                            />
+                                                }}/>
                                         </CardProduct>
                                     ))
                                 ) : (
@@ -227,7 +292,7 @@ export default function OrderPage() {
                         </CardStore>               
                     </section>
                 </form>
-            </div>
-        </main>
+            </Wrapper>
+        </Main>
     );
 };

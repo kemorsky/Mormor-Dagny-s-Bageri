@@ -7,6 +7,7 @@ import Menu from "../../../elements/menu/menu"
 import { InputPrimary } from "../../../components/ui/input"
 import { ButtonAdminManage, ButtonAdminDelete, ButtonOrder } from "../../../components/ui/button"
 import { ProductCard, ProductCardName, ProductCardPrice } from "../../../blocks/card"
+import { Main, Wrapper } from "../../../blocks/wrappers"
 
 export default function Products() {
     const { products, setProducts } = useProducts()
@@ -72,8 +73,8 @@ export default function Products() {
     };
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <div className="flex flex-col items-center justify-center gap-3">
                     <form className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)]" action="" onSubmit={handleSubmit}>
@@ -141,7 +142,7 @@ export default function Products() {
                     <p>Error loading products</p>
                     )}
                 </section>
-            </div>
-        </main>
+            </Wrapper>
+        </Main>
     )
 };

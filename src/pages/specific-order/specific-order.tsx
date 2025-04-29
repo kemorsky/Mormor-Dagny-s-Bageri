@@ -6,10 +6,11 @@ import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, C
 import { formatDate } from "../../lib/formatDate";
 import { ButtonAdminManage, ButtonAdminDelete, ButtonOrder } from "../../components/ui/button";
 import { ImCross } from "react-icons/im";
+import { Main, Wrapper } from "../../blocks/wrappers";
 
 export default function SpecificOrder() {
   const {
-    order, products, isEditing, isCompletingOrder, editedDetails, editedDate,
+    order, products, isEditing, isCompletingOrder, editedDetails, editedDate, message,
     newDetail, finalTotal, setIsCompletingOrder, setEditedDate, setNewDetail,
     handleEdit, handleCancelEdit, handleSubmitDate, handleSubmit, handleAmountChange, handleDelete,
     handleDeleteOrder, handleAddDetail,} = useSpecificOrderPage();
@@ -22,8 +23,8 @@ export default function SpecificOrder() {
   }
 
   return (
-    <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-      <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-3 py-4">
+    <Main>
+      <Wrapper>
         <Menu />
         <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
           <h1 className="self-start text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
@@ -127,10 +128,10 @@ export default function SpecificOrder() {
                 <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
             )}
             <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
-              <ul className="w-full space-y-3">
+              <ul className="w-full space-y-4">
                 {order.Beställningsdetaljer.map((product, index) => (
                   <li key={index}>
-                    <ProductCard>
+                    <ProductCard className={`${isEditing ? 'items-center' : ''}`}>
                       <ProductCardName>{product.Produkt?.Namn}</ProductCardName>
                       <ProductCardPrice>{product.Produkt?.Baspris} kr</ProductCardPrice>
                       {isEditing ? (
@@ -138,7 +139,7 @@ export default function SpecificOrder() {
                           <ProductCardAmount>
                               <input
                                 type="text"
-                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded p-1 ml-1 max-w-12"
+                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded px-2 py-1.5 max-w-12"
                                 value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
                                 onChange={(e) =>
                                   handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
@@ -208,6 +209,9 @@ export default function SpecificOrder() {
                                 }}
                             />
                             <p className="font-inter text-Branding-textPrimary">Pris: {newDetail.Styckpris.toFixed(2)} kr</p>
+                            {message ? (
+                                <p className="font-inter text-red-500">{message}</p>
+                            ): (null)}
                           </div>
                           <ButtonOrder className="w-[12rem]" onClick={handleAddDetail}>Lägg till</ButtonOrder>
                       </div>
@@ -220,9 +224,9 @@ export default function SpecificOrder() {
               </section>
             </div>
           </section>
-        </section>
-      </div>
-    </main>
+        </section>  
+      </Wrapper>
+    </Main>
   );
 }
 

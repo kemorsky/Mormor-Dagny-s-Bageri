@@ -62,6 +62,15 @@ export const fetchOrders = async () => {
   }
 };
 
+export const fetchOrdersByStore = async (ButikId: number) => {
+  try {
+    return await apiRequest(`${BASE_URL}/beställningar/${ButikId}`);
+  } catch (error) {
+    console.error("Error pushing order:", error);
+    throw error;
+  }
+};
+
 export const fetchDashboardStatistics = async () => {
   try {
     return await apiRequest(`${BASE_URL}/beställningar/dashboard-statistics`);
@@ -141,11 +150,10 @@ export const addOrderDetail = async (BeställningId: number, detalj: OrderDetail
       method: "POST",
       body: JSON.stringify(detalj)
     })
-    console.log(detalj)
-    console.log(response)
     return response;
   } catch (error) {
-    console.error("Error adding detail to order", error)
+    console.error(error)
+    throw error;
   }
 }
 
@@ -208,7 +216,8 @@ export const forgotPassword = async (email: string) => {
       body: JSON.stringify({ Email: email })
     });
     if (!response.ok) {
-      throw new Error(`Request failed with status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.error);
     }
     const result = await response.json();
     return result;

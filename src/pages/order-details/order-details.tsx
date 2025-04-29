@@ -10,6 +10,7 @@ import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
 import { ButtonOrder, ButtonEditOrder } from "../../components/ui/button"
 import { ButtonSpinner } from "../../components/ui/button-spinner"
+import { Main, Wrapper } from "../../blocks/wrappers";
 
 export default function OrderDetailsPage() {
     const { state } = useLocation();
@@ -72,8 +73,8 @@ export default function OrderDetailsPage() {
     }
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="w-full max-w-[60rem] inline-flex flex-col items-center justify-start gap-6 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <form className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3" action="" onSubmit={handleSubmit}>
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
@@ -130,7 +131,7 @@ export default function OrderDetailsPage() {
                         <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         {details.length > 0 ? (
                         <div className="bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
-                            <ul className="w-full space-y-3">
+                            <ul className="w-full space-y-4">
                                 {products.map((product, index) => (
                                     <li key={index} className="w-full">
                                     <ProductCard>
@@ -202,7 +203,7 @@ export default function OrderDetailsPage() {
                         )}
                     </section>
                 </form>
-            </div>
-        </main>
+            </Wrapper>
+        </Main>
     )
 }

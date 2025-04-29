@@ -5,6 +5,7 @@ import Menu from "../../../elements/menu/menu";
 import { defaultUser } from "../../../constants/prefab-consts";
 import { InputPrimary } from "../../../components/ui/input";
 import { ButtonAdminManage } from "../../../components/ui/button";
+import { Main, Wrapper } from "../../../blocks/wrappers";
 
 export default function AddUser() {
     const [newUser, setNewUser] = useState<RegisterUser>(() => ({ ...defaultUser }))
@@ -23,8 +24,8 @@ export default function AddUser() {
     };
 
     return (
-        <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-[#2C2F33] shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg p-4">
                     <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
@@ -68,7 +69,7 @@ export default function AddUser() {
                     </label>        
                     <ButtonAdminManage type="submit">Lägg till</ButtonAdminManage>
                 </form>
-            </div>
-        </main>
+            </Wrapper>
+        </Main>    
     )
 };

@@ -204,7 +204,7 @@ const ProductCardAmount = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "max-w-[5rem] w-full text-Branding-textSecondary font-inter font-medium",
+      "max-w-[5rem] text-Branding-textSecondary font-inter font-medium",
       className
     )}
     {...props}

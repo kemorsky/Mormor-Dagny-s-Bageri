@@ -23,6 +23,7 @@ export function useSpecificOrderPage() {
   const [editedDetails, setEditedDetails] = useState<OrderDetails[]>([]);
   const [editedDate, setEditedDate] = useState(order?.PreliminärtLeveransdatum || '');
   const [newDetail, setNewDetail] = useState<OrderDetails>(() => ({ ...defaultDetail }));
+  const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     const getOrder = async () => {
@@ -146,7 +147,6 @@ const handleSubmit = async () => {
 const handleAddDetail = async () => {
     try {
       if (!order) return;
-  
       const response = await addOrderDetail(order.BeställningId ?? 0, newDetail);
       console.log('Backend response:', response);
     
@@ -180,7 +180,9 @@ const handleAddDetail = async () => {
       console.log(editedDetails)
   
     } catch (error) {
-      console.log("Could not add new detail", error);
+      if (error) {
+        setMessage('Ogillit detaljer. Fyll in alla fälter.');
+      }
     }
   };
   
@@ -191,6 +193,7 @@ const handleAddDetail = async () => {
     isCompletingOrder,
     editedDetails,
     editedDate,
+    message,
     newDetail,
     finalTotal,
     setIsCompletingOrder,
