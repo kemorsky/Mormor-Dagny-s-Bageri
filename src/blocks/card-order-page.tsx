@@ -174,7 +174,7 @@ const PreviousOrderCardContact = React.forwardRef<
   <article
     ref={ref}
     className={cn(
-      "min-h-20 flex flex-col justify-center items-start gap-2",
+      "min-h-20 h-full flex flex-col justify-between items-start gap-2",
       className
     )}
     {...props}
@@ -189,7 +189,7 @@ const PreviousOrderCardContactStore = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "w-full max-w-[9.25rem] text-Branding-textPrimary text-base font-semibold font-inter",
+      "w-full text-Branding-textPrimary text-base font-semibold font-inter",
       className
     )}
     {...props}
