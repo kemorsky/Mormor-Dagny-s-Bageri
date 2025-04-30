@@ -9,7 +9,6 @@ import {
     CardClientNumber,
     CardStore,
 } from "../../blocks/card";
-import { ButtonSecondary, ButtonTertiary } from "./../../components/ui/button";
 import Menu from "./../../elements/menu/menu";
 import { fetchSpecificOrder } from "../../lib/api";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
