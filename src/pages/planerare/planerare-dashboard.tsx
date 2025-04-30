@@ -69,29 +69,29 @@ export default function PlanerareDashboard() {
                             </section>
                         </section>
                     </div>
-                    <section className="max-w-[35rem] w-full flex items-start flex-col gap-3">
+                    
+                    <div className="w-full inline-flex flex-col border-black gap-3">
                         <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställningar per butik</h2>
-                        <div className="w-full bg-Branding-cardPrimary rounded-lg border border-black">
-                            <div className="flex flex-col gap-3 w-full">
-                                <article className="w-full grid grid-cols-[2.25fr_1fr_1fr] border-b font-semibold px-3 py-3">
+                        <div className="flex flex-col w-full bg-blue-500 rounded-lg border">
+                            <article className="w-full grid grid-cols-[2.25fr_1fr_1fr] border-b font-semibold px-3 py-3">
                                     <span>Butik Namn</span>
                                     <span>Pågående</span>
                                     <span>Tidigare</span>
-                                </article>
-                                {combinedStoreOrders.map((store, index) => (
-                                    <PlanerareCard key={index} className="grid grid-cols-[2.25fr_1fr_1fr] items-center">
-                                        <PlanerareCardName>{store.ButikNamn}</PlanerareCardName>
-                                        <PlanerareCardAmount>{store.CurrentOrders}</PlanerareCardAmount>
-                                        <PlanerareCardAmount>{store.PreviousOrders}</PlanerareCardAmount>
-                                    </PlanerareCard>
-                                    ))
-                                }
-                            </div>
+                            </article>
+                            {combinedStoreOrders.map((store, index) => (
+                                <PlanerareCard key={index} className="grid grid-cols-[2.25fr_1fr_1fr] items-center">
+                                    <PlanerareCardName>{store.ButikNamn}</PlanerareCardName>
+                                    <PlanerareCardAmount>{store.CurrentOrders}</PlanerareCardAmount>
+                                    <PlanerareCardAmount>{store.PreviousOrders}</PlanerareCardAmount>
+                                </PlanerareCard>
+                                ))
+                            }
                         </div>
-                    </section>
-                    <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
-                    <div className="w-full inline-flex flex-col bg-blue-500 rounded-lg border border-black">
-                        <div className="flex flex-col gap-3 w-full">
+                    </div>
+                    
+                    <div className="w-full inline-flex flex-col border-black gap-3">
+                        <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
+                        <div className="flex flex-col w-full bg-blue-500 rounded-lg border">
                             <article className="w-full grid grid-cols-[2.25fr_1fr_1fr] border-b font-semibold px-3 py-3">
                                 <span>Produkt Namn</span>
                                 <span>Kommande</span>
