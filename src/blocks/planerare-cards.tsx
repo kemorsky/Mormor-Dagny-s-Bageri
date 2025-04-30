@@ -23,7 +23,7 @@ const PlanerareCardName = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-base font-semibold font-inter text-Branding-textPrimary ",
+      "w-full max-w-[12rem] text-base font-semibold font-inter text-Branding-textPrimary",
       className
     )}
     {...props}
@@ -38,7 +38,7 @@ const PlanerareCardAmount = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "",
+      "w-full max-w-[6rem] text-base font-semibold font-inter text-Branding-textPrimary",
       className
     )}
     {...props}
