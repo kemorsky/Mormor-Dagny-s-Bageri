@@ -22,7 +22,7 @@ export default function OrdersPage() {
   const orders = activeTab === "ongoing" ? upcoming : previous;
 
   return (
-    <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-gradient-to-b from-[#898989] to-[#0d0d0d] px-4 pt-12">
+    <main className="w-full min-h-[59.75rem] inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4 pt-12">
       <Menu />
       <div className="flex pt-10">
         <ButtonTab
@@ -44,10 +44,10 @@ export default function OrdersPage() {
         {orders.map((order) => (
           <Card
             key={order.BeställningId}
-            className="w-[380px] h-[85px] rounded-xl bg-[#504f55] flex justify-center relative mb-4 shadow-none"
+            className="w-[23.75rem] h-[5.313rem] rounded-xl bg-Branding-cardPrimary flex justify-center relative mb-4"
             onClick={() => navigate(`/order/${order.BeställningId}`)}
           >
-            <CardDate className="absolute right-4 top-2 text-sm text-white">
+            <CardDate className="absolute right-4 top-2 text-sm">
             {order.PreliminärtLeveransdatum &&
     formatDate(order.PreliminärtLeveransdatum)}
             </CardDate>
