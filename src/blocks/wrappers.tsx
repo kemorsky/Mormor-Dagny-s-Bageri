@@ -53,7 +53,7 @@ const LoginWrapper = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-        "w-[25rem] sm:w-full sm:max-w-[27.5rem] bg-Branding-cardPrimary border border-blue-200 rounded-2xl absolute left-1/2 transform -translate-x-1/2 top-[8.125rem] flex flex-col items-start justify-start gap-3 p-[1.375rem]",    
+        "w-[25rem] sm:w-full sm:max-w-[27.5rem] bg-Branding-cardPrimary border border-black rounded-2xl absolute left-1/2 transform -translate-x-1/2 top-[8.125rem] flex flex-col items-start justify-start gap-3 p-[1.375rem]",    
         className
     )}
     {...props}

@@ -41,7 +41,7 @@ export default function ConfirmationPage() {
             <Wrapper>
                 <Menu />
                 <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
-                    <h1 className="self-start text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
+                    <h1 className="self-start text-2xl text-Branding-textHeading font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
                     <CardStore>
                         <CardStoreContent>
                             <CardStoreInformation>
@@ -62,7 +62,7 @@ export default function ConfirmationPage() {
                             </CardStoreInformation>
                         </CardStoreContent>
                     </CardStore>
-                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
+                    <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
                     <CardStore>
                         <CardStoreContent>
                             <CardStoreInformation>
@@ -92,7 +92,7 @@ export default function ConfirmationPage() {
                 </section>
                 {details? (
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
                         <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl"> 
                             <ul className="w-full space-y-3">
                                 {details.map((product, index) => (

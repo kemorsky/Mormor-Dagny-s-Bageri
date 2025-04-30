@@ -3,7 +3,7 @@ import { Store } from '../../types/types';
 import { useStores } from '../../components/auth/StoreContext';
 import { addStore } from '../../lib/api';
 import { AdminFormInput } from './admin-store-input';
-import { ButtonAdminManage } from '../../components/ui/button';
+import { ButtonOrder } from '../../components/ui/button';
 
 type StoreFormProps = {
   newStore: Store;
@@ -54,7 +54,7 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
         <div className='flex flex-col gap-2'>
                 <section className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Butik Nummer</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Butik Nummer</span>
                                 <AdminFormInput type="text"
                                         placeholder="Butik Nummer"
                                         value={newStore.ButikNummer}
@@ -62,7 +62,7 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
                                         />
                         </label>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Butik Namn</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Butik Namn</span>
                                 <AdminFormInput type="text"
                                         value={newStore.ButikNamn}
                                         placeholder="Butik Namn"
@@ -71,14 +71,14 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
                 </section>
                 <section className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Besöksadress</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Besöksadress</span>
                                 <AdminFormInput type="text"
                                         value={newStore.Besöksadress}
                                         placeholder="Besökadress"
                                         onChange={(e) => setNewStore({ ...newStore, Besöksadress: e.target.value })} />
                         </label>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Butik Telefon</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Butik Telefon</span>
                                 <AdminFormInput type="text"
                                         value={newStore.Telefonnummer}
                                         placeholder="Telefonnummer"
@@ -89,14 +89,14 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
         <div className='flex flex-col gap-2'>
                 <section className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Brödansvarig Namn</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Brödansvarig Namn</span>
                                         <AdminFormInput type="text"
                                         value={newStore.BrödansvarigNamn}
                                         placeholder="Brödansvarig Namn"
                                         onChange={(e) => setNewStore({ ...newStore, BrödansvarigNamn: e.target.value })} />
                         </label>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Brödansvarig Telefon</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Brödansvarig Telefon</span>
                                 <AdminFormInput type="text"
                                         value={newStore.BrödansvarigTelefon}
                                         placeholder="Brödansvarig Telefon"
@@ -105,14 +105,14 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
                 </section>
                 <section className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Butikschef Namn</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Butikschef Namn</span>
                                 <AdminFormInput type="text"
                                         value={newStore.ButikschefNamn}
                                         placeholder="Butikchefs Namn"
                                         onChange={(e) => setNewStore({ ...newStore, ButikschefNamn: e.target.value })} />
                         </label>
                         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Butikschef Telefon</span>
+                                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Butikschef Telefon</span>
                                 <AdminFormInput type="text"
                                         value={newStore.ButikschefTelefon}
                                         placeholder="Butikchefs Telefon"
@@ -121,14 +121,14 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
                 </section>
         </div>
         <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
-                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Fakturaadress</span>
+                <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textHeading">Fakturaadress</span>
                 <AdminFormInput type="text"
                         value={newStore.Fakturaadress}
                         placeholder="Fakturaadress"
                         onChange={(e) => setNewStore({ ...newStore, Fakturaadress: e.target.value })} />
         </label>
         <label className="min-h-[50px] w-[4.5rem] flex items-center justify-between cursor-pointer self-start">
-                <span className="font-inter text-Branding-textPrimary text-[1rem] leading-[1.1875rem]">
+                <span className="font-inter text-Branding-textHeading text-[1rem] leading-[1.1875rem]">
                         {newStore.Låst ? "Låst" : "Olåst"}
                 </span> 
                         <input
@@ -138,7 +138,7 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
                         onChange={(e) => setNewStore({ ...newStore, Låst: e.target.checked })}
                         />
         </label>             
-        <ButtonAdminManage className='self-end' type="submit">Lägg till butiken</ButtonAdminManage>
+        <ButtonOrder className='self-end' type="submit">Lägg till butiken</ButtonOrder>
         {isLoading ?? <p>Loading...</p>}
         </form>
   );

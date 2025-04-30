@@ -8,7 +8,7 @@ import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, Prod
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
 import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
-import { ButtonOrder, ButtonEditOrder } from "../../components/ui/button"
+import { ButtonOrder, ButtonAdminManage } from "../../components/ui/button"
 import { ButtonSpinner } from "../../components/ui/button-spinner"
 import { Main, Wrapper } from "../../blocks/wrappers";
 
@@ -78,7 +78,7 @@ export default function OrderDetailsPage() {
                 <Menu />
                 <form className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3" action="" onSubmit={handleSubmit}>
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställning Information</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställning Information</h2>
                         <CardStore>
                             <CardStoreContent>
                                 <CardStoreInformation>
@@ -99,7 +99,7 @@ export default function OrderDetailsPage() {
                                 </CardStoreInformation>
                             </CardStoreContent>
                         </CardStore>
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
                         <CardStore>
                             <CardStoreContent>
                                 <CardStoreInformation>
@@ -128,13 +128,13 @@ export default function OrderDetailsPage() {
                         </CardStore>
                     </section>
                     <section className="w-full flex flex-col gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         {details.length > 0 ? (
                         <div className="bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
                             <ul className="w-full space-y-4">
                                 {products.map((product, index) => (
                                     <li key={index} className="w-full">
-                                    <ProductCard>
+                                    <ProductCard >
                                         <ProductCardName>{product?.Namn}</ProductCardName>
                                         <ProductCardPrice>{product?.Baspris} kr</ProductCardPrice>
                                         {edit ? (
@@ -148,7 +148,7 @@ export default function OrderDetailsPage() {
                                                     updated[index].Antal = newAntal
                                                     setDetails(updated);
                                                 }}
-                                                className="border border-gray-300 rounded p-1 ml-1 max-w-12"
+                                                className="border border-gray-300 rounded p-1 ml-1 max-w-12 h-10"
                                             />                                        
                                             <ProductCardTotalPrice>
                                                 <span className="text-Branding-textSecondary">Pris: </span>
@@ -190,11 +190,11 @@ export default function OrderDetailsPage() {
                                 <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalTotal.toFixed(2)} kr</p>
                             </section>
                             <div className="self-end flex items-center justify-center gap-3">
-                                <ButtonEditOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
+                                <ButtonAdminManage className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
                                     {edit ? "Bekräfta" : "Ändra detaljer"}
-                                </ButtonEditOrder>
-                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type='submit'>
-                                    {loading ? <span className="flex items-center justify-center gap-2"><ButtonSpinner/>Skickar beställningen</span> : "Lägg beställningen"}
+                                </ButtonAdminManage>
+                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 border border-emerald-600 px-4 py-2 h-[2.625rem] w-[6rem]' : ''}`} type='submit'>
+                                    {loading ? <ButtonSpinner/> : "Lägg beställningen"}
                                 </ButtonOrder>
                             </div>
                         </div>

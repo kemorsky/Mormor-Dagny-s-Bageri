@@ -124,8 +124,7 @@ const handleDelete = async (BeställningsdetaljId: number) => {
 
     try {
         await deleteOrder(BeställningId);
-        console.log("Deleted order with id:", BeställningId);
-        navigate('/');
+        navigate('/orders');
     } catch (error) {
         console.error("Error deleting order:", error);
     }

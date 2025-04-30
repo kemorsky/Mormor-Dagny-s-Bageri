@@ -8,7 +8,7 @@ const PlanerareCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full inline-flex justify-between items-center p-3 border-b border-black",
+      "w-full inline-flex justify-between items-center py-3 border-b border-Branding-textSecondary",
       className
     )}
     {...props}
@@ -23,7 +23,7 @@ const PlanerareCardName = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full max-w-[12rem] text-base font-semibold font-inter text-Branding-textPrimary",
+      "w-full max-w-[12rem] text-base font-inter text-Branding-textPrimary",
       className
     )}
     {...props}
@@ -38,7 +38,7 @@ const PlanerareCardAmount = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full max-w-[6rem] text-base font-semibold font-inter text-Branding-textPrimary",
+      "w-full max-w-[6rem] text-base font-inter text-Branding-textSecondary",
       className
     )}
     {...props}

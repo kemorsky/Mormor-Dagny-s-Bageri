@@ -10,30 +10,17 @@ import {
     CardStore,
 } from "../../blocks/card";
 import Menu from "./../../elements/menu/menu";
-import { fetchSpecificOrder } from "../../lib/api";
-import { useFilteredOrders } from "../../hooks/useFilteredOrders";
-import { useNavigate } from "react-router";
+import { useFilteredOrdersSeller } from "../../hooks/useFilteredOrdersSeller";
 import { formatDate } from "../../lib/formatDate";
 import { formatPhoneNumber } from "../../lib/formatPhoneNumber";
 import { Main, Wrapper } from "../../blocks/wrappers";
 import { PreviousOrderCard, PreviousOrderCardHeader, PreviousOrderCardHeaderId, PreviousOrderCardHeaderDate, PreviousOrderCardContact, PreviousOrderCardContactStore, PreviousOrderCardData } from "../../blocks/card-order-page";
 
 export default function DashBoard() {
-    const { upcoming, previous } = useFilteredOrders();
+    const { upcoming, previous } = useFilteredOrdersSeller();
 
     const scrollRefCurrent = useRef<HTMLDivElement>(null);
     const scrollRefPrevious = useRef<HTMLDivElement>(null);
-
-    const navigate = useNavigate();
-
-    const handleClick = async (BeställningId: number) => {
-        try {
-            const selectedOrder = await fetchSpecificOrder(BeställningId)
-            navigate(`/order/${selectedOrder.BeställningId}`)
-        } catch (error) {
-            console.error("Error fetching this order:", error)
-        }
-    }
 
     // Scrollfunktioner
     const scrollLeft = (ref: React.RefObject<HTMLDivElement>) => {
@@ -50,7 +37,7 @@ export default function DashBoard() {
                 <Menu />
                 {/* Pågående beställningar */}
                 <div className="w-full max-w-[50rem] inline-flex flex-col items-start justify-center gap-3">
-                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina pågående beställningar</h2>
+                    <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina pågående beställningar</h2>
                     <div className="relative w-full">
                         <button
                             onClick={() => scrollLeft(scrollRefCurrent)}
@@ -65,7 +52,7 @@ export default function DashBoard() {
                             className="w-full overflow-x-auto no-scrollbar inline-flex gap-3 snap-x snap-mandatory scroll-smooth"
                         >
                             {upcoming.map((order) => (
-                                <div key={order.BeställningId} onClick={() => { handleClick(order.BeställningId ?? 0) }} className="snap-center min-w-[320px] cursor-pointer">
+                                <a href={`/order/${order.BeställningId}`} key={order.BeställningId} className="snap-center min-w-[320px] cursor-pointer">
                                     <Card>
                                         <div className="flex justify-between items-center w-full">
                                             <CardClientNumber>#{order.BeställningId}</CardClientNumber>
@@ -100,7 +87,7 @@ export default function DashBoard() {
                                             </div>
                                         </CardFooter>
                                     </Card>
-                                </div>
+                                </a>
                             ))}
                         </div>
                         <button
@@ -114,7 +101,7 @@ export default function DashBoard() {
 
                 {/* Tidigare beställningar */}
                 <div className="w-full max-w-[50rem] inline-flex flex-col items-center justify-start gap-3 mt-10">
-                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina tidigare beställningar</h2>
+                    <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina tidigare beställningar</h2>
                     <div className="relative w-full ">
                         {/* Scroll Left Button */}
                         <button
@@ -131,34 +118,32 @@ export default function DashBoard() {
                             className="w-full overflow-x-auto no-scrollbar inline-flex gap-3 snap-x snap-mandatory scroll-smooth"
                         >
                             {previous.map((order) => (
-                                <div>
-                                <PreviousOrderCard key={order.BeställningId}
-                                onClick={() => handleClick(order.BeställningId ?? 0)}
-                                className="snap-center">
-                                    <PreviousOrderCardHeader>
-                                        <PreviousOrderCardHeaderId>#{order.BeställningId}</PreviousOrderCardHeaderId>
-                                        <PreviousOrderCardHeaderDate>
-                                            {(() => {
-                                                const d = new Date(order.PreliminärtLeveransdatum);
-                                                const day = String(d.getDate()).padStart(2, "0");
-                                                const month = String(d.getMonth() + 1).padStart(2, "0");
-                                                const year = d.getFullYear();
-                                                return `${day}.${month}.${year}`;
-                                            })()}
-                                        </PreviousOrderCardHeaderDate>
-                                    </PreviousOrderCardHeader>
-                                    <PreviousOrderCardContact>
-                                        <PreviousOrderCardContactStore>{order.Butik?.ButikNamn}</PreviousOrderCardContactStore>
-                                        <PreviousOrderCardData>
-                                            <p className="text-Branding-textPrimary">Brödansvarig:</p>
-                                            <span className="text-Branding-textSecondary">
-                                                <p>{order.Butik?.BrödansvarigNamn}</p>
-                                                <p>{order.Butik?.ButikschefTelefon?.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{0,3})/, "$1 $2 $3").trim()}</p>
-                                            </span>
-                                        </PreviousOrderCardData>
-                                    </PreviousOrderCardContact>
-                                </PreviousOrderCard>
-                                </div>
+                                <a href={`/order/${order.BeställningId}`} key={order.BeställningId}>
+                                    <PreviousOrderCard className="snap-center">
+                                        <PreviousOrderCardHeader>
+                                            <PreviousOrderCardHeaderId>#{order.BeställningId}</PreviousOrderCardHeaderId>
+                                            <PreviousOrderCardHeaderDate>
+                                                {(() => {
+                                                    const d = new Date(order.PreliminärtLeveransdatum);
+                                                    const day = String(d.getDate()).padStart(2, "0");
+                                                    const month = String(d.getMonth() + 1).padStart(2, "0");
+                                                    const year = d.getFullYear();
+                                                    return `${day}.${month}.${year}`;
+                                                })()}
+                                            </PreviousOrderCardHeaderDate>
+                                        </PreviousOrderCardHeader>
+                                        <PreviousOrderCardContact>
+                                            <PreviousOrderCardContactStore>{order.Butik?.ButikNamn}</PreviousOrderCardContactStore>
+                                            <PreviousOrderCardData>
+                                                <p className="text-Branding-textPrimary">Brödansvarig:</p>
+                                                <span className="text-Branding-textSecondary">
+                                                    <p>{order.Butik?.BrödansvarigNamn}</p>
+                                                    <p>{order.Butik?.ButikschefTelefon?.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{0,3})/, "$1 $2 $3").trim()}</p>
+                                                </span>
+                                            </PreviousOrderCardData>
+                                        </PreviousOrderCardContact>
+                                    </PreviousOrderCard>
+                                </a>
                             ))}
                         </div>
 

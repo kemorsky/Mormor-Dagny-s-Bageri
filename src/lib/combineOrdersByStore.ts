@@ -40,7 +40,6 @@ type CombinedStoreOrders = {
       }
     }
   
-    // Merge duplicates from upcoming
     for (const order of upcoming) {
       const butikId = order.ButikId;
       const existing = map.get(butikId);

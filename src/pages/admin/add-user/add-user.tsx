@@ -4,7 +4,7 @@ import { RegisterUser } from "../../../types/types"
 import Menu from "../../../elements/menu/menu";
 import { defaultUser } from "../../../constants/prefab-consts";
 import { InputPrimary } from "../../../components/ui/input";
-import { ButtonAdminManage } from "../../../components/ui/button";
+import { ButtonOrder } from "../../../components/ui/button";
 import { Main, Wrapper } from "../../../blocks/wrappers";
 
 export default function AddUser() {
@@ -27,7 +27,7 @@ export default function AddUser() {
         <Main>
             <Wrapper>
                 <Menu />
-                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-[#2C2F33] shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg p-4">
+                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg p-4">
                     <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                         <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarnamn</span>
                         <InputPrimary type="text"
@@ -67,7 +67,7 @@ export default function AddUser() {
                             onChange={(e) => setNewUser({...newUser, Låst: e.target.checked})}
                         />
                     </label>        
-                    <ButtonAdminManage type="submit">Lägg till</ButtonAdminManage>
+                    <ButtonOrder type="submit">Lägg till</ButtonOrder>
                 </form>
             </Wrapper>
         </Main>    

@@ -171,7 +171,7 @@ export default function OrderPage() {
                 </section>
                 {selected ? (
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
                         <CardStore className="">
                             <CardStoreContent>
                                 <CardStoreInformation>
@@ -207,7 +207,7 @@ export default function OrderPage() {
                     </section>
                 ) : (
                     <div className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
-                        <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
+                        <h2 className="text-[1.125rem] leading-[1.375rem] text-Branding-textHeading font-open-sans font-semibold">Kund information</h2>
                         <CardStore className="w-full h-full">
                             <CardStoreContent>
                                 <CardStoreInformation>
@@ -218,15 +218,15 @@ export default function OrderPage() {
                     </div>
                 )}
                 <section className="w-full max-w-[33.792rem] max-h-[13.25rem] inline-flex flex-col items-center justify-center gap-3">
-                    <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>
+                    <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Tidigare beställningar</h2>
                     <div className="w-full flex justify-start sm:justify-center items-center gap-3 overflow-x-auto no-scrollbar sm:overflow-visible scroll-snap-type-x">
                         {selectedOrders ? (
                             [...selectedOrders]
                             .sort((a, b) => new Date(b.PreliminärtLeveransdatum).getTime() - new Date(a.PreliminärtLeveransdatum).getTime())
                             .slice(0, 3)
                             .map((order) => (
-                                <div> {/* Div wrapper för att annars overflow-x-scroll inte fungerar */}
-                                    <PreviousOrderCard key={order.BeställningId} className="cursor-pointer" onClick={() => {handleOrderClick(order)}}>
+                                <div key={order.BeställningId}> {/* Div wrapper för att annars overflow-x-scroll inte fungerar */}
+                                    <PreviousOrderCard className="cursor-pointer" onClick={() => {handleOrderClick(order)}}>
                                         <PreviousOrderCardHeader>
                                             <PreviousOrderCardHeaderId>#{order.BeställningId}</PreviousOrderCardHeaderId>
                                             <PreviousOrderCardHeaderDate>
@@ -257,7 +257,7 @@ export default function OrderPage() {
                 </section>
                 <form className="w-full max-w-[33.792rem]" onSubmit={handleSubmit}> 
                     <section className="w-full inline-flex flex-col items-center justify-center gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         <CardStore>
                             <CardStoreContent className="gap-4">
                                 {products ? (
