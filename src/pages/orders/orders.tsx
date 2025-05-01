@@ -8,10 +8,11 @@ import {
   CardClientName,
 } from "../../blocks/card";
 import Menu from "../../elements/menu/menu";
-import { ButtonPaginationNext, ButtonPaginationPrev, ButtonTab } from "../../components/ui/button";
+import { ButtonPaginationNext, ButtonPaginationPrev } from "../../components/ui/buttons";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { formatDate } from "../../lib/formatDate";
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function OrdersPage() {
   const [activeTab, setActiveTab] = useState("ongoing");
@@ -50,7 +51,8 @@ export default function OrdersPage() {
       <Wrapper>
         <Menu />
         <div className="flex">
-          <ButtonTab
+          <Button
+            variant='tab'
             isActive={activeTab === "ongoing"}
             onClick={() => {
               setActiveTab("ongoing")
@@ -59,8 +61,9 @@ export default function OrdersPage() {
             className="rounded-l-xl"
           >
             Pågående
-          </ButtonTab>
-          <ButtonTab
+          </Button>
+          <Button
+            variant='tab'
             isActive={activeTab === "delivered"}
             onClick={() => {
               setActiveTab("delivered")
@@ -69,7 +72,7 @@ export default function OrdersPage() {
             className="rounded-r-xl"
           >
             Levererade
-          </ButtonTab>
+          </Button>
         </div>
         <div>
           {paginated.Data.map((order) => (

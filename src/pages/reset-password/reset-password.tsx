@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { resetPassword } from "../../lib/api";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function ResetPassword() {
     const [searchParams] = useSearchParams();
@@ -61,7 +61,7 @@ export default function ResetPassword() {
               onChange={(e) => setNewPassword(e.target.value)}
             />
     
-            <ButtonPrimary type="submit">Uppdatera lösenord</ButtonPrimary>
+            <Button type="submit">Uppdatera lösenord</Button>
     
             {message && (
               <p className={`text-center text-sm ${success ? "text-green-600" : "text-red-600"}`}>

@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Store, OrderDetails, Order } from '../../types/types';
 import Menu from "../../elements/menu/menu"
 import { InputAmount, InputDiscount, InputOrderDropdown } from "../../components/ui/input"
-import { ButtonOrder } from "../../components/ui/button"
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson, CardProduct, 
         PreviousOrderCard, PreviousOrderCardHeader, PreviousOrderCardHeaderId, PreviousOrderCardHeaderDate, PreviousOrderCardContact,
         PreviousOrderCardContactStore, PreviousOrderCardData
@@ -13,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { Main, Wrapper } from "../../blocks/wrappers";
 import { useAuth } from "../../components/auth/AuthContext";
 import { fetchOrdersByStore } from "../../lib/api";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function OrderPage() {
     const { currentUser } = useAuth()
@@ -172,7 +172,7 @@ export default function OrderPage() {
                 {selected ? (
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
                         <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
-                        <CardStore className="">
+                        <CardStore>
                             <CardStoreContent>
                                 <CardStoreInformation>
                                     <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem]">{selected.ButikNamn} 
@@ -286,7 +286,7 @@ export default function OrderPage() {
                                         onChange={handleDiscountChange}
                                         />
                                     <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalPrice.toFixed(2)} kr</p>
-                                    <ButtonOrder> Gå vidare</ButtonOrder>
+                                    <Button variant='proceed' size='smaller'> Gå vidare</Button>
                                 </section>
                             </CardStoreContent>
                         </CardStore>               

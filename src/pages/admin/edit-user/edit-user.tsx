@@ -5,8 +5,8 @@ import { useUser } from "../../../components/auth/UserContext";
 import { useState } from "react";
 import { AdminUserCard, AdminUserCardContent} from "../../../blocks/admin-cards";
 import { InputPrimary } from "../../../components/ui/input";
-import { ButtonAdminDelete, ButtonAdminManage } from "../../../components/ui/button";
 import { Main, Wrapper } from "../../../blocks/wrappers";
+import { Button } from "../../../components/ui/button-shadcn";
 
 export default function EditUser() {
     const {users, setUsers} = useUser();
@@ -116,15 +116,15 @@ export default function EditUser() {
                                     onChange={(e) => setEditingPassword({ ...editingPassword, LösenordHash: e.target.value })}
                                 />
                                 <div className="inline-flex items-center justify-center gap-3">
-                                    <ButtonAdminManage type="submit">Spara</ButtonAdminManage>
-                                    <ButtonAdminDelete onClick={() => {setEditingPassword(null)}}>Avbryt</ButtonAdminDelete>
+                                    <Button variant='manage' size='admin' type="submit">Spara</Button>
+                                    <Button variant='delete' size='admin' onClick={() => {setEditingPassword(null)}}>Avbryt</Button>
                                 </div>
                                 
                             </form> 
                             ) : (
                                 <div className="self-center flex items-center justify-center gap-3">
-                                    <ButtonAdminManage onClick={() => handleEdit(selectedUser)}>Redigera lösenord</ButtonAdminManage>
-                                    <ButtonAdminDelete onClick={() => {handleDeleteUser(selectedUser.Användarnamn ?? '')}}>Ta bort användare</ButtonAdminDelete>
+                                    <Button variant='manage' size='admin' onClick={() => handleEdit(selectedUser)}>Redigera lösenord</Button>
+                                    <Button variant='delete' size='admin' onClick={() => {handleDeleteUser(selectedUser.Användarnamn ?? '')}}>Ta bort användare</Button>
                                 </div>
                             )}
                 </AdminUserCard>

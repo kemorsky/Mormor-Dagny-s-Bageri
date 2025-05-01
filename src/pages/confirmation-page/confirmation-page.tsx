@@ -6,7 +6,7 @@ import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
-import { ButtonOrder } from "../../components/ui/button"
+import { ButtonOrder } from "../../components/ui/buttons"
 import { Main, Wrapper } from "../../blocks/wrappers";
 
 export default function ConfirmationPage() {

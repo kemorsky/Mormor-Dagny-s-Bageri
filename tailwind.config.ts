@@ -17,7 +17,8 @@ export default {
               textSecondary: "#9a9a9a",
               textAccent: "#D4AF37",
               input: "#2C2B30",
-              primaryButton: '#403f44',
+              buttonPrimary: '#403f44',
+              buttonProceed: '#D4AF37',
             },
           },
           fontFamily: {

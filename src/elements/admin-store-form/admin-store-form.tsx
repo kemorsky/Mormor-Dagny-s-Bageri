@@ -1,9 +1,8 @@
-// StoreForm.tsx
 import { Store } from '../../types/types';
 import { useStores } from '../../components/auth/StoreContext';
 import { addStore } from '../../lib/api';
 import { AdminFormInput } from './admin-store-input';
-import { ButtonOrder } from '../../components/ui/button';
+import { Button } from '../../components/ui/button-shadcn';
 
 type StoreFormProps = {
   newStore: Store;
@@ -138,7 +137,7 @@ const AddStoreForm: React.FC<StoreFormProps> = ({
                         onChange={(e) => setNewStore({ ...newStore, Låst: e.target.checked })}
                         />
         </label>             
-        <ButtonOrder className='self-end' type="submit">Lägg till butiken</ButtonOrder>
+        <Button variant='proceed' size='smaller' className='self-end' type="submit">Lägg till butiken</Button>
         {isLoading ?? <p>Loading...</p>}
         </form>
   );
