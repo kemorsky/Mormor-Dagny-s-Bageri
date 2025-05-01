@@ -144,7 +144,7 @@ const PreviousOrderCardHeaderId = React.forwardRef<
   <span
     ref={ref}
     className={cn(
-      "text-Branding-textPrimary text-sm font-semibold font-inter",
+      "text-Branding-textPrimary text-[1rem] leading-[1rem] font-bold font-open-sans",
       className
     )}
     {...props}
@@ -159,7 +159,7 @@ const PreviousOrderCardHeaderDate = React.forwardRef<
   <span
     ref={ref}
     className={cn(
-      "text-Branding-textSecondary text-sm font-semibold font-inter",
+      "text-Branding-textSecondary text-[1rem] leading-[1rem] font-bold font-open-sans",
       className
     )}
     {...props}

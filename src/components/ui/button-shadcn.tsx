@@ -18,18 +18,26 @@ const buttonVariants = cva(
         delete:
           "text-red-200 hover:text-Branding-textPrimary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-red-400 hover:bg-red-500",
         tab:
-          "w-40 px-4 py-2 font-DMSans transition-colors",
+          "w-40 rounded-none border border-Branding-buttonProceed shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]",
+        prev:
+          "rounded-lg font-DMSans transition-colors hover:text-gray-500",
+        next: 
+          "rounded-lg font-DMSans transition-colors hover:text-gray-500",
+        pageNumber: "items-center px-4 py-2 mx-1 transition-colors rounded-md sm:flex hover:text-Branding-textSecondary"
       },
       active: {
-        true: "bg-black text-Branding-textPrimary font-semibold",
-        false:
-          "bg-[#898989] text-Branding-textPrimary hover:text-Branding-textAccent",
+        true: "bg-Branding-buttonProceed text-[#1E2124] font-bold",
+        false: "bg-Branding-buttonPrimary text-Branding-buttonProceed hover:text-Branding-textAccent",
+      },
+      disabled: {
+        true: "bg-gray-700 text-Branding-textSecondary font-semibold",
+        false: "bg-sky-600 hover:text-gray-500 text-Branding-textPrimary hover:text-Branding-textSecondary"
       },
       size: {
         default: "min-w-[14.5rem] px-4 py-2",
         smaller: "max-w-[10rem] px-4 py-2",
         admin: "min-w-[5.135rem] px-4 py-2",
-        lg: "h-10 rounded-md px-8",
+        pagination: "h-10 w-10 p-2",
         icon: "h-9 w-9",
       },
     },
@@ -45,6 +53,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
   isActive?: boolean
+  disabled?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -52,7 +61,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, active: isActive, className }))}
+        className={cn(buttonVariants({ variant, size, active: isActive, disabled: props.disabled, className }))}
         ref={ref}
         {...props}
       />

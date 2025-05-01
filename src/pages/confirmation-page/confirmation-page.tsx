@@ -6,8 +6,8 @@ import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
-import { ButtonOrder } from "../../components/ui/buttons"
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn"
 
 export default function ConfirmationPage() {
     const [details, setDetails] = useState<OrderDetails[]>([]);
@@ -113,7 +113,7 @@ export default function ConfirmationPage() {
                             <section className="self-end flex flex-col items-end gap-2">
                                 <p className="font-inter text-Branding-textPrimary">Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
                                 <p className="font-inter text-Branding-textPrimary">Finallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
-                                <ButtonOrder onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</ButtonOrder>
+                                <Button variant='proceed' onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</Button>
                             </section>
                         </div>
                         

@@ -24,7 +24,7 @@ const CardOrderId = React.forwardRef<
   <h2
     ref={ref}
     className={cn(
-      "text-left font-open-sans text-[1rem] leading-[1rem] font-semibold text-Branding-textPrimary",
+      "text-left font-open-sans text-[1rem] leading-[1rem] font-bold text-Branding-textPrimary",
       className
     )}
     {...props}
@@ -39,7 +39,7 @@ const CardDate = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "text-right font-open-sans text-[1rem] leading-[1rem] text-Branding-textSecondary",
+      "text-right font-open-sans text-[1rem] leading-[1rem] font-bold text-Branding-textSecondary",
       className
     )}
     {...props}
