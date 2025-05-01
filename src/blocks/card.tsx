@@ -54,7 +54,7 @@ const CardStore = React.forwardRef<
   <h2
     ref={ref}
     className={cn(
-      "font-semibold text-[1rem] leading-[19px]",
+      "font-semibold text-[1rem] leading-[19px] text-Branding-textPrimary",
       className
     )}
     {...props}
@@ -99,7 +99,7 @@ const CardClientName = React.forwardRef<
   <h2
     ref={ref}
     className={cn(
-      "text-[0.8125rem] leading-[1rem]",
+      "text-[0.8125rem] leading-[1rem] text-Branding-textPrimary",
       className
     )}
     {...props}

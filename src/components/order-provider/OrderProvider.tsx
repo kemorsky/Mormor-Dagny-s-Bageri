@@ -11,20 +11,19 @@ export default function OrderProvider({children}: OrderProviderProps) {
 
     useEffect(() => {
         const getOrders = async () => {
-            setLoading(true)
-            try {
-                const ordersData = await fetchOrders();
-                console.log(ordersData.Data)
-                setOrders(ordersData.Data)
-            } catch (error) {
-                console.error("Error fetching orders:", error);
-                throw error;
-            } finally {
-                setLoading(false)
-            }
+          setLoading(true)
+          try {
+            const allOrders: Order[] = await fetchOrders();
+            setOrders(allOrders)
+          } catch (error) {
+            console.error("Error fetching orders:", error);
+            throw error;
+          } finally {
+            setLoading(false)
+          }
         }
         getOrders().catch(console.error)
-    }, []);
+      }, []);
 
     const getOrder = (BeställningId: number) => {
         return orders.find((order) => order.BeställningId === BeställningId) || null

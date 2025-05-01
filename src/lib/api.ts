@@ -53,14 +53,21 @@ export const fetchProducts = async () => {
   }
 };
 
-export const fetchOrders = async () => {
+export const fetchOrders = async (page: number = 1, accumulatedOrders: Order[] = []): Promise<Order[]> => {
   try {
-    return await apiRequest(`${BASE_URL}/beställningar`);
+    const response = await apiRequest(`${BASE_URL}/beställningar?page=${page}`);
+    const allOrders = [...accumulatedOrders, ...response.Data];
+    if (page === response.TotalPages) {
+      return allOrders;
+    }
+    
+    return fetchOrders(page + 1, allOrders);
   } catch (error) {
-    console.error("Error pushing order:", error);
+    console.error("Error fetching orders:", error);
     throw error;
   }
 };
+
 
 export const fetchOrdersByStore = async (ButikId: number) => {
   try {

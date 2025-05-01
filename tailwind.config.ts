@@ -10,10 +10,11 @@ export default {
           },
           colors: {
             Branding: {
-              backgroundPrimary: "#1e2124",
-              cardPrimary: "#2C2F33",
+              backgroundPrimary: "#1F1B16",
+              cardPrimary: "#2C2B30",
+              textHeading: "#ffffff",
               textPrimary: "#ffffff",
-              textSecondary: "#9A9A9A",
+              textSecondary: "#9a9a9a",
               textAccent: "#D4AF37",
               input: "#2C2B30",
               primaryButton: '#403f44',

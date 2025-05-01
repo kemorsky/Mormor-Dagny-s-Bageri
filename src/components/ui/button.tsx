@@ -6,7 +6,7 @@ export const ButtonPrimary: React.FC<ButtonProps> = ({ className, ...props }) =>
     return (
         <button
             className={cn(
-                "font-DMSans font-bold w-[232px] px-4 py-3 bg-Branding-primaryButton hover:bg-Branding-primaryButton/80 transition-colors rounded-xl border border-Branding-textAccent inline-flex justify-center items-center text-Branding-textAccent text-[1.125rem] leading-[1.5rem]",
+                "font-DMSans font-bold min-w-[14.5rem] px-4 py-2 bg-Branding-primaryButton hover:bg-Branding-primaryButton/80 transition-colors rounded-lg border border-Branding-textAccent inline-flex justify-center items-center text-Branding-textAccent gap-2.5",
                 className
             )}
             {...props}
@@ -47,12 +47,11 @@ export const ButtonOrder: React.FC<ButtonProps> = ({ className, ...props }) => {
         <button
             type="submit"
             className={cn(
-                "font-DMSans font-semibold px-4 py-3 bg-[#D4AF37] hover:bg-[#F0C93D] text-[#1E2124] border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[1rem] leading-[1.25rem]",
+                "font-DMSans font-semibold px-4 py-2 bg-[#D4AF37] hover:bg-[#F0C93D] text-[#1E2124] border border-[#1E2124] rounded-lg transition-colors inline-flex justify-center items-center gap-2.5",
                 className
             )}
             {...props}
         >
-            
         </button>
     );
 };
@@ -67,7 +66,6 @@ export const ButtonEditOrder: React.FC<ButtonProps> = ({ className, ...props }) 
             )}
             {...props}
         >
-            
         </button>
     );
 };
@@ -76,9 +74,37 @@ export const ButtonTab: React.FC<ButtonProps & { isActive: boolean }> = ({ class
     return (
         <button
             className={cn(
-                "w-40 px-4 py-2 font-lato text-lg transition-colors border-none",
+                "w-40 px-4 py-2 font-DMSans transition-colors",
                 isActive ? "bg-black text-Branding-textPrimary font-semibold" 
                 : "bg-[#898989] text-Branding-textPrimary hover:text-Branding-textAccent",
+                className
+            )}
+            {...props}
+        />
+    );
+};
+
+export const ButtonPaginationPrev: React.FC<ButtonProps & { disabled: boolean }> = ({ className, disabled, ...props }) => {
+    return (
+        <button
+            className={cn(
+                "px-4 py-2 rounded-lg font-DMSans transition-colors",
+                disabled ? "bg-gray-700 text-Branding-textSecondary font-semibold" 
+                : "bg-blue-500 text-Branding-textPrimary hover:text-Branding-textSecondary",
+                className
+            )}
+            {...props}
+        />
+    );
+};
+
+export const ButtonPaginationNext: React.FC<ButtonProps & { disabled: boolean }> = ({ className, disabled, ...props }) => {
+    return (
+        <button
+            className={cn(
+                "px-4 py-2 rounded-lg font-DMSans transition-colors",
+                disabled ? "bg-gray-700 text-Branding-textSecondary font-semibold" 
+                : "bg-blue-500 text-Branding-textPrimary hover:text-Branding-textSecondary",
                 className
             )}
             {...props}
@@ -90,7 +116,7 @@ export const ButtonAdmin: React.FC<ButtonProps> = ({className, ...props}) => {
     return (
         <button
             className={cn(
-                "font-DMSans font-bold w-[232px] px-4 py-3 bg-Branding-primaryButton hover:bg-Branding-primaryButton/80 transition-colors rounded-xl border border-Branding-textAccent inline-flex justify-center items-center text-Branding-textAccent text-[1.125rem] leading-[1.5rem]",
+                "font-DMSans font-semibold min-w-[14.675rem] px-4 py-2 bg-Branding-primaryButton hover:bg-Branding-primaryButton/80 transition-colors rounded-lg border border-Branding-textAccent inline-flex justify-center items-center text-Branding-textAccent gap-2.5",
                 className
             )}
             { ...props } />
@@ -102,12 +128,11 @@ export const ButtonAdminManage: React.FC<ButtonProps> = ({ className, ...props }
         <button
             type="submit"
             className={cn(
-                "font-DMSans font-semibold px-3 py-1.5 bg-[#228B22] hover:bg-[#2E8B57] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.25rem]",
+                "font-DmSans font-semibold text-emerald-300 hover:text-Branding-textPrimary px-4 py-2 rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-emerald-600 hover:bg-emerald-700 transition-colors inline-flex justify-center items-center gap-2.5",
                 className
             )}
             {...props}
         >
-            
         </button>
     );
 };
@@ -117,12 +142,11 @@ export const ButtonAdminDelete: React.FC<ButtonProps> = ({ className, ...props }
         <button
             type="submit"
             className={cn(
-                "font-DMSans font-semibold px-3 py-1.5 bg-[#B22222] hover:bg-[#CC3333] text-Branding-textPrimary border border-[#1E2124] rounded-[12px] transition-colors inline-flex justify-center items-center text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.25rem]",
+                "font-DmSans font-semibold text-Branding-textPrimary px-4 py-2 rounded-lg shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-red-400 hover:bg-red-500 transition-colors inline-flex justify-center items-center gap-2.5",
                 className
             )}
             {...props}
         >
-            
         </button>
     );
 };

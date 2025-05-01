@@ -110,7 +110,7 @@ export default function Stores() {
                 </section>
                 {selected ? (
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
-                        <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
+                        <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund information</h2>
                         {editingStore?.ButikId === selected.ButikId ? (
                             <EditStoreForm
                                 isLoading={isLoading}
@@ -172,7 +172,7 @@ export default function Stores() {
                     </section>
                 ) : (
                     <div className="w-full max-w-[33.792rem] inline-flex flex-col items-center justify-center gap-3">
-                        <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold self-start">Kund information</h2>
+                        <h2 className="text-[1.125rem] text-Branding-textHeading leading-[1.375rem] font-open-sans font-semibold self-start">Kund information</h2>
                         <CardStore className="min-h-[17.6875rem]">
                             <CardStoreContent>
                                 <CardStoreInformation>
@@ -183,7 +183,7 @@ export default function Stores() {
                     </div>
                 )}
                 <div className="w-full max-w-[33.792rem] flex flex-col items-center justify-center gap-3">
-                    <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold self-start">Lägg till en butik</h2>
+                    <h2 className="text-[1.125rem] text-Branding-textHeading leading-[1.375rem] font-open-sans font-semibold self-start">Lägg till en butik</h2>
                     <AddStoreForm
                         newStore={newStore}
                         setNewStore={setNewStore}

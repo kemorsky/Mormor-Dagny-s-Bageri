@@ -27,7 +27,7 @@ export default function SpecificOrder() {
       <Wrapper>
         <Menu />
         <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
-          <h1 className="self-start text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
+          <h1 className="self-start text-Branding-textHeading text-2xl font-open-sans font-semibold">Beställning #{order.BeställningId}</h1>
           <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3 relative">
             <CardStore>
               <CardStoreContent>
@@ -85,7 +85,7 @@ export default function SpecificOrder() {
                 )}
               </div>
             )}
-            <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
+            <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Kund Information</h2>
             <CardStore>
               <CardStoreContent>
                   <CardStoreInformation>
@@ -117,7 +117,7 @@ export default function SpecificOrder() {
           <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
             {canEditOrder ? (
                 <article className="flex items-center justify-center gap-3">
-                  <h2 className="self-center text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
+                  <h2 className="self-center text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
                   {isCompletingOrder ? (
                     <ButtonAdminDelete onClick={() => setIsCompletingOrder(false)}>Avbryt</ButtonAdminDelete >
                     ) : (
@@ -139,7 +139,7 @@ export default function SpecificOrder() {
                           <ProductCardAmount>
                               <input
                                 type="text"
-                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded px-2 py-1.5 max-w-12"
+                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded px-2 py-1.5 max-w-12 h-10"
                                 value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
                                 onChange={(e) =>
                                   handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
@@ -150,7 +150,7 @@ export default function SpecificOrder() {
                               <span className="text-Branding-textSecondary">Pris: </span> 
                               {product.Styckpris.toFixed(2)} kr
                           </ProductCardTotalPrice>
-                          <button className="bg-red-600 hover:bg-red-500 transition-colors p-2 rounded-md" onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross/></button>
+                          <button className="border border-red-400 hover:bg-red-500 transition-colors p-3 rounded-md" onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross className="text-[0.875rem]"/></button>
                         </>
                       ) : (
                         <>
