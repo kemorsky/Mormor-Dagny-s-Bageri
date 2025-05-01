@@ -9,13 +9,28 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-[190px] h-[190px] px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
+      "max-w-[289px] w-full max-h-[200px] h-full px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
       className
     )}
     {...props}
   />
 ))
 Card.displayName = "Card"
+
+const CardOrderId = React.forwardRef<
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h2
+    ref={ref}
+    className={cn(
+      "text-left font-open-sans text-[1rem] leading-[1rem] font-bold text-Branding-textPrimary",
+      className
+    )}
+    {...props}
+  />
+))
+CardOrderId.displayName = "CardOrderId"
 
 const CardDate = React.forwardRef<
   HTMLParagraphElement,
@@ -24,7 +39,7 @@ const CardDate = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "text-right text-[1rem] leading-[1rem] text-white",
+      "text-right font-open-sans text-[1rem] leading-[1rem] font-bold text-Branding-textSecondary",
       className
     )}
     {...props}
@@ -84,7 +99,7 @@ const CardFooter = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-[106px] font-inter space-y-1",
+      "w-[106px] font-inter",
       className
     )}
     {...props}
@@ -212,22 +227,22 @@ const ProductCardAmount = React.forwardRef<
 ))
 ProductCardAmount.displayName = "ProductCardAmount"
 
-const WideCard = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "w-[320px] h-[200px] px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
-      className
-    )}
-    {...props}
-  />
-));
-WideCard.displayName = "WideCard";
+// const WideCard = React.forwardRef<
+//   HTMLDivElement,
+//   React.HTMLAttributes<HTMLDivElement>
+// >(({ className, ...props }, ref) => (
+//   <div
+//     ref={ref}
+//     className={cn(
+//       "w-[320px] h-[200px] px-3 py-3 bg-gradient-card shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
+//       className
+//     )}
+//     {...props}
+//   />
+// ));
+// WideCard.displayName = "WideCard";
 
-export {Card, WideCard, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardTotalPrice, ProductCardAmount }
+export {Card, CardOrderId, CardDate, CardHeader, CardStore, CardAddress, CardFooter, CardClientName, CardClientNumber, ProductListCard, ProductCard, ProductCardName, ProductCardPrice, ProductCardTotalPrice, ProductCardAmount }
 
 
 // export default function Card() {

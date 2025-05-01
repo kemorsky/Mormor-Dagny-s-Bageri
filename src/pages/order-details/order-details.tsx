@@ -8,9 +8,9 @@ import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, Prod
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
 import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
-import { ButtonOrder, ButtonAdminManage } from "../../components/ui/button"
 import { ButtonSpinner } from "../../components/ui/button-spinner"
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn"
 
 export default function OrderDetailsPage() {
     const { state } = useLocation();
@@ -181,7 +181,7 @@ export default function OrderDetailsPage() {
                                                 const updated = parseFloat(e.target.value) || 0;
                                                 setOrderDiscount(updated);
                                             }}
-                                            className="border border-gray-300 rounded p-1 ml-2 w-20"
+                                            className="border border-gray-300 rounded p-1 ml-1 w-[4.5rem] h-10"
                                         />
                                     </label>
                                 ) : (
@@ -190,12 +190,12 @@ export default function OrderDetailsPage() {
                                 <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalTotal.toFixed(2)} kr</p>
                             </section>
                             <div className="self-end flex items-center justify-center gap-3">
-                                <ButtonAdminManage className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
+                                <Button variant='manage' size='admin' className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 hover:text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
                                     {edit ? "Bekräfta" : "Ändra detaljer"}
-                                </ButtonAdminManage>
-                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 border border-emerald-600 px-4 py-2 h-[2.625rem] w-[6rem]' : ''}`} type='submit'>
+                                </Button>
+                                <Button variant='proceed' size='admin' className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 border border-emerald-600 px-4 py-2 h-[2.625rem] w-[6rem]' : ''}`} type='submit'>
                                     {loading ? <ButtonSpinner/> : "Lägg beställningen"}
-                                </ButtonOrder>
+                                </Button>
                             </div>
                         </div>
                         ) : (

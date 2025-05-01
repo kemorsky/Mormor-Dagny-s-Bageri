@@ -4,8 +4,8 @@ import { RegisterUser } from "../../../types/types"
 import Menu from "../../../elements/menu/menu";
 import { defaultUser } from "../../../constants/prefab-consts";
 import { InputPrimary } from "../../../components/ui/input";
-import { ButtonOrder } from "../../../components/ui/button";
 import { Main, Wrapper } from "../../../blocks/wrappers";
+import { Button } from "../../../components/ui/button-shadcn";
 
 export default function AddUser() {
     const [newUser, setNewUser] = useState<RegisterUser>(() => ({ ...defaultUser }))
@@ -67,7 +67,7 @@ export default function AddUser() {
                             onChange={(e) => setNewUser({...newUser, Låst: e.target.checked})}
                         />
                     </label>        
-                    <ButtonOrder type="submit">Lägg till</ButtonOrder>
+                    <Button variant="proceed" type="submit">Lägg till</Button>
                 </form>
             </Wrapper>
         </Main>    

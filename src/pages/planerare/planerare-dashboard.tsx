@@ -33,8 +33,6 @@ export default function PlanerareDashboard() {
     const previousTopProducts = useOrderedProducts(previous);
     const combinedProducts = combineOrderedProducts(upcomingTopProducts, previousTopProducts);
 
-    
-
     useEffect(() => {
         const getStats = async () => {
             try {

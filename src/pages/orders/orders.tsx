@@ -1,17 +1,13 @@
-import { useState } from "react";
-import {
-  Card,
-  CardDate,
-  CardHeader,
-  CardStore,
-  CardAddress,
-  CardClientName,
-} from "../../blocks/card";
+import { useState, useEffect, useRef } from "react";
+import { OrdersCard, OrdersCardHeader, OrdersCardOrderId, OrdersCardDate, OrdersCardStore, OrdersCardAddress, 
+        OrdersCardClientInfo, OrdersCardClientName, OrdersCardClientNumber, } from "../../blocks/orders-card";
 import Menu from "../../elements/menu/menu";
-import { ButtonPaginationNext, ButtonPaginationPrev, ButtonTab } from "../../components/ui/button";
 import { useFilteredOrders } from "../../hooks/useFilteredOrders";
 import { formatDate } from "../../lib/formatDate";
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import {  } from "react";
 
 export default function OrdersPage() {
   const [activeTab, setActiveTab] = useState("ongoing");
@@ -22,8 +18,26 @@ export default function OrdersPage() {
   
   const paginated = activeTab === "ongoing" ? upcoming : previous;
 
-  const handlePrev = () => setPage((p) => Math.max(1, p - 1));
-  const handleNext = () => setPage((p) => Math.min(paginated.TotalPages, p + 1));
+  const handlePrev = () => handlePageChange(Math.max(1, page - 1));
+  const handleNext = () => handlePageChange(Math.min(paginated.TotalPages, page + 1));
+
+  // Inside the component
+  const lastScrollY = useRef<number>(0);
+
+  // Save scroll position before pagination
+  const handlePageChange = (newPage: number) => {
+    lastScrollY.current = window.scrollY;
+    setPage(newPage);
+  };
+
+  // Restore scroll position after content updates
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 0); // Delay to ensure DOM is painted
+  
+    return () => clearTimeout(timeout);
+  }, [page]);
 
   function getSimplePagination(current: number, total: number): (number | "...")[] {
     const pages: (number | "...")[] = [];
@@ -50,71 +64,70 @@ export default function OrdersPage() {
       <Wrapper>
         <Menu />
         <div className="flex">
-          <ButtonTab
-            isActive={activeTab === "ongoing"}
-            onClick={() => {
-              setActiveTab("ongoing")
-              setPage(1)
-            }}
-            className="rounded-l-xl"
-          >
+          <Button variant='tab'
+                  size='smaller'
+                  isActive={activeTab === "ongoing"}
+                  onClick={() => {
+                    setActiveTab("ongoing")
+                    handlePageChange(1);
+                  }}
+                  className="rounded-l-xl">
             Pågående
-          </ButtonTab>
-          <ButtonTab
-            isActive={activeTab === "delivered"}
-            onClick={() => {
-              setActiveTab("delivered")
-              setPage(1)
-            }}
-            className="rounded-r-xl"
-          >
+          </Button>
+          <Button variant='tab'
+                  size='smaller'
+                  isActive={activeTab === "delivered"}
+                  onClick={() => {
+                    setActiveTab("delivered")
+                    handlePageChange(1);
+                  }}
+                  className="rounded-r-xl">
             Levererade
-          </ButtonTab>
+          </Button>
         </div>
-        <div>
+        <div className="w-full max-w-[25rem] inline-flex flex-col items-start justify-center gap-3">
           {paginated.Data.map((order) => (
-            <a href={`/order/${order.BeställningId}`} key={order.BeställningId} role="button">
-              <Card className="w-[23.75rem] h-[5.313rem] rounded-xl bg-Branding-cardPrimary flex justify-center relative mb-4">
-                <CardDate className="absolute right-4 top-2 text-sm">
-                  {order.PreliminärtLeveransdatum && formatDate(order.PreliminärtLeveransdatum)}
-                </CardDate>
-                <CardHeader>
-                  <CardStore className="text-lg font-normal">
-                    {order.Butik?.ButikNamn}
-                  </CardStore>
-                  <CardAddress className="text-Branding-textPrimary text-sm">
-                    {order.Butik?.Besöksadress}
-                  </CardAddress>
-                  <CardClientName className="text-sm">
-                    {order.Butik?.ButikschefNamn} {order.Butik?.ButikschefTelefon}
-                  </CardClientName>
-                </CardHeader>
-              </Card>
+            <a href={`/order/${order.BeställningId}`} key={order.BeställningId} role="button" className="w-full">
+              <OrdersCard>
+                <OrdersCardHeader>
+                  <OrdersCardOrderId>#{order.BeställningId}</OrdersCardOrderId>
+                  <OrdersCardDate>{order.PreliminärtLeveransdatum && formatDate(order.PreliminärtLeveransdatum)}</OrdersCardDate>
+                </OrdersCardHeader>
+                <section className="self-start">
+                  <OrdersCardStore>{order.Butik?.ButikNamn}</OrdersCardStore>
+                  <OrdersCardAddress>{order.Butik?.Besöksadress}</OrdersCardAddress>
+                </section>
+                <section className="self-start">
+                  <OrdersCardClientName className="self-start font-medium text-Branding-textPrimary text-sm">Brödansvarig</OrdersCardClientName>
+                  <OrdersCardClientInfo>
+                    <OrdersCardClientName>{order.Butik?.BrödansvarigNamn}</OrdersCardClientName>
+                    <OrdersCardClientNumber>{order.Butik?.BrödansvarigTelefon}</OrdersCardClientNumber>
+                  </OrdersCardClientInfo>
+                </section>
+              </OrdersCard>
             </a>
           ))}
         </div>
         <div className="flex gap-3">
-          <ButtonPaginationPrev onClick={handlePrev} disabled={page === 1}>a</ButtonPaginationPrev>
+          <Button variant="prev" size="pagination" onClick={handlePrev} disabled={page === 1}><ArrowLeft className="h-4 w-4" /></Button>
           <section className="inline-flex items-center justify-center gap-1">
           {pageNumbers.map((pageNumber, i) =>
             pageNumber === "..." ? (
               <span key={`ellipsis-${i}`} className="px-2 text-gray-400">...</span>
             ) : (
-              <button
+              <Button
+                  variant="pageNumber"
+                  size="pagination"
                   key={pageNumber}
-                  onClick={() => setPage(pageNumber)}
-                  className={`items-center px-4 py-2 mx-1 transition-colors rounded-md sm:flex hover:text-gray-200
-                    ${pageNumber === page
-                      ? "bg-blue-600 text-Branding-textPrimary"
-                      : "bg-gray-800 text-gray-200 hover:bg-blue-600"
-                  }`}
-                >
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`${pageNumber === page ? "bg-Branding-buttonPrimary text-Branding-textAccent" : 
+                            "bg-gray-700 text-gray-500 hover:bg-blue-600"}`}>
                   {pageNumber}
-                </button>
+                </Button>
             )
           )}
           </section>
-          <ButtonPaginationNext onClick={handleNext} disabled={page === paginated.TotalPages}>b</ButtonPaginationNext>
+          <Button variant="next" size="pagination" onClick={handleNext} disabled={page === paginated.TotalPages}><ArrowRight className="h-4 w-4" /></Button>
         </div>
       </Wrapper>
     </Main>

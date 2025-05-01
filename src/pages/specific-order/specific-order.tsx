@@ -4,9 +4,9 @@ import { useAuth } from "../../components/auth/AuthContext";
 import { ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice, ProductCardTotalPrice } from "../../blocks/card";
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../blocks/card-order-page";
 import { formatDate } from "../../lib/formatDate";
-import { ButtonAdminManage, ButtonAdminDelete, ButtonOrder } from "../../components/ui/button";
 import { ImCross } from "react-icons/im";
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function SpecificOrder() {
   const {
@@ -46,8 +46,8 @@ export default function SpecificOrder() {
                             />
                         </p>
                         <div className="space-x-2.5 self-center mt-1">
-                          <ButtonAdminManage onClick={handleSubmitDate}>Spara</ButtonAdminManage>
-                          <ButtonAdminDelete onClick={() => setEditedDate('')}>Avbryt</ButtonAdminDelete>
+                          <Button variant='manage' size='admin' onClick={handleSubmitDate}>Spara</Button>
+                          <Button variant='delete' size='admin' onClick={() => setEditedDate('')}>Avbryt</Button>
                         </div>
                         </>
                       ) : (
@@ -67,21 +67,21 @@ export default function SpecificOrder() {
               </CardStoreContent>
             </CardStore>
             {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
-              <div className="self-center flex gap-2 flex-wrap">
-                {canEditOrder && !isEditing && <ButtonAdminManage onClick={handleEdit}>Ändra beställningsdetaljer</ButtonAdminManage>}
+              <div className="self-center flex gap-3 flex-wrap">
+                {canEditOrder && !isEditing && <Button variant='manage' size='admin' onClick={handleEdit}>Ändra beställningsdetaljer</Button>}
                 {canEditOrder && isEditing && (
                   <>
-                    <ButtonAdminManage onClick={handleSubmit}>Spara</ButtonAdminManage>
-                    <ButtonAdminDelete onClick={handleCancelEdit}>Avbryt</ButtonAdminDelete>
+                    <Button variant='manage' size='admin' onClick={handleSubmit}>Spara</Button>
+                    <Button variant='delete' size='admin' onClick={handleCancelEdit}>Avbryt</Button>
                   </>
                 )}
                 {canEditDeliveryDate && (
-                  <ButtonAdminManage onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
+                  <Button variant='manage' size='admin' onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
                     Ändra beställningsdatum
-                  </ButtonAdminManage>
+                  </Button>
                 )}
                 {canDeleteOrder && !isEditing && (
-                  <ButtonAdminDelete onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</ButtonAdminDelete>
+                  <Button variant='delete' size='admin' onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</Button>
                 )}
               </div>
             )}
@@ -119,9 +119,9 @@ export default function SpecificOrder() {
                 <article className="flex items-center justify-center gap-3">
                   <h2 className="self-center text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
                   {isCompletingOrder ? (
-                    <ButtonAdminDelete onClick={() => setIsCompletingOrder(false)}>Avbryt</ButtonAdminDelete >
+                    <Button variant='delete' size='admin' onClick={() => setIsCompletingOrder(false)}>Avbryt</Button >
                     ) : (
-                    <ButtonAdminManage onClick={() => setIsCompletingOrder(true)}>Komplettera</ButtonAdminManage>
+                    <Button variant='manage' size='admin' onClick={() => setIsCompletingOrder(true)}>Komplettera</Button>
                     )}
                 </article>
                 ) : (
@@ -213,7 +213,7 @@ export default function SpecificOrder() {
                                 <p className="font-inter text-red-500">{message}</p>
                             ): (null)}
                           </div>
-                          <ButtonOrder className="w-[12rem]" onClick={handleAddDetail}>Lägg till</ButtonOrder>
+                          <Button variant='proceed' size='smaller' className="w-[12rem]" onClick={handleAddDetail}>Lägg till</Button>
                       </div>
                   </div>
               )}

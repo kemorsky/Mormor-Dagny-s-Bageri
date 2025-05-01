@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 import { useAuth } from "../../components/auth/AuthContext";
 import UserTypes from "../../lib/userTypes";
 import { LoginMain, LoginWrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function LoginPage() {
     const { handleLogin, currentUser } = useAuth();
@@ -86,7 +86,7 @@ export default function LoginPage() {
                             </div>
                         )}
                         <section className="w-full flex flex-col items-center justify-center gap-4 mt-[1.5rem]">
-                            <ButtonPrimary type="submit">Logga In</ButtonPrimary>
+                            <Button type="submit">Logga In</Button>
                             <p className="font-inter font-semibold text-[1rem] leading-[1.375rem]">Glömde lösenordet?</p>
                             <a className="font-inter font-bold text-[1rem] leading-[1.375rem] cursor-pointer" onClick={() => navigate('/forgot-password')}>Återställ lösenord</a>
                         </section>

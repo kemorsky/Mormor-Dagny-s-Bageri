@@ -10,6 +10,7 @@ import { useStores } from "../../../components/auth/StoreContext";
 import AddStoreForm from "../../../elements/admin-store-form/admin-store-form";
 import EditStoreForm from "../../../elements/admin-store-form/admin-edit-store-form";
 import { Main, Wrapper } from "../../../blocks/wrappers";
+import { Button } from "../../../components/ui/button-shadcn";
 
 export default function Stores() {
     const [selected, setSelected] = useState<Store | null>(null);
@@ -163,8 +164,8 @@ export default function Stores() {
                                             />
                                     </label>
                                     <section className="flex gap-3 self-end">
-                                        <button className="bg-orange-500 rounded-lg px-4 py-2" onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Ändra butiken</button>
-                                        <button className="bg-blue-500 rounded-lg px-4 py-2" onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</button>
+                                        <Button variant='manage' size='admin' onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Ändra butiken</Button>
+                                        <Button variant='delete' size='admin' onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</Button>
                                     </section>
                                 </CardStoreContent>                                                             
                             </CardStore>
