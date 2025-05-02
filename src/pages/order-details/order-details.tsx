@@ -134,7 +134,7 @@ export default function OrderDetailsPage() {
                             <ul className="w-full space-y-4">
                                 {products.map((product, index) => (
                                     <li key={index} className="w-full">
-                                    <ProductCard >
+                                    <ProductCard className={` ${edit ? 'items-center' : ''}`} >
                                         <ProductCardName>{product?.Namn}</ProductCardName>
                                         <ProductCardPrice>{product?.Baspris} kr</ProductCardPrice>
                                         {edit ? (
@@ -148,7 +148,7 @@ export default function OrderDetailsPage() {
                                                     updated[index].Antal = newAntal
                                                     setDetails(updated);
                                                 }}
-                                                className="border border-gray-300 rounded p-1 ml-1 max-w-12 h-10"
+                                                className="bg-Branding-input border border-Branding-textAccent rounded p-1 ml-1 max-w-12 h-10"
                                             />                                        
                                             <ProductCardTotalPrice>
                                                 <span className="text-Branding-textSecondary">Pris: </span>
@@ -172,8 +172,8 @@ export default function OrderDetailsPage() {
                             <section className="self-end flex flex-col items-end gap-2">       
                                 <p className="font-inter text-Branding-textPrimary">Totallt: {totalBeforeDiscount.toFixed(2)} kr</p>
                                 {edit ? (
-                                    <label className="block">
-                                        Rabatt:
+                                    <label className="font-inter text-Branding-textPrimary">
+                                        Rabatt(%):
                                         <input
                                             type="text"
                                             value={orderDiscount}
@@ -181,7 +181,7 @@ export default function OrderDetailsPage() {
                                                 const updated = parseFloat(e.target.value) || 0;
                                                 setOrderDiscount(updated);
                                             }}
-                                            className="border border-gray-300 rounded p-1 ml-1 w-[4.5rem] h-10"
+                                            className="bg-Branding-input border border-Branding-textAccent rounded p-1 ml-1 max-w-12 h-10"
                                         />
                                     </label>
                                 ) : (

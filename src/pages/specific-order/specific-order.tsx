@@ -39,9 +39,9 @@ export default function SpecificOrder() {
                         <>
                         <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem] flex items-center justify-center">Leveransdatum:
                           <input
-                              className="ml-1 border border-gray-300 rounded p-1 font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"
+                              className="ml-1 bg-Branding-input border border-Branding-textAccent rounded p-1 font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"
                               type="text"
-                              value={formatDate(editedDate)}
+                              value={editedDate}
                               onChange={(e) => setEditedDate(e.target.value)}
                             />
                         </p>
@@ -111,7 +111,7 @@ export default function SpecificOrder() {
                       </CardStoreBreadperson>
                   </CardStoreContacts>
               </CardStoreContent>                                                             
-          </CardStore>
+            </CardStore>
           </section>
 
           <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
@@ -139,7 +139,7 @@ export default function SpecificOrder() {
                           <ProductCardAmount>
                               <input
                                 type="text"
-                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded px-2 py-1.5 max-w-12 h-10"
+                                className="font-inter bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1.5 max-w-12 h-10"
                                 value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
                                 onChange={(e) =>
                                   handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
@@ -150,7 +150,7 @@ export default function SpecificOrder() {
                               <span className="text-Branding-textSecondary">Pris: </span> 
                               {product.Styckpris.toFixed(2)} kr
                           </ProductCardTotalPrice>
-                          <button className="border border-red-400 hover:bg-red-500 transition-colors p-3 rounded-md" onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross className="text-[0.875rem]"/></button>
+                          <Button variant='deleteProduct' size='pagination' onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross className="text-[0.875rem]"/></Button>
                         </>
                       ) : (
                         <>
@@ -170,7 +170,7 @@ export default function SpecificOrder() {
                       <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Lägg till en produkt</h2>
                       <div className="flex flex-col gap-3">
                           <select
-                              className="w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
+                              className="w-full max-w-[16.896rem] bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3"
                               value={newDetail.ProduktId}
                               onChange={(e) => {
                                   const selectedId = parseInt(e.target.value);
@@ -186,7 +186,7 @@ export default function SpecificOrder() {
                           >
                               <option>Välj produkt</option>
                               {products.map((product) => (
-                                  <option key={product.ProduktId} className="" value={product.ProduktId}>
+                                  <option key={product.ProduktId} value={product.ProduktId}>
                                     {product.Namn} – {product.Baspris} kr
                                   </option>
                               ))}

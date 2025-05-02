@@ -153,7 +153,7 @@ export default function OrderPage() {
                             value={query} 
                             onChange={handleQueryChange} 
                             />
-                        <p onClick={handleClearInput} className="text-base cursor-pointer">Avbryt</p>
+                        <p onClick={handleClearInput} className="text-base cursor-pointer hover:text-Branding-textAccent">Avbryt</p>
                     </form>
                     {isActive && stores && stores.length > 0 && (
                         <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
@@ -161,7 +161,7 @@ export default function OrderPage() {
                                 <li
                                 key={store.ButikId}
                                 onClick={() => handleSelectedStore(store)}
-                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
+                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textSecondary hover:text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
                                 >
                                     {store.ButikNamn}, {store.Besöksadress}
                                 </li>
@@ -222,7 +222,11 @@ export default function OrderPage() {
                     <div className="w-full flex justify-start sm:justify-center items-center gap-3 overflow-x-auto no-scrollbar sm:overflow-visible scroll-snap-type-x">
                         {selectedOrders ? (
                             [...selectedOrders]
-                            .sort((a, b) => new Date(b.PreliminärtLeveransdatum).getTime() - new Date(a.PreliminärtLeveransdatum).getTime())
+                            .sort((a, b) => {
+                                const dateA = a.PreliminärtLeveransdatum ? new Date(a.PreliminärtLeveransdatum).getTime() : 0;
+                                const dateB = b.PreliminärtLeveransdatum ? new Date(b.PreliminärtLeveransdatum).getTime() : 0;
+                                return dateB - dateA;
+                              })
                             .slice(0, 3)
                             .map((order) => (
                                 <div key={order.BeställningId}> {/* Div wrapper för att annars overflow-x-scroll inte fungerar */}
@@ -231,7 +235,7 @@ export default function OrderPage() {
                                             <PreviousOrderCardHeaderId>#{order.BeställningId}</PreviousOrderCardHeaderId>
                                             <PreviousOrderCardHeaderDate>
                                                 {(() => {
-                                                    const d = new Date(order.PreliminärtLeveransdatum);
+                                                    const d = order.PreliminärtLeveransdatum ? new Date(order.PreliminärtLeveransdatum) : new Date();
                                                     const day = String(d.getDate()).padStart(2, "0");
                                                     const month = String(d.getMonth() + 1).padStart(2, "0");
                                                     const year = d.getFullYear();

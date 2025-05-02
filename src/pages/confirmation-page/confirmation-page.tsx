@@ -113,7 +113,7 @@ export default function ConfirmationPage() {
                             <section className="self-end flex flex-col items-end gap-2">
                                 <p className="font-inter text-Branding-textPrimary">Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
                                 <p className="font-inter text-Branding-textPrimary">Finallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
-                                <Button variant='proceed' onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</Button>
+                                <Button variant='proceed' size='smaller' onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</Button>
                             </section>
                         </div>
                         

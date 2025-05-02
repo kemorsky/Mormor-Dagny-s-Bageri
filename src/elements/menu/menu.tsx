@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router";
 import { useAuth } from "../../components/auth/AuthContext";
+import { CircleUserRound } from 'lucide-react'
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
     const { currentUser, handleLogOut } = useAuth();
@@ -28,8 +29,9 @@ export default function Menu() {
         <header className="max-w-[60rem] w-full inline-flex items-start justify-between">
             <nav onClick={handleClick} className=" inline-flex flex-col items-start justify-center relative transition-all cursor-pointer ">
                 <div className="group w-full inline-flex items-center justify-start gap-2 hover:bg-Branding-cardPrimary rounded-xl sm:px-2 sm:py-1">
-                    <section className="h-10 w-10 rounded-full inline-flex items-center justify-center overflow-hidden">
-                        <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
+                    <section className="h-10 w-10 rounded-full bg-sky-700 inline-flex items-center justify-center overflow-hidden">
+                        <CircleUserRound className="object-fill w-10 h-10 stroke-white stroke-1"/>
+                        {/* <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" /> */}
                     </section>
                     <article className="inline-flex flex-col gap-1 font-DMSans">
                         <p className="text-[1rem] leading-[1.1875rem] text-Branding-textPrimary group-hover:text-Branding-textAccent font-semibold">

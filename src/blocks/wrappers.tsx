@@ -23,7 +23,7 @@ const LoginMain = React.forwardRef<
   <main
     ref={ref}
     className={cn(
-        "w-full min-h-screen bg-Branding-backgroundPrimary relative",    
+        "w-full min-h-[59.75rem] bg-Branding-backgroundPrimary relative", 
         className
     )}
     {...props}

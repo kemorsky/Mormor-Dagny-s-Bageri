@@ -9,8 +9,6 @@ type RequestOptions = {
 const BASE_URL = "http://localhost:5139/api";
 
   export const apiRequest = async (url: string, options: RequestOptions = {}) => {
-    // console.log(`Making request to ${url} with options:`, options);
-
       try {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -116,7 +114,6 @@ export const editOrderDeliveryDate = async (BeställningId: number, updateDTO: {
       method: "PUT",
       body: JSON.stringify( updateDTO )
     })
-    console.log(response)
     return response;
   } catch (error) {
     console.error("Error fetching this order:", error)
@@ -129,7 +126,6 @@ export const deleteOrder = async (BeställningId: number) => {
     const response = await apiRequest(`${BASE_URL}/beställningar/${BeställningId}` , {
       method: "DELETE"
     })
-    console.log(response)
     return response;
   } catch (error) {
     console.error("Error fetching this order:", error)
@@ -235,7 +231,7 @@ export const forgotPassword = async (email: string) => {
 };
 
 
-export const resetPassword = async (username: string, password: string, token: string) => { // TO BE IMPLEMENTED AT A LATER DATE
+export const resetPassword = async (username: string, password: string, token: string) => {
   try {
     const response = await fetch(`${BASE_URL}/auth/reset-password`, {
       method: 'POST',
@@ -247,8 +243,13 @@ export const resetPassword = async (username: string, password: string, token: s
         NewPassword: password,
         Token: token
       })
-    })
-    return response;
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error);
+    }
+    const result = await response.json();
+    return result;
   } catch (error) {
     console.error("Error resetting password:", error);
   }
@@ -260,7 +261,6 @@ export const addUser = async (user: RegisterUser) => {
       method: 'POST',
       body: JSON.stringify(user)
     });
-    console.log(response)
     return response;
   } catch (error) {
     console.error("Error adding user:", error);
@@ -299,7 +299,6 @@ export const deleteUser = async (Användarnamn: string) => {
     const response = await apiRequest(`${BASE_URL}/auth/ta-bort-användare/${Användarnamn}`, {
       method: 'DELETE',
     })
-    console.log(response)
     return response;
   } catch (error) {
     console.log(error)
@@ -312,7 +311,6 @@ export const addStore = async (store: Store) => {
       method: 'POST',
       body: JSON.stringify(store)
     })
-    console.log(response)
     return response;
   } catch (error) {
     console.log("Couldn't add store", error)
@@ -337,7 +335,6 @@ export const editStore = async (store: Store) => {
         Telefonnummer: store.Telefonnummer,
       })
     })
-    console.log(response)
     return response;
   } catch (error) {
     console.log("Couldn't edit store", error)
@@ -376,7 +373,6 @@ export const addProduct = async (newProduct: Product) => {
       method: 'POST',
       body: JSON.stringify(newProduct)
     })
-    console.log(response)
     return response;
   } catch (error) {
     console.log("Error adding product", error)
