@@ -43,6 +43,10 @@ export default function Stores() {
     };
 
     const handleDeleteStore = async (ButikId: number) => {
+        const confirmDelete = window.confirm("Är du säker på att du vill ta bort den här butiken?");
+        if (!confirmDelete) {
+            return;
+    }
         try {
             await deleteStore(ButikId)
             console.log(`Store with ID ${ButikId} deleted successfully`);
@@ -93,7 +97,7 @@ export default function Stores() {
                             value={query} 
                             onChange={handleQueryChange} 
                             />
-                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer">Avbryt</p>
+                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer hover:text-Branding-textAccent">Avbryt</p>
                     </form>
                     {isActive && stores && stores.length > 0 && (
                         <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
@@ -101,7 +105,7 @@ export default function Stores() {
                                 <li
                                 key={store.ButikId}
                                 onClick={() => handleSelectedStore(store)}
-                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
+                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textSecondary hover:text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
                                 >
                                     {store.ButikNamn}, {store.Besöksadress}
                                 </li>

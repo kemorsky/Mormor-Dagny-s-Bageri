@@ -81,7 +81,7 @@ export default function LoginPage() {
                             }
                         </label>
                         {message && (
-                            <div className="absolute bottom-[10.05rem] left-3 w-full p-2 text-red-500 rounded text-sm font-medium font-inter">
+                            <div className="absolute bottom-[9.55rem] left-3 w-full p-2 text-red-500 rounded text-sm font-medium font-inter">
                                 {message}
                             </div>
                         )}

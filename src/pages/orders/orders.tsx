@@ -120,8 +120,8 @@ export default function OrdersPage() {
                   size="pagination"
                   key={pageNumber}
                   onClick={() => handlePageChange(pageNumber)}
-                  className={`${pageNumber === page ? "bg-Branding-buttonPrimary text-Branding-textAccent" : 
-                            "bg-gray-700 text-gray-500 hover:bg-blue-600"}`}>
+                  className={`${pageNumber === page ? "bg-Branding-buttonPrimary text-Branding-textAccent border border-Branding-textAccent" : 
+                            "bg-Branding-buttonPrimary/80 text-Branding-textSecondary hover:bg-Branding-buttonPrimary"}`}>
                   {pageNumber}
                 </Button>
             )

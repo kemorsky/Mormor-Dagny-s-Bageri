@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-Branding-buttonPrimary hover:bg-Branding-buttonPrimary/80 border border-Branding-textAccent text-Branding-textAccent",
+          "bg-Branding-buttonPrimary hover:bg-[#5c5c5c] border border-Branding-textAccent text-Branding-textAccent",
         proceed:
           "bg-Branding-buttonProceed hover:bg-[#F0C93D] text-[#1E2124] border border-[#1E2124]",
         manage:
@@ -19,19 +19,22 @@ const buttonVariants = cva(
           "text-red-200 hover:text-Branding-textPrimary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-red-400 hover:bg-red-500",
         tab:
           "w-40 rounded-none border border-Branding-buttonProceed shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         prev:
-          "rounded-lg font-DMSans transition-colors hover:text-gray-500",
+          "rounded-lg font-DMSans transition-colors hover:text-Branding-textPrimary",
         next: 
-          "rounded-lg font-DMSans transition-colors hover:text-gray-500",
-        pageNumber: "items-center px-4 py-2 mx-1 transition-colors rounded-md sm:flex hover:text-Branding-textSecondary"
+          "rounded-lg font-DMSans transition-colors hover:text-Branding-textPrimary",
+        pageNumber: "px-4 py-2 mx-1 transition-colors rounded-md hover:text-Branding-textPrimary",
+        deleteProduct: "border border-red-400 hover:bg-red-500 p-3 rounded-md"
       },
       active: {
         true: "bg-Branding-buttonProceed text-[#1E2124] font-bold",
-        false: "bg-Branding-buttonPrimary text-Branding-buttonProceed hover:text-Branding-textAccent",
+        false: "bg-Branding-buttonPrimary text-Branding-textAccent hover:text-[#F0C93D]",
       },
       disabled: {
-        true: "bg-gray-700 text-Branding-textSecondary font-semibold",
-        false: "bg-sky-600 hover:text-gray-500 text-Branding-textPrimary hover:text-Branding-textSecondary"
+        true: "bg-gray-700 text-Branding-textPrimary font-semibold",
+        false: "bg-Branding-buttonProceed hover:bg-[#F0C93D] text-[#1E2124]"
       },
       size: {
         default: "min-w-[14.5rem] px-4 py-2",

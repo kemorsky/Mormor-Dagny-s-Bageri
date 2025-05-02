@@ -56,6 +56,10 @@ export default function EditUser() {
     }
 
     const handleDeleteUser = async (Användarnamn: string) => {
+        const confirmDelete = window.confirm("Är du säker på att du vill ta bort den här användaren?");
+        if (!confirmDelete) {
+            return;
+    }
             try {
                 await deleteUser(Användarnamn);
                 console.log("Deleted user:", Användarnamn);
