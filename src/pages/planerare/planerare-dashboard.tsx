@@ -8,6 +8,7 @@ import { useFilteredOrdersDashboard } from "../../hooks/useFilteredOrdersDashboa
 import { useOrderedProducts } from "../../hooks/useOrderedProducts";
 import { combineOrderedProducts } from "../../lib/combineProducts"; //
 import { combineOrdersByStore } from "../../lib/combineOrdersByStore";
+import { formatCurrency } from "../../lib/formatCurrency";
 
 export default function PlanerareDashboard() {
     const [ stats, setStats ] = useState<DashboardStats>();
@@ -62,7 +63,7 @@ export default function PlanerareDashboard() {
                                 <p className="text-[0.875rem] font-open-sans leading-[1.125rem] font-medium text-Branding-textPrimary">Beställningar</p>
                             </section>
                             <section className="min-w-[9rem] h-[6rem] p-3 rounded-xl border-black bg-emerald-700 inline-flex flex-col items-start justify-center gap-3">
-                                <h1 className="text-[2rem] leading-[2rem] font-open-sans font-bold text-Branding-textPrimary">{stats.TotalRevenue.toFixed(2)} kr</h1>
+                                <h1 className="text-[2rem] leading-[2rem] font-open-sans font-bold text-Branding-textPrimary">{formatCurrency(stats.TotalRevenue)}</h1>
                                 <p className="text-[0.875rem] leading-[1.125rem] font-open-sans font-medium text-Branding-textPrimary">Inkomst</p>
                             </section>
                         </section>

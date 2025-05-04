@@ -139,7 +139,7 @@ export default function SpecificOrder() {
                           <ProductCardAmount>
                               <input
                                 type="text"
-                                className="font-inter bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1.5 max-w-12 h-10"
+                                className="font-inter text-center bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1.5 max-w-12 h-10"
                                 value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
                                 onChange={(e) =>
                                   handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
@@ -194,7 +194,7 @@ export default function SpecificOrder() {
                           <div className="flex gap-3 items-center">
                             <input
                                 type="text"
-                                className="w-[5rem] bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
+                                className="w-12 h-10 bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary text-center font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
                                 placeholder="Antal"
                                 value={newDetail.Antal}
                                 onChange={(e) => {

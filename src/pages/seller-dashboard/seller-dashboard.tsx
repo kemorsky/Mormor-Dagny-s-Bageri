@@ -46,12 +46,12 @@ export default function DashBoard() {
                                                         <span>{formatPhoneNumber(order.Butik?.ButikschefTelefon ?? '')}</span>
                                                     </CardClientNumber>
                                                 </div>
-                                                <div className="flex-1 min-w-0 flex flex-col text-right">
+                                                <div className="flex-1 min-w-0 flex flex-col text-left">
                                                     <span className="text-Branding-textPrimary text-sm">Brödansvarig</span>
                                                     <CardClientName className="text-sm text-Branding-textSecondary">
                                                         <span>{order.Butik?.BrödansvarigNamn}</span>
                                                     </CardClientName>
-                                                    <CardClientNumber className="text-sm font-normal text-right">
+                                                    <CardClientNumber className="text-sm font-normal text-left">
                                                         {formatPhoneNumber(order.Butik?.BrödansvarigTelefon ?? '')}
                                                     </CardClientNumber>
                                                 </div>

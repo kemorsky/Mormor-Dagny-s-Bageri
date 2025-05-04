@@ -83,7 +83,7 @@ export default function OrderPage() {
             ...newOrder,
             Beställare: order.Beställare,
             Beställningsdatum: order.Beställningsdatum,
-            PreliminärtLeveransdatum: order.PreliminärtLeveransdatum,
+            PreliminärtLeveransdatum: '',
             Beställningsdetaljer: order.Beställningsdetaljer,
         });
     };

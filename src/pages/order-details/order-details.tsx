@@ -148,7 +148,7 @@ export default function OrderDetailsPage() {
                                                     updated[index].Antal = newAntal
                                                     setDetails(updated);
                                                 }}
-                                                className="bg-Branding-input border border-Branding-textAccent rounded p-1 ml-1 max-w-12 h-10"
+                                                className="bg-Branding-input border border-Branding-textAccent text-center rounded p-2 ml-1 max-w-12 h-10"
                                             />                                        
                                             <ProductCardTotalPrice>
                                                 <span className="text-Branding-textSecondary">Pris: </span>
@@ -181,7 +181,7 @@ export default function OrderDetailsPage() {
                                                 const updated = parseFloat(e.target.value) || 0;
                                                 setOrderDiscount(updated);
                                             }}
-                                            className="bg-Branding-input border border-Branding-textAccent rounded p-1 ml-1 max-w-12 h-10"
+                                            className="bg-Branding-input border border-Branding-textAccent text-center rounded p-2 ml-1 max-w-12 h-10"
                                         />
                                     </label>
                                 ) : (
