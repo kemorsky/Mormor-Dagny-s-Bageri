@@ -9,7 +9,7 @@ const CardStore = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full min-h-[8.5rem] flex flex-col items-start justify-start p-3 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl",
+      "w-full min-h-[8.5rem] flex flex-col items-start justify-start p-3 bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.15)] rounded-xl",
       className
     )}
     {...props}
@@ -114,7 +114,7 @@ const PreviousOrderCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-[10.75rem] h-[10.75rem] z-index-50 relative p-3 bg-Branding-cardPrimary rounded-3xl inline-flex flex-col justify-start items-start gap-3 cursor-pointer",
+      "w-[10.75rem] h-[10.75rem] z-index-50 relative p-3 bg-[#242c3b] shadow-[0px_0px_8px_4px_rgba(180,180,180,0.06)] rounded-3xl inline-flex flex-col justify-start items-start gap-3 cursor-pointer",
       className
     )}
     {...props}

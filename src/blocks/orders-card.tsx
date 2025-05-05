@@ -8,7 +8,7 @@ const OrdersCard = React.forwardRef<
     <div
         ref={ref}
         className={cn(
-            "w-full max-w-[25rem] rounded-3xl bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col justify-center items-center p-3 gap-3",
+            "w-full max-w-[25rem] rounded-3xl bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.12)] flex flex-col justify-center items-center p-3 gap-3",
             className
         )}
         {...props}

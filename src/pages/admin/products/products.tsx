@@ -77,7 +77,7 @@ export default function Products() {
             <Wrapper>
                 <Menu />
                 <div className="flex flex-col items-center justify-center gap-3">
-                    <form className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)]" action="" onSubmit={handleSubmit}>
+                    <form className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.12)]" action="" onSubmit={handleSubmit}>
                         <label className="w-full flex flex-col items-start justify-center gap-2">
                             <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Namn</span>
                             <InputPrimary type="text"
@@ -99,7 +99,7 @@ export default function Products() {
                         <Button variant='proceed' type="submit">Lägg till produkt</Button>
                     </form>
                 </div>
-                <section className="w-full max-w-[33.792rem] bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] inline-flex flex-col items-start justify-center p-3 rounded-xl gap-3">
+                <section className="w-full max-w-[33.792rem] bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.12)] inline-flex flex-col items-start justify-center p-3 rounded-xl gap-3">
                     {products ? (
                         products.map((product, index) => (
                             editingProduct?.ProduktId === product.ProduktId ? (
@@ -110,13 +110,13 @@ export default function Products() {
                                         placeholder="Edit Namn"
                                         value={editingProduct?.Namn}
                                         onChange={(e) => setEditingProduct({ ...editingProduct, Namn: e.target.value })}
-                                        className="max-w-[10rem] sm:max-w-[12rem] p-2 rounded-lg border border-white/65 font-semibold font-inter text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.1875rem] bg-Branding-input"/>
+                                        className="max-w-[10rem] sm:max-w-[12rem] p-2 rounded-lg border border-Branding-textAccent font-semibold font-inter text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.1875rem] bg-Branding-input"/>
                                     <input
                                         type="text"
                                         placeholder="Edit Baspris"
                                         value={editingProduct?.Baspris}
-                                        onChange={(e) => setEditingProduct({ ...editingProduct, Baspris: parseFloat(e.target.value) })}
-                                        className="p-2 max-w-[2.75rem] sm:max-w-[3.5rem] rounded-lg border border-white/65 font-semibold font-inter text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.1875rem] bg-Branding-input"/>
+                                        onChange={(e) => setEditingProduct({ ...editingProduct, Baspris: parseInt(e.target.value) || 0 })}
+                                        className="p-2 max-w-[2.75rem] sm:max-w-[3.5rem] rounded-lg border border-Branding-textAccent font-inter text-[0.875rem] leading-[1rem] sm:text-[1rem] sm:leading-[1.1875rem] bg-Branding-input"/>
                                     <div className="flex gap-2">
                                         <Button variant='manage' size='admin' type="submit">Spara</Button>
                                         <Button variant='delete' size='admin'

@@ -70,7 +70,7 @@ export default function DashBoard() {
                 <div className="w-full max-w-[50rem] inline-flex flex-col items-center justify-start gap-3 mt-10">
                     <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Dina tidigare beställningar</h2>
                     <Carousel className="w-full h-full min-h-[10.75rem]">
-                        <CarouselContent>
+                        <CarouselContent className="gap-1">
                                 {previous.map((order) => (
                                     <CarouselItem key={order.BeställningId} className="max-w-[180px]">
                                         <a href={`/order/${order.BeställningId}`} className='min-w-[10.75rem] min-h-[10.75rem]'>

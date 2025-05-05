@@ -6,8 +6,8 @@ export default {
         extend: {
           colors: {
             Branding: {
-              backgroundPrimary: "#1F1B16",
-              cardPrimary: "#333333",
+              backgroundPrimary: "#181D27",
+              cardPrimary: "#293056",
               textHeading: "#ffffff",
               textPrimary: "#ffffff",
               textSecondary: "#9a9a9a",

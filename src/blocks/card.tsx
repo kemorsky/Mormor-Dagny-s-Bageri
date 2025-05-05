@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "max-w-[289px] w-full max-h-[200px] h-full px-3 py-3 bg-[#242424] shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-3xl inline-flex flex-col items-end justify-between",
+      "max-w-[289px] w-full max-h-[200px] h-full px-3 py-3 bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.12)] rounded-3xl inline-flex flex-col items-end justify-between",
       className
     )}
     {...props}
@@ -144,7 +144,7 @@ const ProductListCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full px-3 py-3 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-xl inline-flex flex-col items-start justify-center gap-3",
+      "w-full px-3 py-3 bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.12)] rounded-xl inline-flex flex-col items-start justify-center gap-3",
       className
     )}
     {...props}

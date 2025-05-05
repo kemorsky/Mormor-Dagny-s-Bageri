@@ -27,7 +27,7 @@ export default function AddUser() {
         <Main>
             <Wrapper>
                 <Menu />
-                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] rounded-lg p-4">
+                <form onSubmit={handleSubmit} className="inline-flex flex-col gap-2.5 bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.12)] rounded-lg p-4">
                     <label className="w-full py-1 flex flex-col items-start justify-center gap-2">
                         <span className="text-[0.875rem] leading-[0.875rem] font-inter font-semibold text-Branding-textPrimary">Användarnamn</span>
                         <InputPrimary type="text"

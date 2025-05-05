@@ -127,7 +127,7 @@ export default function SpecificOrder() {
                 ) : (
                 <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
             )}
-            <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
+            <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.15)] flex flex-col gap-3 p-3 rounded-xl">
               <ul className="w-full space-y-4">
                 {order.Beställningsdetaljer.map((product, index) => (
                   <li key={index}>
@@ -139,7 +139,7 @@ export default function SpecificOrder() {
                           <ProductCardAmount>
                               <input
                                 type="text"
-                                className="font-inter text-center bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1.5 max-w-12 h-10"
+                                className="font-inter text-center bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1 max-w-12 h-[2.625rem]"
                                 value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
                                 onChange={(e) =>
                                   handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
