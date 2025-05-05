@@ -6,8 +6,8 @@ import { OrderDetails } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, ProductCardTotalPrice  } from "../../blocks/card"
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
-import { ButtonOrder } from "../../components/ui/button"
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn"
 
 export default function ConfirmationPage() {
     const [details, setDetails] = useState<OrderDetails[]>([]);
@@ -93,7 +93,7 @@ export default function ConfirmationPage() {
                 {details? (
                     <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
                         <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
-                        <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl"> 
+                        <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.15)] flex flex-col gap-3 p-3 rounded-xl"> 
                             <ul className="w-full space-y-3">
                                 {details.map((product, index) => (
                                 <li key={index}>
@@ -113,7 +113,7 @@ export default function ConfirmationPage() {
                             <section className="self-end flex flex-col items-end gap-2">
                                 <p className="font-inter text-Branding-textPrimary">Rabatt: {order?.Beställningsdetaljer?.[0]?.Rabatt}%</p>
                                 <p className="font-inter text-Branding-textPrimary">Finallt pris: {calculatedFinalTotal.toFixed(2)}kr</p>
-                                <ButtonOrder onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</ButtonOrder>
+                                <Button variant='proceed' size='smaller' onClick={() => {navigate('/seller-dashboard')}}>Gå till Hem</Button>
                             </section>
                         </div>
                         

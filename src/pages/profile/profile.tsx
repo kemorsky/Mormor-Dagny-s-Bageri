@@ -3,6 +3,7 @@ import { User } from "../../types/types"
 import { getUser } from "../../lib/api"
 import Menu from "../../elements/menu/menu"
 import { AdminUserCard, AdminUserCardContent } from "../../blocks/admin-cards"
+import { Main, Wrapper } from "../../blocks/wrappers"
 
 export default function Profile() {
     const [user, setUser] = useState<User>()
@@ -22,11 +23,11 @@ export default function Profile() {
     if (!user) {return <div>Loading</div>}
 
     return (
-         <main className="w-full min-h-screen inline-flex flex-col items-center justify-start bg-Branding-backgroundPrimary px-4">
-            <div className="max-w-[60rem] w-full inline-flex flex-col items-center justify-start gap-6 py-4">
+        <Main>
+            <Wrapper>
                 <Menu />
                 <AdminUserCard>
-                    <AdminUserCardContent className="">
+                    <AdminUserCardContent>
                         <div className="self-stretch inline-flex flex-col justify-start items-start gap-1">
                             <p className="w-24 h-3.5 justify-start text-white text-sm font-semibold font-inter">Användarnamn</p>
                             <p className="self-stretch justify-start text-Branding-textSecondary text-lg font-inter">{user.Användarnamn}</p>
@@ -41,8 +42,7 @@ export default function Profile() {
                         </div>
                     </AdminUserCardContent>
                 </AdminUserCard>
-                
-            </div>
-         </main>
+         </Wrapper>
+    </Main>
     )
 };

@@ -10,6 +10,7 @@ import { useStores } from "../../../components/auth/StoreContext";
 import AddStoreForm from "../../../elements/admin-store-form/admin-store-form";
 import EditStoreForm from "../../../elements/admin-store-form/admin-edit-store-form";
 import { Main, Wrapper } from "../../../blocks/wrappers";
+import { Button } from "../../../components/ui/button-shadcn";
 
 export default function Stores() {
     const [selected, setSelected] = useState<Store | null>(null);
@@ -42,6 +43,10 @@ export default function Stores() {
     };
 
     const handleDeleteStore = async (ButikId: number) => {
+        const confirmDelete = window.confirm("Är du säker på att du vill ta bort den här butiken?");
+        if (!confirmDelete) {
+            return;
+    }
         try {
             await deleteStore(ButikId)
             console.log(`Store with ID ${ButikId} deleted successfully`);
@@ -92,7 +97,7 @@ export default function Stores() {
                             value={query} 
                             onChange={handleQueryChange} 
                             />
-                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer">Avbryt</p>
+                        <p onClick={() => { setSelected(null); setQuery(''); setIsActive(false)}} className="text-base cursor-pointer hover:text-Branding-textAccent">Avbryt</p>
                     </form>
                     {isActive && stores && stores.length > 0 && (
                         <ul className="w-full max-h-[16rem] overflow-y-auto bg-Branding-input space-y-1 rounded-[0.5rem] divide-y divide-Branding-textAccent absolute top-[3.875rem]">
@@ -100,7 +105,7 @@ export default function Stores() {
                                 <li
                                 key={store.ButikId}
                                 onClick={() => handleSelectedStore(store)}
-                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
+                                className="block text-[1rem] leading-[1.125rem] font-inter font-semibold text-Branding-textSecondary hover:text-Branding-textPrimary cursor-pointer px-4 py-4 m-0"
                                 >
                                     {store.ButikNamn}, {store.Besöksadress}
                                 </li>
@@ -163,8 +168,8 @@ export default function Stores() {
                                             />
                                     </label>
                                     <section className="flex gap-3 self-end">
-                                        <button className="bg-orange-500 rounded-lg px-4 py-2" onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Ändra butiken</button>
-                                        <button className="bg-blue-500 rounded-lg px-4 py-2" onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</button>
+                                        <Button variant='manage' size='admin' onClick={() => selected.ButikId !== undefined && handleEditStore(selected)}>Ändra butiken</Button>
+                                        <Button variant='delete' size='admin' onClick={() => selected.ButikId !== undefined && handleDeleteStore(selected.ButikId)}>Ta bort butiken</Button>
                                     </section>
                                 </CardStoreContent>                                                             
                             </CardStore>

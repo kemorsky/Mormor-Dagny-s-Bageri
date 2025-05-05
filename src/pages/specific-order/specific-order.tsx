@@ -4,9 +4,9 @@ import { useAuth } from "../../components/auth/AuthContext";
 import { ProductCard, ProductCardName, ProductCardAmount, ProductCardPrice, ProductCardTotalPrice } from "../../blocks/card";
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../blocks/card-order-page";
 import { formatDate } from "../../lib/formatDate";
-import { ButtonAdminManage, ButtonAdminDelete, ButtonOrder } from "../../components/ui/button";
 import { ImCross } from "react-icons/im";
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function SpecificOrder() {
   const {
@@ -39,15 +39,15 @@ export default function SpecificOrder() {
                         <>
                         <p className="font-semibold font-inter text-[1rem] leading-[1.1875rem] flex items-center justify-center">Leveransdatum:
                           <input
-                              className="ml-1 border border-gray-300 rounded p-1 font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"
+                              className="ml-1 bg-Branding-input border border-Branding-textAccent rounded p-1 font-inter text-Branding-textSecondary text-[1rem] leading-[1.1875rem]"
                               type="text"
-                              value={formatDate(editedDate)}
+                              value={editedDate}
                               onChange={(e) => setEditedDate(e.target.value)}
                             />
                         </p>
                         <div className="space-x-2.5 self-center mt-1">
-                          <ButtonAdminManage onClick={handleSubmitDate}>Spara</ButtonAdminManage>
-                          <ButtonAdminDelete onClick={() => setEditedDate('')}>Avbryt</ButtonAdminDelete>
+                          <Button variant='manage' size='admin' onClick={handleSubmitDate}>Spara</Button>
+                          <Button variant='delete' size='admin' onClick={() => setEditedDate('')}>Avbryt</Button>
                         </div>
                         </>
                       ) : (
@@ -67,21 +67,21 @@ export default function SpecificOrder() {
               </CardStoreContent>
             </CardStore>
             {(canEditOrder || canDeleteOrder || canEditDeliveryDate) && (
-              <div className="self-center flex gap-2 flex-wrap">
-                {canEditOrder && !isEditing && <ButtonAdminManage onClick={handleEdit}>Ändra beställningsdetaljer</ButtonAdminManage>}
+              <div className="self-center flex gap-3 flex-wrap">
+                {canEditOrder && !isEditing && <Button variant='manage' size='admin' onClick={handleEdit}>Ändra beställningsdetaljer</Button>}
                 {canEditOrder && isEditing && (
                   <>
-                    <ButtonAdminManage onClick={handleSubmit}>Spara</ButtonAdminManage>
-                    <ButtonAdminDelete onClick={handleCancelEdit}>Avbryt</ButtonAdminDelete>
+                    <Button variant='manage' size='admin' onClick={handleSubmit}>Spara</Button>
+                    <Button variant='delete' size='admin' onClick={handleCancelEdit}>Avbryt</Button>
                   </>
                 )}
                 {canEditDeliveryDate && (
-                  <ButtonAdminManage onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
+                  <Button variant='manage' size='admin' onClick={() => setEditedDate(order.PreliminärtLeveransdatum ?? '')}>
                     Ändra beställningsdatum
-                  </ButtonAdminManage>
+                  </Button>
                 )}
                 {canDeleteOrder && !isEditing && (
-                  <ButtonAdminDelete onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</ButtonAdminDelete>
+                  <Button variant='delete' size='admin' onClick={() => handleDeleteOrder(order.BeställningId ?? 0)}>Ta bort beställningen</Button>
                 )}
               </div>
             )}
@@ -111,7 +111,7 @@ export default function SpecificOrder() {
                       </CardStoreBreadperson>
                   </CardStoreContacts>
               </CardStoreContent>                                                             
-          </CardStore>
+            </CardStore>
           </section>
 
           <section className="w-full max-w-[33.792rem] inline-flex flex-col items-start justify-center gap-3">
@@ -119,15 +119,15 @@ export default function SpecificOrder() {
                 <article className="flex items-center justify-center gap-3">
                   <h2 className="self-center text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
                   {isCompletingOrder ? (
-                    <ButtonAdminDelete onClick={() => setIsCompletingOrder(false)}>Avbryt</ButtonAdminDelete >
+                    <Button variant='delete' size='admin' onClick={() => setIsCompletingOrder(false)}>Avbryt</Button >
                     ) : (
-                    <ButtonAdminManage onClick={() => setIsCompletingOrder(true)}>Komplettera</ButtonAdminManage>
+                    <Button variant='manage' size='admin' onClick={() => setIsCompletingOrder(true)}>Komplettera</Button>
                     )}
                 </article>
                 ) : (
                 <h2 className="self-start text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Beställda produkter</h2>
             )}
-            <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
+            <div className="w-full bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.15)] flex flex-col gap-3 p-3 rounded-xl">
               <ul className="w-full space-y-4">
                 {order.Beställningsdetaljer.map((product, index) => (
                   <li key={index}>
@@ -139,7 +139,7 @@ export default function SpecificOrder() {
                           <ProductCardAmount>
                               <input
                                 type="text"
-                                className="font-inter text-Branding-textSecondary border border-gray-300 rounded px-2 py-1.5 max-w-12 h-10"
+                                className="font-inter text-center bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1 max-w-12 h-[2.625rem]"
                                 value={editedDetails.find(item => item.BeställningsdetaljId === product.BeställningsdetaljId)?.Antal?.toString() ?? ''}
                                 onChange={(e) =>
                                   handleAmountChange(product.BeställningsdetaljId ?? 0, e.target.value)
@@ -150,7 +150,7 @@ export default function SpecificOrder() {
                               <span className="text-Branding-textSecondary">Pris: </span> 
                               {product.Styckpris.toFixed(2)} kr
                           </ProductCardTotalPrice>
-                          <button className="border border-red-400 hover:bg-red-500 transition-colors p-3 rounded-md" onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross className="text-[0.875rem]"/></button>
+                          <Button variant='deleteProduct' size='pagination' onClick={() => handleDelete(product.BeställningsdetaljId ?? 0)}><ImCross className="text-[0.875rem]"/></Button>
                         </>
                       ) : (
                         <>
@@ -170,7 +170,7 @@ export default function SpecificOrder() {
                       <h2 className="text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Lägg till en produkt</h2>
                       <div className="flex flex-col gap-3">
                           <select
-                              className="w-full bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
+                              className="w-full max-w-[16.896rem] bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3"
                               value={newDetail.ProduktId}
                               onChange={(e) => {
                                   const selectedId = parseInt(e.target.value);
@@ -186,7 +186,7 @@ export default function SpecificOrder() {
                           >
                               <option>Välj produkt</option>
                               {products.map((product) => (
-                                  <option key={product.ProduktId} className="" value={product.ProduktId}>
+                                  <option key={product.ProduktId} value={product.ProduktId}>
                                     {product.Namn} – {product.Baspris} kr
                                   </option>
                               ))}
@@ -194,7 +194,7 @@ export default function SpecificOrder() {
                           <div className="flex gap-3 items-center">
                             <input
                                 type="text"
-                                className="w-[5rem] bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
+                                className="w-12 h-10 bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary text-center font-inter font-medium text-[0.875rem] sm:text-[1rem] rounded-lg focus:border-white focus:outline-none block p-3 "
                                 placeholder="Antal"
                                 value={newDetail.Antal}
                                 onChange={(e) => {
@@ -213,7 +213,7 @@ export default function SpecificOrder() {
                                 <p className="font-inter text-red-500">{message}</p>
                             ): (null)}
                           </div>
-                          <ButtonOrder className="w-[12rem]" onClick={handleAddDetail}>Lägg till</ButtonOrder>
+                          <Button variant='proceed' size='smaller' className="w-[12rem]" onClick={handleAddDetail}>Lägg till</Button>
                       </div>
                   </div>
               )}

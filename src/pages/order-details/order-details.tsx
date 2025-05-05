@@ -8,9 +8,9 @@ import { ProductCard, ProductCardName, ProductCardPrice, ProductCardAmount, Prod
 import { CardStore, CardStoreBreadperson, CardStoreContacts, CardStoreContent, CardStoreInformation, CardStoreOwner } from "../../blocks/card-order-page"
 import { useStores } from "../../components/auth/StoreContext"
 import { useProducts } from "../../components/auth/ProductContext"
-import { ButtonOrder, ButtonAdminManage } from "../../components/ui/button"
 import { ButtonSpinner } from "../../components/ui/button-spinner"
 import { Main, Wrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn"
 
 export default function OrderDetailsPage() {
     const { state } = useLocation();
@@ -130,11 +130,11 @@ export default function OrderDetailsPage() {
                     <section className="w-full flex flex-col gap-3">
                         <h2 className="self-start text-Branding-textHeading text-[1.125rem] leading-[1.375rem] font-open-sans font-semibold">Produkter</h2>
                         {details.length > 0 ? (
-                        <div className="bg-Branding-cardPrimary shadow-[0px_0px_6px_2px_rgba(100,100,100,0.15)] flex flex-col gap-3 p-3 rounded-xl">
+                        <div className="bg-Branding-cardPrimary shadow-[0px_0px_8px_4px_rgba(180,180,180,0.15)] flex flex-col gap-3 p-3 rounded-xl">
                             <ul className="w-full space-y-4">
                                 {products.map((product, index) => (
                                     <li key={index} className="w-full">
-                                    <ProductCard >
+                                    <ProductCard className={` ${edit ? 'items-center' : ''}`} >
                                         <ProductCardName>{product?.Namn}</ProductCardName>
                                         <ProductCardPrice>{product?.Baspris} kr</ProductCardPrice>
                                         {edit ? (
@@ -148,7 +148,7 @@ export default function OrderDetailsPage() {
                                                     updated[index].Antal = newAntal
                                                     setDetails(updated);
                                                 }}
-                                                className="border border-gray-300 rounded p-1 ml-1 max-w-12 h-10"
+                                                className="font-inter text-center bg-Branding-input border border-Branding-textAccent text-Branding-textPrimary rounded px-2 py-1 max-w-12 h-[2.625rem]"
                                             />                                        
                                             <ProductCardTotalPrice>
                                                 <span className="text-Branding-textSecondary">Pris: </span>
@@ -172,8 +172,8 @@ export default function OrderDetailsPage() {
                             <section className="self-end flex flex-col items-end gap-2">       
                                 <p className="font-inter text-Branding-textPrimary">Totallt: {totalBeforeDiscount.toFixed(2)} kr</p>
                                 {edit ? (
-                                    <label className="block">
-                                        Rabatt:
+                                    <label className="font-inter text-Branding-textPrimary">
+                                        Rabatt(%):
                                         <input
                                             type="text"
                                             value={orderDiscount}
@@ -181,7 +181,7 @@ export default function OrderDetailsPage() {
                                                 const updated = parseFloat(e.target.value) || 0;
                                                 setOrderDiscount(updated);
                                             }}
-                                            className="border border-gray-300 rounded p-1 ml-2 w-20"
+                                            className="bg-Branding-input border border-Branding-textAccent text-center rounded px-2 py-1 ml-1 max-w-12 h-[2.625rem]"
                                         />
                                     </label>
                                 ) : (
@@ -190,12 +190,12 @@ export default function OrderDetailsPage() {
                                 <p className="font-inter text-Branding-textPrimary">Totallt med rabatt: {finalTotal.toFixed(2)} kr</p>
                             </section>
                             <div className="self-end flex items-center justify-center gap-3">
-                                <ButtonAdminManage className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
+                                <Button variant='manage' size='admin' className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 hover:text-gray-800' : ''}`} type="button" onClick={() => setEdit(prev => !prev)}>
                                     {edit ? "Bekräfta" : "Ändra detaljer"}
-                                </ButtonAdminManage>
-                                <ButtonOrder className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 border border-emerald-600 px-4 py-2 h-[2.625rem] w-[6rem]' : ''}`} type='submit'>
+                                </Button>
+                                <Button variant='proceed' size='admin' className={`${loading ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 text-gray-800 border border-emerald-600 px-4 py-2 h-[2.625rem] w-[6rem]' : ''}`} type='submit'>
                                     {loading ? <ButtonSpinner/> : "Lägg beställningen"}
-                                </ButtonOrder>
+                                </Button>
                             </div>
                         </div>
                         ) : (

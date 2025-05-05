@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router";
 import { useAuth } from "../../components/auth/AuthContext";
+import { CircleUserRound } from 'lucide-react'
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
     const { currentUser, handleLogOut } = useAuth();
@@ -27,42 +28,42 @@ export default function Menu() {
     return (
         <header className="max-w-[60rem] w-full inline-flex items-start justify-between">
             <nav onClick={handleClick} className=" inline-flex flex-col items-start justify-center relative transition-all cursor-pointer ">
-                <div className="w-full inline-flex items-center justify-start gap-2 hover:bg-Branding-cardPrimary rounded-xl sm:px-2 sm:py-1">
-                    <section className="h-10 w-10 bg-blue-200 rounded-full inline-flex items-center justify-center overflow-hidden">
-                        <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" />
+                <div className="group w-full inline-flex items-center justify-start gap-2 hover:bg-Branding-cardPrimary rounded-xl sm:px-2 sm:py-1">
+                    <section className="h-10 w-10 rounded-full bg-sky-700 inline-flex items-center justify-center overflow-hidden">
+                        <CircleUserRound className="object-fill w-10 h-10 stroke-white stroke-1"/>
+                        {/* <img src={"/profile-picture.jpg"} alt="profile picture" className="w-full h-full" /> */}
                     </section>
-                    <article className="inline-flex flex-col gap-1">
-                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textAccent hover:text-Branding-textAccent/90 font-inter font-semibold">
+                    <article className="inline-flex flex-col gap-1 font-DMSans">
+                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textPrimary group-hover:text-Branding-textAccent font-semibold">
                             {userName}
                         </p>
-                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textSecondary font-inter">
+                        <p className="text-[1rem] leading-[1.1875rem] text-Branding-textSecondary">
                             {userType}
                         </p>
                     </article>
                 </div>
                 {isOpen ? 
-                    <ul className="w-full z-50 absolute top-[3.175rem] bg-Branding-cardPrimary rounded-lg divide-y-2 divide-gray-500 divide-solid">
-                        <li className="h-[2.625rem] flex items-center p-2">
-                            <a href="/me" className="text-[1rem] w-full leading-[1.1875rem] rounded-lg  font-inter font-semibold text-Branding-textPrimary hover:text-Branding-textAccent">Profil</a>
-                        </li>
-                        <li className="flex items-center bg-[#2C2F33] p-2 rounded-b-lg ">
-                            <a className="w-full text-Branding-textPrimary hover:text-Branding-textAccent">
-                                <button onClick={async () => {
-                                                await handleLogOut();
-                                                navigate('/')}}
-                                        className="text-[1rem] leading-[1.1875rem] font-inter font-semibold ">
-                                    Logga ut
-                                </button>
-                            </a>
-                        </li>
+                    <ul className="w-full z-50 absolute top-[3.175rem] font-DMSans font-semibold text-[1rem] leading-[1.1875rem] bg-Branding-cardPrimary rounded-lg">
+                        <a href="/me" className="w-full rounded-lg text-Branding-textPrimary hover:text-Branding-textAccent">
+                            <span className="h-[2.625rem] flex items-center p-2">
+                                Profil
+                            </span>
+                        </a>
+                        <hr className="border-gray-500"/>
+                        <a className="w-full text-Branding-textPrimary hover:text-Branding-textAccent "
+                            onClick={async () => {
+                                await handleLogOut();
+                                navigate('/')}}>
+                            <span className="flex items-center p-2 h-[2.625rem]">Logga ut</span>
+                        </a>
                     </ul>
                     : null}
             </nav>
             <section className="inline-flex items-center justify-center gap-3">
-                <a className="text-Branding-textAccent hover:text-Branding-textAccent/90 text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg font-inter font-semibold hover:bg-Branding-cardPrimary hover:text-Branding-textAccent cursor-pointer" onClick={handleNavigateHome}>Hem</a>
-                <a className="text-Branding-textAccent hover:text-Branding-textAccent/90 text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg font-inter font-semibold hover:bg-Branding-cardPrimary hover:text-Branding-textAccent" href="/orders" >Leverans</a>
+                <a className="text-Branding-textPrimary hover:text-Branding-textAccent text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg font-DMSans font-semibold hover:bg-Branding-cardPrimary cursor-pointer" onClick={handleNavigateHome}>Hem</a>
+                <a className="text-Branding-textPrimary hover:text-Branding-textAccent text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg font-DMSans font-semibold hover:bg-Branding-cardPrimary" href="/orders" >Leverans</a>
                 {userType !== "Planerare" && (
-                    <a className="text-Branding-textAccent hover:text-Branding-textAccent/90 text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg  font-inter font-semibold hover:bg-Branding-cardPrimary hover:text-Branding-textAccent" href="/order">Ny Beställning</a>
+                    <a className="text-Branding-textPrimary hover:text-Branding-textAccent text-[1rem] leading-[1.1875rem] sm:px-2 sm:py-1 px-1 rounded-lg  font-DMSans font-semibold hover:bg-Branding-cardPrimary" href="/order">Ny Beställning</a>
                 )}
             </section>
         </header> 

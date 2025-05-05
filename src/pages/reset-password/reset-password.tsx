@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { resetPassword } from "../../lib/api";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { ButtonPrimary } from "../../components/ui/button";
 import { InputPrimary } from "../../components/ui/input";
+import { Button } from "../../components/ui/button-shadcn";
+import { LoginMain, LoginWrapper } from "../../blocks/wrappers";
 
 export default function ResetPassword() {
     const [searchParams] = useSearchParams();
@@ -18,9 +19,8 @@ export default function ResetPassword() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
         if (password !== newPassword) {
-            setMessage('Passwords do not match')
+            setMessage('Fel vid bekfräftning av lösenordet. Kontrollera att de matchar och prova igen.');
             return;
         }
         if (!token || !username) {
@@ -30,45 +30,47 @@ export default function ResetPassword() {
         try {
             const response = await resetPassword(username, newPassword, token)
             if (response) {
-                setMessage("Lösenordet har återställts!");
                 setSuccess(true)
+                setMessage("Lösenordet har återställts.");
                 setTimeout(() => navigate("/"), 3000);
             } else {
-                setMessage("Ogiltig eller saknad token.");
+                setMessage("Ogiltig eller saknande token.");
             }
 
         } catch (error) {
-            setMessage("Något gick fel.");
-            console.error("Error resetting password:", error);
+            if (error instanceof Error) {
+              setMessage(error.message);
+            }
         }
     }
 
     return (
-        <main className="min-h-screen flex items-center justify-center bg-gradient-primary px-6">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md w-full">
-            <h2 className="text-2xl font-bold text-center">Återställ lösenord</h2>
-    
-            <InputPrimary
-              type="password"
-              placeholder="Nytt lösenord"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <InputPrimary
-              type="password"
-              placeholder="Bekräfta lösenord"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-    
-            <ButtonPrimary type="submit">Uppdatera lösenord</ButtonPrimary>
-    
-            {message && (
-              <p className={`text-center text-sm ${success ? "text-green-600" : "text-red-600"}`}>
-                {message}
-              </p>
-            )}
-          </form>
-        </main>
+      <LoginMain>
+        <LoginWrapper>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center gap-4 max-w-md w-full">
+              <h1 className="self-start font-open-sans font-bold text-[1.5rem] leading-[2rem] text-Branding-textAccent">Återställ ditt lösenord</h1>      
+              <InputPrimary
+                type="password"
+                placeholder="Nytt lösenord"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <InputPrimary
+                type="password"
+                placeholder="Bekräfta lösenord"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+      
+              <Button type="submit">Uppdatera lösenord</Button>
+      
+              {message && (
+                <p className={`text-left text-sm ${success ? "text-green-600" : "text-red-500"}`}>
+                  {message}
+                </p>
+              )}
+            </form>
+          </LoginWrapper>
+        </LoginMain>
       );
 };

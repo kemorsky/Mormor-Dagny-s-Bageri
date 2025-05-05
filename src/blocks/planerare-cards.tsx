@@ -23,7 +23,7 @@ const PlanerareCardName = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "w-full max-w-[12rem] text-base font-inter text-Branding-textPrimary",
+      "w-full max-w-[12rem] text-base font-inter text-Branding-textSecondary",
       className
     )}
     {...props}

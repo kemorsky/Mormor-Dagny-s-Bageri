@@ -1,5 +1,6 @@
 import { CardStore, CardStoreContent, CardStoreInformation, CardStoreContacts, CardStoreOwner, CardStoreBreadperson } from "../../blocks/card-order-page";
 import { useStores } from "../../components/auth/StoreContext";
+import { Button } from "../../components/ui/button-shadcn";
 import { editStore } from "../../lib/api";
 import { Store } from "../../types/types";
 
@@ -102,8 +103,8 @@ const EditStoreForm: React.FC<EditStoreProps> = ({
                                 </CardStoreBreadperson>
                         </CardStoreContent>   
                         <section className="flex gap-3 self-end">
-                                <button type="submit" className="bg-orange-500 rounded-lg px-4 py-2">Spara</button>
-                                <button className="bg-blue-500 rounded-lg px-4 py-2" onClick={() => setEditingStore(null)}>Avbryt</button>
+                                <Button variant='manage' size='admin' type="submit">Spara</Button>
+                                <Button variant='delete' size='admin' onClick={() => setEditingStore(null)}>Avbryt</Button>
                         </section>  
                         {isLoading ?? <p>Loading...</p>}                                                        
                 </CardStore>

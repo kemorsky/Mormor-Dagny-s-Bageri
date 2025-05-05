@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputPrimary } from "../../components/ui/input";
-import { ButtonPrimary } from "../../components/ui/button";
 import { forgotPassword } from "../../lib/api";
 import { LoginMain, LoginWrapper } from "../../blocks/wrappers";
+import { Button } from "../../components/ui/button-shadcn";
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState<string>('');
@@ -41,7 +41,7 @@ export default function ResetPasswordPage() {
             placeholder="E-mail"
           />
           <div className="w-full inline-flex flex-col items-center justify-center gap-4">
-            <ButtonPrimary onClick={() => {handleSendPassword(email)}}>Skicka påminnelse</ButtonPrimary>
+            <Button onClick={() => {handleSendPassword(email)}}>Skicka påminnelse</Button>
             <a
               className="font-inter font-bold text-[1rem] leading-[1.375rem] cursor-pointer"
               onClick={() => navigate("/")}>
