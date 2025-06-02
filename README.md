@@ -11,6 +11,7 @@ The Front End has been built with:
 - React for design management and comfort
 - React Router for easy navigation between elements
 - Tailwind CSS for easy and comfortable styling
+- Fuse.js for fast and easy client info access
 
 # Main Features
 
