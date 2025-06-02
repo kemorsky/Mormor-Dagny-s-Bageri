@@ -1,54 +1,39 @@
-# React + TypeScript + Vite
+# Mormor Dagny's Bageri
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project has been written in collaboration with the backend department. It was created to digitalize the custom library of a bakery business owned by the client (internship granter) and act as a web application desployed to his workers.
 
-Currently, two official plugins are available:
+The project has been written in C# and .NET for the backend, which is accessed through MySQL Workbench. The repository is private and can't be shared here.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The team had no designated UI/UX designer, nor specific instructions left by the client and as such was not the primary goal of the project. Data storage, navigation, and management across the linked frontend and backend and its API routes, was.
 
-## Expanding the ESLint configuration
+The Front End has been built with:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React for design management and comfort
+- React Router for easy navigation between elements
+- Tailwind CSS for easy and comfortable styling
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+# Main Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Admin Dashboard in which admin can:
+  - Create, Delete and Edit Users
+  - Create, Delete and Edit Stores
+  - Create, Delete and Edit Products
+  - Create, Delete and make Edits to Orders
+  - See detailed Sales Dashboard (alongside Product Planner/Manager)
+- Order Page in which user can:
+  - Fetch client information through Fuzzy Search
+  - Fill out the order manually OR through one of the 3 past saved orders
+  - Make changes to the order along the process
+- Seller Dashboard in which user can:
+  - See their ongoing and past orders
+  - Access said orders
+- All Orders section which divides Ongoing and Past Orders via tabs and showcases them through pagination
+- Basic Profile Page
+- Password Recovery managed through tokens
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# Project Presentation
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+The project can be viewed here in this preview video.
+
+https://www.youtube.com/watch?v=WLWSMqrxBWw
+
